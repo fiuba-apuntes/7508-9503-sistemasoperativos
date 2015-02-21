@@ -251,6 +251,99 @@ Referencias de la Figura \ref{fig:library_call}:
 	\item El paso 10 reestablece la protección de memoria del sistema operativo (sale de modo kernel).
 \end{itemize}
 
+\newpage
+\section{Procesos}
+\subsection{Modelo de procesos}
+El sistema operativo debe organizar el software que corre en unidades secuenciales, a esta organización se le llama proceso.\\
+
+Un proceso es:
+\begin{itemize}
+	\item La imagen de un programa en ejecución (una copia del programa).
+	\item Con las estructuras del sistema operativo para administrarlo.
+	\item Several processes may be associated with the same program; for example, opening up several instances of the same program often means more than one process is being executed.
+\end{itemize}~\\
+
+Un proceso tiene:
+\begin{itemize}
+	\item La imagen del programa (una copia de su código ejecutable y de su área de datos).
+	\item La información acerca de sus estado de ejecución:
+	\begin{itemize}
+		\item Los valores del program counter, registros y variables.
+		\item Información necesaria para su administración por parte del Sistema Operativo (id, prioridad, ...).
+	\end{itemize}
+	\item Memory (typically some region of virtual memory); which includes the executable code, process-specific data (input and output), a call stack (to keep track of active subroutines and/or other events), and a heap to hold intermediate computation data generated during run time.
+	\item Operating system descriptors of resources that are allocated to the process, such as file descriptors (Unix terminology) or handles (Windows), and data sources and sinks.
+	\item Security attributes, such as the process owner and the process' set of permissions (allowable operations).
+\end{itemize}
+
+Esta información la guarda el sistema operative en estructuras de datos llamadas Process Control Blocks.\\
+
+Any subset of resource, but typically at least the processor state, may be associated with each of the process' threads in operating systems that support threads or 'daughter' processes.
+
+The operating system keeps its processes separated and allocates the resources they need, so that they are less likely to interfere with each other and cause system failures (e.g., deadlock or thrashing). The operating system may also provide mechanisms for inter-process communication to enable processes to interact in safe and predictable ways.
+
+\subsection{Multiprogramación}
+In computing, multitasking is a method where multiple tasks (also known as processes) are performed during the same period of time – they are executed concurrently (in overlapping time periods, new tasks starting before others have ended) instead of sequentially (one completing before the next starts). The tasks share common processing resources, such as a CPU and main memory.\\
+
+Multitasking does not necessarily mean that multiple tasks are executing at exactly the same instant. In other words, multitasking does not imply parallelism, but it does mean that more than one task can be part-way through execution at the same time, and more than one task is advancing over a given period of time.
+
+In the case of a computer with a single CPU, only one task is said to be running at any point in time, meaning that the CPU is actively executing instructions for that task.\\
+
+Multitasking solves the problem by scheduling which task may be the one running at any given time, and when another waiting task gets a turn. The act of reassigning a CPU from one task to another one is called a context switch. When context switches occur frequently enough, the illusion of parallelism is achieved.
+
+Even on computers with more than one CPU (called multiprocessor machines) or more than one core in a given CPU (called multicore machines), where more than one task can be executed at a given instant (one per CPU or core), multitasking allows many more tasks to be run than there are CPUs.\\
+
+Cuando hay más de un procesador se conoce como Multiprocesamiento.
+
+Se ejecuta un proceso. Cuando se “bloquea” por I/O, se aprovecha el tiempo para ejecutar otro proceso.
+
+La CPU va conmutando (switching) de un proceso a otro.
+
+Es un multiplexado de la CPU.
+
+\subsubsection{Implementación de la multiprogramación}
+El \textit{scheduler} decide a que proceso dar el control.
+
+El \textit{dispatcher} realiza el cambio de estado.
+
+Cada vez que se interrumpe un proceso también se pierde el tiempo de guardar el contexto.
+
+\subsection{Estados de un proceso}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{process_states_simple}
+	\caption{Estados de un procedimiento (simplificado)}
+	\label{fig:process_states_simple}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{process_states_full}
+	\caption{Estados de un procedimiento}
+	\label{fig:process_states_full}
+\end{figure}
+
+\subsubsection{Created or New}
+When a process is first created, it occupies the ``created'' or ``new'' state. In this state, the process awaits admission to the ``ready'' state. This admission will be approved or delayed by a long-term, or admission, scheduler. Typically in most desktop computer systems, this admission will be approved automatically, however for real-time operating systems this admission may be delayed. In a real time system, admitting too many processes to the "ready" state may lead to oversaturation and over contention for the systems resources, leading to an inability to meet process deadlines.
+
+\subsubsection{Ready and waiting}
+A ``ready'' or ``waiting'' process has been loaded into main memory and is awaiting execution on a CPU (to be context switched onto the CPU by the dispatcher, or short-term scheduler). There may be many ``ready'' processes at any one point of the system's execution—for example, in a one-processor system, only one process can be executing at any one time, and all other ``concurrently executing'' processes will be waiting for execution.
+
+A ready queue or run queue is used in computer scheduling. Modern computers are capable of running many different programs or processes at the same time. However, the CPU is only capable of handling one process at a time. Processes that are ready for the CPU are kept in a queue for ``ready'' processes. Other processes that are waiting for an event to occur, such as loading information from a hard drive or waiting on an internet connection, are not in the ready queue.
+
+\subsubsection{Running}
+A process moves into the running state when it is chosen for execution. The process's instructions are executed by one of the CPUs (or cores) of the system. There is at most one running process per CPU or core. A process can run in either of the two modes, namely kernel mode or user mode.
+
+\subsubsection{Blocked (Waiting)}
+A process that is blocked on some event (such as I/O operation completion or a signal). A process may be blocked due to various reasons such as when a particular process has exhausted the CPU time allocated to it or it is waiting for an event to occur.
+
+\subsubsection{Terminated}
+A process may be terminated, either from the ``running'' state by completing its execution or by explicitly being killed. In either of these cases, the process moves to the ``terminated'' state. The underlying program is no longer executing, but the process remains in the process table as a zombie process until its parent process calls the wait system call to read its exit status, at which point the process is removed from the process table, finally ending the process's lifetime. If the parent fails to call wait, this continues to consume the process table entry (concretely the process identifier or PID), and causes a resource leak.\\
+
+A child process always first becomes a zombie before being removed from the resource table. In most cases, under normal system operation zombies are immediately waited on by their parent and then reaped by the system – processes that stay zombies for a long time are generally an error and cause a resource leak.\\
+
+Después de terminado un proceso, el mismo queda en estado ``terminado'' hasta que el sistema operativo termina de limpiar las estructuras que usó para ejecutarlo (mientras tanto está en estado zombie).
+
 % Bibliografía utilizada en el apunte
 \newpage
 \newcommand{\bibliographyname}{Bibliografía} % Defino el nombre de la sección de la bibliografía
