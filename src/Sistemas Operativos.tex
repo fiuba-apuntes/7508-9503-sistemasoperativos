@@ -162,6 +162,94 @@ La paralelizacion esta limitada por la ley de Amdahl: The speedup of a program u
 
 \newpage
 \section{Mecanismos básicos}
+Sistema operativo es software que extiende un poco la capa de hardware.
+
+El hardware es lo que le provee recursos al sistema operativo: CPU, memoria, dispositivos I/O. Cada nivel interpreta al nivel superior.
+
+El estado de una maquina virtual sólo está definido entre instrucción e instrucción.
+
+Una instrucción en una capa equivale a muchas instrucciones de la capa inferior.
+
+\subsection{Modos de CPU}
+Son distintos niveles de permisos o privilegios.
+
+Se suele trabajar con dos modos: \textbf{Modo Supervisor} (puede hacer todo) y \textbf{Modo Usuario} (tiene restricciones).
+
+Se pasa de modo usuario a modo supervisor por medio de una interrupción. 
+
+El retorno a modo usuario está a cargo del programa. Motivo para querer pasar de modo supervisor a modo usuario: Control de riesgo de código desconocido (ejemplo: escribir en las direcciones de memoria del SO).\\
+
+Algunas arquitecturas incluyen más modos:
+\begin{itemize}
+	\item X86 Modo real, protegido y virtual.
+	\item Modo hypervisor
+\end{itemize}
+
+Un sistema operativo puede tener partes corriendo en cada uno de los modos.
+
+Un programa de usuario sólo corre en modo usuario. El único programa que debiera ser capaz de pasar a modo supervisor es el sistema operativo.
+
+\subsection{Interrupciones}
+Una interrupción es una suspensión temporal de la ejecución de un proceso, para pasar a ejecutar una subrutina de servicio de interrupción, la cual, por lo general, no forma parte del programa, sino que pertenece al sistema operativo o al BIOS. Una vez finalizada dicha subrutina, se reanuda la ejecución del programa.\\
+
+Hay dos tipos de interrupciones:
+\begin{itemize}
+	\item Sincronica o software trap: Una instrucción del programa.
+	\item Asincrónica: I/O, timer, external.
+\end{itemize}
+
+\subsubsection{Atención de interrupciones}
+\begin{enumerate}
+	\item \textbf{Primer nivel de atención:} Salvar el contexto (registros, código de condición, dirección de retorno). El objetivo es poder proseguir el proceso (después de atendida la interrupción) desde el estado en el que estaba. Que un proceso sufra o no una interrupción no cambia su resultado, solamente el tiempo que le insume.
+	
+	\item \textbf{Segundo nivel de atención:} Se decide si se atiende en el momento la interrupción o se deja para después. Si vienen 2 interrupciones al mismo tiempo puede llegar a perderse una. Por eso los que envían la interrupción deben estar preparados para repetirla.
+\end{enumerate}
+
+\subsection{Modos del sistema operativo}
+\subsubsection{Modo Kernel}
+Ejecutando un servicio propio del sistema operativo.
+
+In computing, the kernel is a computer program that manages input/output requests from software, and translates them into data processing instructions for the central processing unit and other electronic components of a computer. The kernel is a fundamental part of a modern computer's operating system.
+
+Because of its critical nature, the kernel code is usually loaded into a protected area of memory, which prevents it from being overwritten by other, less frequently used parts of the operating system or by application programs. The kernel performs its tasks, such as executing processes and handling interrupts, in kernel space, whereas everything a user normally does, such as writing text in a text editor or running programs in a GUI (graphical user interface), is done in user space. This separation is made in order to prevent user data and kernel data from interfering with each other and thereby diminishing performance or causing the system to become unstable (and possibly crashing).
+
+When a computer program (in this context called a process) makes requests of the kernel, the request is called a system call.
+
+\subsubsection{Modo usuario}
+Ejecutando un programa de usuario.
+
+The term userland (or user space) refers to all code which runs outside the operating system's kernel. Userland usually refers to the various programs and libraries that the operating system uses to interact with the kernel: software that performs input/output, manipulates file system objects, application software etc.
+
+\subsection{System Calls}
+Si un proceso esta corriendo un programa en modo usuario y necesita un servicio del sistema, como leer data de un archivo, tiene que ejecutar un software trap para transferirle el control al sistema operativo. El sistema operativo se fija lo que necesita el proceso que lo  llamo inspeccionando los parámetros. Hace lo que tenga que hacer y devuelve el control a la instrucción que sigue al system call.\\
+
+Ejemplos
+\begin{itemize}
+	\item Leer de un dispositivo solo puede hacer el SO (leer de memoria, CD, USB, etc).
+	\item Manejo de procesos
+	\item Manejo de archivos
+	\item Etc
+\end{itemize}
+
+\subsection{Library Calls}
+Son llamados a procedimientos de bibliotecas provistas por el lenguaje en el que se está programando.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{library_call}
+	\caption{Llamado a procedimientos de bibliotecas}
+	\label{fig:library_call}
+\end{figure}
+
+Referencias de la Figura \ref{fig:library_call}:
+\begin{itemize}
+	\item 1, 2, 3 y 4 corresponden a un llamado convencional a un procedimiento.
+	\item Antes de hacer 5, el sistema operativo habilita el acceso a la memoria del sistema operativo (pasa a modo kernel).
+	\item 6 implica una software trap, el procesador pasa a modo protegido.
+	\item 7 y 8 se ejecutan en modo protegido del procesador.
+	\item En 9 se vuelve a modo usuario del procesador, pero con el sistema operativo en modo kernel.
+	\item El paso 10 reestablece la protección de memoria del sistema operativo (sale de modo kernel).
+\end{itemize}
 
 % Bibliografía utilizada en el apunte
 \newpage
