@@ -1,0 +1,186 @@
+\documentclass[a4paper, twoside]{article}
+\usepackage[utf8]{inputenc} % Especifica la codificación de caracteres de los documentos.
+\usepackage[spanish]{babel} % Indica que el documento se escribirá en español.
+\usepackage[top=3cm, bottom=2.5cm, inner=1.5cm, outer=2.5cm]{geometry} % Márgenes personalizados
+\usepackage{subfiles} % Paquete para incluir el preambulo en los sub archivos.
+\usepackage{afterpage} % Permite añadir páginas despues de una página dada.
+\usepackage{hyperref} % Permite incluir enlaces en los archivos.
+\usepackage{lastpage} % Paquete para poder contabilizar el total de páginas del documento.
+\usepackage{fancyhdr} % Permite personalizar los header y footer del documento.
+\usepackage{graphicx} % Permite incluir gráficos
+\usepackage[hang, bf]{caption} % Personaliza los subtítulos de las figuras y tablas
+\usepackage{float} % Permite posicionar mejor las figuras y tablas
+
+% Defino la ruta de los paquetes personalizados para el apunte
+\newcommand{\rutapaquetes}{./paquetes-apunte}
+
+\usepackage[mostrarlicencia]{\rutapaquetes/caratula} % Caratula personalizada (cargada desde caratula.sty)
+\usepackage[mostrarrevisores]{\rutapaquetes/colaboradores} % Seccion de colaboradores (cargada y creada con colaboradores.sty)
+\usepackage{\rutapaquetes/historial} % Seccion de historial de cambios (cargada y creada con historial.sty)
+
+% Define los estilos de los enlaces interpretados por el paquete hyperref
+\hypersetup{
+	colorlinks=true,   % false: boxed links; true: colored links
+	linkcolor=black,   % color of internal links (change box color with linkbordercolor)
+	citecolor=green,   % color of links to bibliography
+	filecolor=magenta, % color of file links
+	urlcolor=blue,     % color of external links
+}
+
+\newcommand{\imgdir}{../resources/images} % Ruta de las imágenes
+
+% Define los directorios de las imágenes y gráficos
+\graphicspath{ {\imgdir/} {\rutapaquetes/} }
+
+\newcommand{\nombremateria}{Sistemas Operativos (75.08 - 95.03)} % Defino el comando "\nombremateria" para no harcodear el nombre en varios lugares.
+
+% Define el pagestyle personalizado
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markboth{}{\thesection\ \ #1}}
+% Define header para pagina par
+\fancyhead[ER]{\rightmark}
+% Define header para pagina impar
+\fancyhead[OL]{\rightmark}
+% Define footer para pagina par
+\fancyfoot[EL]{\nombremateria} % Nombre del apunte a la izquierda
+\fancyfoot[ER]{Página \thepage\ de \pageref{LastPage}} % Numero de pagina a la derecha
+% Define footer para pagina impar
+\fancyfoot[OL]{Página \thepage\ de \pageref{LastPage}} % Numero de pagina a la izquierda
+\fancyfoot[OR]{\nombremateria} % Nombre del apunte a la derecha
+
+\renewcommand{\footrulewidth}{0.4pt} % Agrego linea que separa el footer
+
+% Configura la caratula
+\materia{\nombremateria}
+\tipoapunte{Resumen teórico}
+%\tema{Tema de la Materia}
+%\subtema{Subtema}
+
+\begin{document}
+% Página en blanco agregada después de la carátula
+%\afterpage{
+%	\null
+%	\thispagestyle{empty}%
+%	\addtocounter{page}{-1}%
+%	\newpage}
+\maketitle % Genera la carátula
+
+\tableofcontents % Genera el índice
+
+\subfile{\rutapaquetes/acerca-del-proyecto.tex} % Inlcuye informacion acerca del proyecto FIUBA Apuntes
+
+% Insertar aquí el contenido del apunte. A continuacion hay secciones a modo de ejemplo.
+
+\section{Introducción}
+\subsection{¿Qué es un sistema operativo?}
+\begin{itemize}
+	\item Un programa que hace de intermediario entre el usuario de la computadora y su hardware (Oculta los detalles finos de la arquitectura).
+	\item Un programa que administra los recursos de un sistema de computación: permite administrar el tiempo de procesador y el espacio (memoria, disco, etc).
+\end{itemize}
+
+\subsection{Arquitecturas}
+\subsubsection{Mainframe}
+Computadora central. Gran capacidad de I/O, server para e-commerce a gran escala.\\
+
+\textbf{Seguridad y disponibilidad:} 
+\begin{itemize}
+	\item Transaction processing: is information processing that is divided into individual, indivisible operations, called transactions. Each transaction must succeed or fail as a complete unit; it can never be only partially complete.
+	\item Batch processing: is the execution of a series of programs ("jobs") on a computer without manual intervention.
+\end{itemize}
+
+\subsubsection{Servidores}
+Destinados a ofrecer servicios a través de una red.
+
+\subsubsection{Supercomputadoras}
+Computacion de alto rendimiento. Se usan para hacer simulaciones.\\
+
+\textbf{Limites:}
+\begin{itemize}
+	\item Concurrencia: los procesos no son 100\% independientes
+	\item Costo
+	\item Programación del software
+\end{itemize}
+
+\subsubsection{Server operating system}
+Interfaz solo línea de comando o EFI (estándar de firmware).
+
+\subsubsection{Computadora personal}
+No requiere conocimientos especiales.
+
+\subsubsection{Tablets, PDA}
+
+\subsubsection{Consolas}
+
+\subsubsection{Sistemas operativos embebidos}
+Dispositivos que no aceptan instalación de nuevo software por el usuario.
+
+No deberían tener bugs.
+
+Se usan en tvs, autos, etc.
+
+\subsubsection{Cluster}
+Un grupo de computadoras interconectadas por una red local de alta velocidad.
+
+Se comportan como si fuese una única computadora.
+
+Si es de alta disponibilidad tiene nodos redundantes en caso de falla. Retoma en otro equipo en el estado en el que estaba. 
+
+Balance de carga, con dispositivo físico o de software.
+
+\subsubsection{Grid}
+Cluster virtual con recursos distribuidos.
+
+\textbf{Ejemplo:} BOINC, SETI.
+
+\textbf{Problemas:} concurrencia (que se choquen tareas), que queden tareas sin cubrir.
+
+\subsubsection{Cloud computing}
+Se provee por internet. Dinamicamente escalable.
+
+Atrás de la nube puede haber cluster, grid, etc (al cliente no le importa).
+
+\textbf{Servicios posibles de cloud computing:}
+\begin{itemize}
+	\item Cloud Storage: Dropbox.
+	\item Infraestructura (infraestructura as a service (IaaS)):Tipicamente plataformas virtualizadas. Ejemplo: Amazon EC2
+	\item Plataforma (PaaS): Provee la plataforma y un ambiente de desarrollo y soporte. Ejemplo: Google Code.
+	\item Software (SaaS): Software on demand provisto por terceros. Ejemplo: Amazon Services, Paypal. 
+\end{itemize}
+
+\subsubsection{Tiempo real}
+Distinto de online o de rápido.
+
+Tiempo de respuesta máximo y predecible. 
+
+\subsubsection{Multiprocesador}
+Más de un procesador en el mismo chip o board.
+
+Soportado en todos los sistemas operativos de escritorio.
+
+La paralelizacion esta limitada por la ley de Amdahl: The speedup of a program using multiple processors in parallel computing is limited by the time needed for the sequential fraction of the program.
+
+\newpage
+\section{Mecanismos básicos}
+
+% Bibliografía utilizada en el apunte
+\newpage
+\newcommand{\bibliographyname}{Bibliografía} % Defino el nombre de la sección de la bibliografía
+\addcontentsline{toc}{section}{\bibliographyname} % Agrego la bibliografía en el índice
+\renewcommand\refname{\bibliographyname} % Renombro a la bibliografía (por default es 'Referencias')
+\begin{thebibliography}{X}
+	\bibitem{tanenbaum} \textsc{Andrew S. Tanenbaum}, \textit{Sistemas Operativos Modernos}, tercera edición, PEARSON EDUCACIÓN, México, 2009.
+\end{thebibliography}
+
+% Incluir los nombres de las personas que han colaborado en la creación del apunte
+%\colaborador{Colaborador 1}
+%\colaborador{Colaborador 2}
+%\revisor{Dr. Profesor}{10/01/2015}
+%\makeseccioncolaboradores % Crea la seccion de colaboradres
+
+% Incluir el historial de cambios
+\revision{21/02/2012}{Versión inicial con las secciones de Introduccion, Mecanismos básicos.}
+%\revision{10/01/2015}{Se agregó una carátula personalizada, una sección con información del proyecto FIUBA Apuntes, la sección de colaboradores del apunte, sección de historial de cambios, ejemplo de bibliografía, ajuste de márgenes, encabezado y pie de página.}
+\makehistorial
+
+\end{document}
