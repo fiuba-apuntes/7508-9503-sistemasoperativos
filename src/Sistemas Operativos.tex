@@ -694,6 +694,154 @@ El lock es un protocolo o una convencion, pero no impide read, write, delete, et
 #no hay un shell hijo
 \end{lstlisting}
 
+\newpage
+\section{Threads}
+Los thread son mini-procesos en el mismo espacio de direcciones que corren casi en paralelo. Como están en el mismo espacio de direcciones, comparten la data. Es decir, son hilos de ejecución que comparten el agrupamiento de recursos.
+
+Son más livianos que los procesos, así es que es más fácil y rápido crearlos y destruirlos.\\
+
+Threads differ from traditional multitasking operating system processes in that:
+\begin{itemize}
+	\item processes are typically independent, while threads exist as subsets of a process
+	\item processes carry considerably more state information than threads, whereas multiple threads within a process share process state as well as memory and other resources
+	\item processes have separate address spaces, whereas threads share their address space
+	\item processes interact only through system-provided inter-process communication mechanisms
+	\item context switching between threads in the same process is typically faster than context switching between processes.
+\end{itemize}
+
+Cada thread tiene sus propios program counters, registros donde almacena sus variables,su stack y su estado. Pero comparten code, data y files.\\
+
+Different threads in a process are not as independent as different processes. All threads have exactly the same address space, which means that they also share the same global variables. Since every thread can access every memory address within the process’ address space, one thread can read, write, or even wipe out anothre thread’s stack. There is no protection between threads because should not be necessary. All threads are owned by a single user, who has presumably created multiple threads so that the can cooperate, not fight. In addition to sharing an address space, all the threads can share the same set of open files, child processes, alarms, and signals.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{differences_between_processes_and_threads_1}
+	%\caption{Diferencia entre procesos y threads}
+	\label{fig:differences_between_processes_and_threads_1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{differences_between_processes_and_threads_2}
+	%\caption{Diferencia entre procesos y threads}
+	\label{fig:differences_between_processes_and_threads_2}
+\end{figure}
+
+\textbf{Thread Control Block (TCB)}
+
+Hay informacion que pasa del PCB al (o los) TCB
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{differences_between_processes_and_threads_3}
+	%\caption{Diferencia entre procesos y threads}
+	\label{fig:differences_between_processes_and_threads_3}
+\end{figure}
+
+Like traditional process, thread can be in any of several states: running, blocked, ready or terminated. A running thread concurrently has the CPU and is active. A blocked thread is waiting for some event (or other thread) to unblock it. A ready thread is scheduled to run and will as soon as its turn come up. The transitions between threads states are the same as transitions between process states.
+
+\subsection{Aplicaciones de multithreading}
+Varias aplicaciones que concurren sobre los mismo datos como:
+\begin{itemize}
+	\item Un server que lanza un thread por cada pedido.
+	\item Un procesador de texto concurrente con su corrector y su armador de pagina.
+	\item El manejo de Interfaces Gráficas.
+\end{itemize}
+
+Algunos de los sistemas hechos con threads podrían hacerse con eventos.
+
+Eventos usan handlers y callbacks, los threads quedan congelados hasta que se les devuelve el control.
+
+Escalar con threads es casi trivial, escalar con eventos tiene un techo (stack ripping) 
+
+No mezclar threads con eventos.
+
+\subsection{Implementacion de threading}
+There are two main ways to implement a threads package: in user space and in the kernel (a hybrid implementation is also possible).
+
+\subsubsection{Threads in user space}
+The kernel knows nothing about them. As far as the kernel is concerned, it is managing ordinary, single-threaded processes (can be implemented in operating systems than not suport threading). Threads are implemented by a library.
+
+Cada proceso tiene su propia tabla de threads privada, para seguirle el rastro a cada uno de sus threads. En la tabla se guardan las propiedades del thread (program counter, stack pointer, registers, state, etc). La tabla es manejada por el runtime system.
+
+When a thread does something that may cause it to become blocked locally, for example, waiting for another thread in its process to complete some work, it calls a run-time system procedure. This procedure checks to see if the thread must be put in a blocked state. If so, it stores the thread’s registers in the thread table, looks in the table for a ready thread to run, and reloads the machine registers with the new thread’s saved values. As soon as the stack pointer and program counter have been switched, the new thread comes to life again automatically.
+
+La biblioteca de threads permite al usuario multiplexar su time slice.
+
+Time slice: tiempo que puede ejecutarse un proceso sin que el SO lo pare (impide que el usuario bloquee el sistema).\\
+
+\textbf{Ventajas}
+\begin{itemize}
+	\item Doing thread switching like this is at least an order of magnitude (maybe more) faster than trapping to the kernel. The procedure that saves the thread’s state and the scheduler are just local procedures, so invoking them is much more efficient than making a kernel call. Among other issues, no trap is needed, no context switch is needed, the memory cache need not be flushed, and so on. This makes thread scheduling very fast.
+	\item Customized scheduling algorithm.
+	\item Scale better, since kernel threads require some table space and stack space in the kernel, which can be a problem if there are a very large number of threads.
+\end{itemize}
+
+\textbf{Problemas}
+\begin{itemize}
+	\item How to implement blocking systems calls. It should prevent one blocked thread from affecting others.
+	\item If a thread starts running, no other thread in that process will ever run unless the first thread voluntarily gives up the CPU
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{threads_user_space}
+	\caption{Threads en el espacio de usuario}
+	\label{fig:threads_user_space}
+\end{figure}
+
+\subsubsection{Kernel threads}
+The kernel has a thread table that keeps track of all the threads in the system. When a thread wants to create a new thread or destroy an exisiting one, it makes a kernel call, which then does the creation or destruction by updating the kernel thread table.
+
+La tabla del kernel es igual a la que se usa en los threads en el espacio de usuario, pero almacenada en el kernel.
+
+All calls that might block a thread are implemented as system calls, at considerably greater cost than a call to a run-time system procedure. When a thread blocks, the kernel, at its options, can run either another thread from the same process (if one is ready) or a thread from a different process. With user-level threads, the run-time system keeps running threads from its own process until the kernel takes the CPU away from it (or there are no ready threads left to run).
+
+Due to the relatively greater cost of creating and destroying threads in the kernel, some systems recycle their threads. When a thread is destroyed, it is marked as not runnable, but its kernel data structures are not otherwise affected. Later, when a new thread must be ccreated, and old thread is reactivated, saving some overhead.
+
+Kernel threads do not require any new, nonblocking system calls.
+
+Their main disadvantage is that the cost of a system call is substantial, so if thread operations (creation, termination, etc) are common, much more overhead will be incurred.\\
+
+\textbf{Some problems}
+\begin{itemize}
+	\item Multithreaded process fork: How many threads for the new one?
+	\item Signals: when a signal comes in, which thread should handle it?
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{kernel_threads}
+	\caption{Kernel Threads}
+	\label{fig:kernel_threads}
+\end{figure}
+
+\subsubsection{Implementaciones hibridas}
+One way is use kernel-level threads and then multiplex user-level threads onto some or all the kernel threads. The programmer can determine how many kernel threads to use and how many user-level threads to multiplex on each one.
+
+The kernel is aware of only the kernel-level threads and schedules those. Some of those threads may have multiple user-level threads multiplexed on top of them. These user level threads are created, destroyed and scheduled just like user-level threads in a process.Each kernel-level thread has some set of user-level threads that take turns using it.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{hybrid_threads}
+	\caption{Threads híbridos}
+	\label{fig:hybrid_threads}
+\end{figure}
+
+\textbf{Scheduler activations}
+
+Mimic the funcionality of kernel threads but with better performance (similar to user space threads).
+Cuando se produce una interrupcion, el SO le devuelve el control al usuario.
+
+The kernel assigns a certain number of virtual processors to each process and lets the user space runtime system allocate threads to processors.
+
+The basic idea is that when the kernel knows that a thread has blocked, the kernel notifies the process runtime system by an “upcall”. The runtime system, at its own discretion, can either restart the blocked thread immediately or put it on the ready list to be run later.
+
+An objection to scheduler activations is the fundamental reliance on upcalls, a concept tha violates the structure inherent in any layered system. Normally, layer n offers certain services that layer n+1 can call on, but layer n may not call procedures in layer n + 1. Upcalls do not follow this fundamental principle.
+
+\newpage
+\section{Administracion de memoria}
+
 % Bibliografía utilizada en el apunte
 \newpage
 \newcommand{\bibliographyname}{Bibliografía} % Defino el nombre de la sección de la bibliografía
@@ -710,8 +858,8 @@ El lock es un protocolo o una convencion, pero no impide read, write, delete, et
 %\makeseccioncolaboradores % Crea la seccion de colaboradres
 
 % Incluir el historial de cambios
-\revision{21/02/2012}{Versión inicial con las secciones de Introduccion, Mecanismos básicos.}
-%\revision{10/01/2015}{Se agregó una carátula personalizada, una sección con información del proyecto FIUBA Apuntes, la sección de colaboradores del apunte, sección de historial de cambios, ejemplo de bibliografía, ajuste de márgenes, encabezado y pie de página.}
+\revision{21/02/2015}{Versión inicial con las secciones de Introduccion, Mecanismos básicos.}
+\revision{22/02/2015}{Se agregó la sección de procesos y de threads.}
 \makehistorial
 
 \end{document}
