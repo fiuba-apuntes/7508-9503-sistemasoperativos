@@ -64,7 +64,7 @@
 	commentstyle=\color{darkgreen},
 	extendedchars=true,
 	frame=single,
-	language=c++,
+	language=C++,
 	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1, % Escapeo caracteres especiales
 	keywordstyle=\color{darkblue},
 	numbers=left,
@@ -410,7 +410,7 @@ Decide qué proceso, entre los procesos en memoria y con estado \emph{ready}, se
 
 \begin{itemize}
 	\item Al pasar de Running a Blocked.
-	El manejador de interrupciones lo invoca para cambiar de estado al proceso:\\
+	El manejador de interrupciones lo invoca para cambiar de estado al proceso:
 	\begin{itemize}
 		\item Salva los datos necesarios en el PCB.
 		\item Cambia el PCB de cola.
@@ -423,13 +423,26 @@ Decide qué proceso, entre los procesos en memoria y con estado \emph{ready}, se
 	Continúa la ejecución del proceso.
 \end{itemize}
 
-Scheduler (Long term)
+\subsubsection{Scheduler (Long term)}
 Decide a cuál de los procesos en ready hay que darle el control.
 In general, most processes can be described as either I/O-bound or CPU-bound. An I/O-bound process is one that spends more of its time doing I/O than it spends doing computations. A CPU-bound process, in contrast, generates I/O requests infrequently, using more of its time doing computations.
 It is important that a long-term scheduler selects a good process mix of I/O-bound and CPU-bound processes. If all processes are I/O-bound, the ready queue will almost always be empty, and the short-term scheduler will have little to do. On the other hand, if all processes are CPU-bound, the I/O waiting queue will almost always be empty, devices will go unused, and again the system will be unbalanced.
-he system with the best performance will thus have a combination of CPU-bound and I/O-bound processes.
+he system with the best performance will thus have a combination of CPU-bound and I/O-bound processes.\\
 
 Tiene en cuenta las características del proceso:
+
+\begin{itemize}
+	\item \textbf{Throughput} - The total number of processes that complete their execution per time unit.
+	\item \textbf{Latency}, specifically:
+	\begin{itemize}
+		\item \textbf{Turnaround time} - total time between submission of a process and its completion.
+		\item \textbf{Response time} - amount of time it takes from when a request was submitted until the first response is produced.
+	\end{itemize}
+	\item \textbf{Fairness} - Equal CPU time to each process (or more generally appropriate times according to each process' priority and workload).
+	\item \textbf{Waiting Time} - The time the process remains in the ready queue.
+\end{itemize}
+
+\paragraph{Objetivos del Scheduler:}
 \begin{itemize}
 	\item Dar una participación adecuada del reparto de tiempo de CPU (Fairness).
 	\item Equilibrar el uso de recursos (Load Balancing).
@@ -468,6 +481,7 @@ Las decisiones de scheduling se pueden tomar cuando un proceso:
 \end{itemize}
 
 \textbf{Transicion apropiativa}: es el SO el que interrumpe.
+
 \textbf{Transcion no apropiativa}: es el propio proceso el que interrumpe.
 
 \textbf{Starvation}: es un problema que ocurre cuando hay multitasking, donde a un proceso se le niega constantemente los recursos necesarios. De esta manera la tarea nunca puede concretarse.
@@ -482,7 +496,7 @@ Las decisiones de scheduling se pueden tomar cuando un proceso:
 \end{enumerate}
 
 \subsubsection{First come-First served (FIFO)}
-Simplemente encola procesos en estado \emph{ready} en el orden de llegada.
+Simplemente encola procesos en estado \emph{ready} en el orden de llegada.\\
 
 \textbf{Características}
 
@@ -535,13 +549,150 @@ If a process uses too much CPU time, it will be moved to a lower-priority queue.
 	\item Por pedido del usuario (Uso de una System Call).
 \end{itemize}
 
-\subsubsection{Terminacion de procesos}
+\subsubsection{Terminación de procesos}
 \begin{itemize}
 	\item Salida normal (voluntaria).
 	\item Salida por error (voluntaria).
 	\item Error “fatal” (involuntaria).
 	\item “Muerte” por otro proceso.
 \end{itemize}
+
+\subsection{Booting}
+A boot loader is a computer program that loads an operating system or some other system software for the computer after completion of the power-on self-tests; it is the loader for the operating system itself, which has its own loader for loading ordinary user programs and libraries. Within the hard reboot process, it runs after completion of the self-tests, then loads and runs the software. A boot loader is loaded into main memory from persistent memory, such as a hard disk drive or, in some older computers, from a medium such as punched cards, punched tape, or magnetic tape. The boot loader then loads and executes the processes that finalize the boot.
+
+\begin{itemize}
+	\item Cargar en memoria un software que pueda lanzar un Sistema Operativo.
+	\begin{itemize}
+		\item Switches en el panel.
+		\item Flash boot loader.
+		\item MBR (Master Boot Record) program.
+		\item EFI (Extended Firmware Interface).
+	\end{itemize}
+	\item Termina cargando el first stage boot loader.
+\end{itemize}
+
+\subsection{EFI (Extensible Firmware Interface)}
+Interfaz Extensible del Firmware, Extensible Firmware Interface (EFI), es una especificación desarrollada por Intel dirigida a reemplazar la antigua interfaz del estándar IBM PC ROM BIOS, e interactúa como puente entre el sistema operativo y el firmware base.
+
+\begin{itemize}
+	\item Boot Services:
+	\begin{itemize}
+		\item Soporte de consola.
+		\item Soporte gráfico.
+	\end{itemize}
+	\item Runtime Services:
+	\begin{itemize}
+		\item Device Drivers
+		\item Fecha y Hora
+	\end{itemize}
+	\item Carga de código desde Internet
+\end{itemize}
+
+Las especificaciones de la EFI permiten ofrecer un controlador de dispositivo independiente del procesador denominado EFI Byte Code o simplemente EBC. Gracias a esto, se permite soporte para la carga de gráficos, red, sonido y opciones avanzadas del sistema, sin haber precargado el sistema operativo en cuestión. Esto era totalmente imposible en el BIOS, ya que cargaba funciones muy limitadas y necesarias como el soporte de periféricos como teclado y ratón.
+
+\subsection{UEFI}
+El 25 de julio de 2005 se creó la fundación UEFI (Unified Extensible Firmware Interface) cuya labor consistía en desarrollar y promocionar la plataforma EFI.
+
+Define un “boot manager” (a firmware policy engine) que carga el loader del SO y los drivers que se necesiten.
+La configuración del booteo se almacena en variables NVRAM (path de loaders)
+Los loaders del SO son “clases” de aplicaciones UEFI, como clases que son, se almacenan en el file system (EFI System partition) que es independiente del medio (HD, Optical Disk, etc).
+Especifica un Shell para ejecutar aplicaciones (eje boot loaders), modificar variables, etc
+Mantiene compatibilidad reversa con BIOS
+
+\subsection{Proceso de BOOT – Linux}
+En Linux, el flujo de control durante el arranque es desde el BIOS, al gestor de arranque y al núcleo (kernel). 
+El núcleo inicia el planificador (para permitir la multitarea) y ejecuta el primer espacio de usuario (es decir, fuera del espacio del núcleo) y el programa de inicialización (que establece el entorno de usuario y permite la interacción del usuario y el inicio de sesión), momento en el que el núcleo se inactiva hasta que sea llamado externamente.
+
+\subsection{Creacion de procesos por el usuario}
+Espacio de direcciones de un proceso
+
+\begin{itemize}
+	\item TXT: Ejecutable
+	\item DATA: Variables “static”
+	\item U\_Area: Stack + Información del proceso
+\end{itemize}
+
+\subsubsection{TXT}
+The Text segment (a.k.a the Instruction segment) contains the executable program code and constant data. The text segment is marked by the operating system as read-only and can not be modified by the process. Multiple processes can share the same text segment. Processes share the text segment if a second copy of the program is to be executed concurrently.
+
+\subsubsection{Data}
+The data segment, which is contiguous (in a virtual sense) with the text segment, can be subdivided into initialized data (e.g. in C/C++, variables that are declared as static or are static by virtual of their placement) and uninitialized (or 0-initizliazed) data. The uninitialized data area is also called BSS (Block Started By Symbol). For example, Initialized Data section is for initialized global variables or static variables, and BSS is for uninitialized.
+
+\subsubsection{U\_Area (STACK + Process info)}
+In addition to the text, data, and stack segment, the OS also maintains for each process a region called the u area (User Area). The u area contains information specific to the process (e.g. open files, current directory, signal action, accounting information) and a system stack segment for process use. If the process makes a system call (e.g., the system call to write in the function in main ), the stack frame information for the system is stored in the system stack segment. Again, this information is kept by the OS in an area that the process doesn't normally have access to. Thus, if this information is needed, the process must use special system call to access it. Like the process itself, the contents of the u area for the process are paged in and out by the OS.
+
+\subsection{Fork y Exec}
+\subsubsection{Exec}
+Reemplaza al proceso actual con un nuevo programa.
+
+\subsubsection{Fork}
+Lanza un nuevo proceso a imagen y semejanza de sí mismo. El hijo tiene el mismo código ejecutable que su padre.
+The fork operation creates a separate address space for the child
+When a process calls fork, it is deemed the parent process, and the newly created process, its child. After the fork, both processes not only run the same program, but they resume execution as though both had called the system call. They can then inspect the call's return value to determine their status, child or parent, and act accordingly.
+Cada uno tiene su propio espacio de direcciones. No se comparte memoria de escritura.
+
+So, \texttt{fork()} and \texttt{exec()} are often used in sequence to get a new program running as a child of a current process. Shells typically do this whenever you try to run a program like \texttt{find} - the shell forks, then the child loads the \texttt{find} program into memory, setting up all command line arguments, standard I/O and so forth.\\
+
+\textbf{Laboratorio}
+
+\begin{lstlisting}
+if ( (pidhijo = fork()) == 0) {
+	// When fork() returns 0, we are in the child process.
+	cout << endl << "---> Es el HIJO con pid = " << getpid() << " cuyo padre es pid = " << getppid() << endl;
+	exit(0);
+} else {
+	// When fork() returns a positive number, we are in the parent process
+	// and the return value is the PID of the newly created child process.
+	cout << endl << "Es el PADRE con pid = " << getpid() << " y su hijo es pid = " << pidhijo << endl;
+	exit(0);
+}
+\end{lstlisting}
+
+Fork copia TXT, Data y U\_Area “on demand”
+
+\begin{lstlisting}
+if (fork()==0){
+	Read	//lee el hijo
+} else {
+	Read	//lee el padre
+}
+\end{lstlisting}
+
+Los dos leen del mismo archivo. Si leen una vez cada uno, cada uno lee salteado.
+
+\textbf{Lock compartido}: Asociado al read.
+\textbf{Lock exclusivo}: Asociado al write.
+
+Si quiero bloquear un archivo (de forma exclusiva) y ya esta bloqueado, se queda esperando hasta que se desbloquea.
+
+El unico caso en que los bloquea al mismo tiempo es que ambos sean compartidos.
+
+El bloqueo no es una cola. Lo hace o se queda esperando, sin orden de prioridad.
+
+El lock es un protocolo o una convencion, pero no impide read, write, delete, etc, si se lo hace sin locks.\\
+
+\textbf{Ejecución Foreground con proceso hijo Unix}
+\begin{lstlisting}[language=sh]
+> script1.sh 	#script1.sh necesita permiso de ejecución
+# no nos devuelve el control hasta que no finaliza
+\end{lstlisting}
+
+\textbf{Ejecución Background con proceso hijo}
+\begin{lstlisting}[language=sh]
+> script1.sh & 		#script1.sh necesita permiso de ejecución
+#Nos devuelve el control en el momento
+
+[1] 20295 		#muestra el número de proceso
+[1] + Done script1.sh 	#nos avisa que finalizó
+\end{lstlisting}
+
+\textbf{Ejecución Foreground sin proceso hijo}
+\begin{lstlisting}[language=sh]
+> . .script1.sh 		#script1.sh no necesita permiso de ejecución
+#no nos devuelve el control hasta que no finaliza
+#se ejecuta en el mismo ambiente, eso significa que
+#no hay un shell hijo
+\end{lstlisting}
 
 % Bibliografía utilizada en el apunte
 \newpage
