@@ -10,6 +10,11 @@
 \usepackage{graphicx} % Permite incluir gráficos
 \usepackage[hang, bf]{caption} % Personaliza los subtítulos de las figuras y tablas
 \usepackage{float} % Permite posicionar mejor las figuras y tablas
+\usepackage{listings} % Permite insertar código fuente
+\usepackage{xcolor} % Permite utilizar más colores.
+
+\definecolor{darkblue}{rgb}{0,0,0.4}
+\definecolor{darkgreen}{rgb}{0,0.4,0}
 
 % Defino la ruta de los paquetes personalizados para el apunte
 \newcommand{\rutapaquetes}{./paquetes-apunte}
@@ -24,7 +29,7 @@
 	linkcolor=black,   % color of internal links (change box color with linkbordercolor)
 	citecolor=green,   % color of links to bibliography
 	filecolor=magenta, % color of file links
-	urlcolor=blue,     % color of external links
+	urlcolor=blue     % color of external links
 }
 
 \newcommand{\imgdir}{../resources/images} % Ruta de las imágenes
@@ -51,6 +56,25 @@
 
 \renewcommand{\footrulewidth}{0.4pt} % Agrego linea que separa el footer
 
+% Elijo formato de bloques de código fuente
+\lstset{ 
+	backgroundcolor=\color{white},
+	basicstyle=\ttfamily\footnotesize,
+	breaklines=true,
+	commentstyle=\color{darkgreen},
+	extendedchars=true,
+	frame=single,
+	language=c++,
+	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1, % Escapeo caracteres especiales
+	keywordstyle=\color{darkblue},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	tabsize=4,
+	showspaces=false,
+	showstringspaces=false,
+	stringstyle=\color{red}
+}
+
 % Configura la caratula
 \materia{\nombremateria}
 \tipoapunte{Resumen teórico}
@@ -68,7 +92,7 @@
 
 \tableofcontents % Genera el índice
 
-\subfile{\rutapaquetes/acerca-del-proyecto.tex} % Inlcuye informacion acerca del proyecto FIUBA Apuntes
+\subfile{\rutapaquetes/acerca-del-proyecto.tex} % Incluye información acerca del proyecto FIUBA Apuntes
 
 % Insertar aquí el contenido del apunte. A continuacion hay secciones a modo de ejemplo.
 
@@ -85,8 +109,8 @@ Computadora central. Gran capacidad de I/O, server para e-commerce a gran escala
 
 \textbf{Seguridad y disponibilidad:} 
 \begin{itemize}
-	\item Transaction processing: is information processing that is divided into individual, indivisible operations, called transactions. Each transaction must succeed or fail as a complete unit; it can never be only partially complete.
-	\item Batch processing: is the execution of a series of programs ("jobs") on a computer without manual intervention.
+	\item Transaction processing: es procesamiento de información distribuido en operaciones individuales e indivisibles, llamadas \emph{transacciones}. Cada transacción debe ser exitosa o fallar como unidad entera, no puede haber transacciones parcialmente completas.
+	\item Batch processing: Es la ejecución de una serie de programas ("tareas") en una computadora sin intervención del usuario.
 \end{itemize}
 
 \subsubsection{Servidores}
@@ -158,7 +182,7 @@ Más de un procesador en el mismo chip o board.
 
 Soportado en todos los sistemas operativos de escritorio.
 
-La paralelizacion esta limitada por la ley de Amdahl: The speedup of a program using multiple processors in parallel computing is limited by the time needed for the sequential fraction of the program.
+La paralelizacion esta limitada por la ley de Amdahl: El \emph{speedup} de un programa que utiliza varios procesadores en paralelo está limitado por el tiempo tomado por la fracción secuencial del programa.
 
 \newpage
 \section{Mecanismos básicos}
@@ -209,11 +233,11 @@ Hay dos tipos de interrupciones:
 \subsubsection{Modo Kernel}
 Ejecutando un servicio propio del sistema operativo.
 
-In computing, the kernel is a computer program that manages input/output requests from software, and translates them into data processing instructions for the central processing unit and other electronic components of a computer. The kernel is a fundamental part of a modern computer's operating system.
+En computación, el \emph{kernel} es un programa que maneja las solicitudes de entrada y salida que realiza el software, traduciendolas en instrucciones de procesamiento de datos para la CPU y otros componenentes electrónicos de una computadora. El kernel es una parte fundamental en un sistema operativo moderno de PC.
 
-Because of its critical nature, the kernel code is usually loaded into a protected area of memory, which prevents it from being overwritten by other, less frequently used parts of the operating system or by application programs. The kernel performs its tasks, such as executing processes and handling interrupts, in kernel space, whereas everything a user normally does, such as writing text in a text editor or running programs in a GUI (graphical user interface), is done in user space. This separation is made in order to prevent user data and kernel data from interfering with each other and thereby diminishing performance or causing the system to become unstable (and possibly crashing).
+Debido a su naturaleza crítica, el código kernel generalmente se encuentra cargado en un area protegida de la memoria, previniendo que sea sobreescrito por otra parte no tan usada del sistema operativo o por aplicaciones. El kernel realiza sus tareas, como la ejecución de procesos y manejo de interrupciones, en area del kernel, mientras que todo lo que un usuario normalmente haría, como escribir texto en un editor o correr aplicaciones con interfaz gráfica, se realiza en el espacio del usuario. Esta separación se realiza con el fin de prevenir datos del usuario y del kernel interferir uno con el otro, disminuyendo performance o causando el sistema operativo inestable (o incluso colgandolo)
 
-When a computer program (in this context called a process) makes requests of the kernel, the request is called a system call.
+Cuando un programa (o como se lo conoce en este contexto \emph{proceso}) realiza solicitudes al kernel, esta solicitud se llama "llamada al sistema" o \emph{system call}
 
 \subsubsection{Modo usuario}
 Ejecutando un programa de usuario.
@@ -260,8 +284,8 @@ Un proceso es:
 \begin{itemize}
 	\item La imagen de un programa en ejecución (una copia del programa).
 	\item Con las estructuras del sistema operativo para administrarlo.
-	\item Several processes may be associated with the same program; for example, opening up several instances of the same program often means more than one process is being executed.
-\end{itemize}~\\
+	\item Varios procesos pueden estar asociados a un mismo programa; por ejemplo, iniciar varias instancias de un mismo programa generalmente significa que más de un proceso está siendo ejecutado.
+\end{itemize}
 
 Un proceso tiene:
 \begin{itemize}
@@ -271,27 +295,26 @@ Un proceso tiene:
 		\item Los valores del program counter, registros y variables.
 		\item Información necesaria para su administración por parte del Sistema Operativo (id, prioridad, ...).
 	\end{itemize}
-	\item Memory (typically some region of virtual memory); which includes the executable code, process-specific data (input and output), a call stack (to keep track of active subroutines and/or other events), and a heap to hold intermediate computation data generated during run time.
-	\item Operating system descriptors of resources that are allocated to the process, such as file descriptors (Unix terminology) or handles (Windows), and data sources and sinks.
-	\item Security attributes, such as the process owner and the process' set of permissions (allowable operations).
+	\item Memoria (generalmente una región de memoria virtual); que incluye el código ejecutable, datos específicos del proceso (entrada y salida), un stack de llamadas (para mantener registro de las subrutinas activas y otros eventos), y un heap para mantener datos intermedios generados durante el tiempo de ejecución.
+	\item Descriptores de recursos del sistema operativos, reservados por el proceso, como pueden ser los \emph{file descriptors} (Unix), o \emph{handles} (Windows), y fuentes y sumideros de datos.
+	\item Atributos de seguridad, como el propietario del proceso y los permisos (operaciones permmitidas) del mismo.
 \end{itemize}
 
-Esta información la guarda el sistema operative en estructuras de datos llamadas Process Control Blocks.\\
+Esta información la guarda el sistema operativo en estructuras de datos llamadas \emph{Process Control Blocks}.\\
 
-Any subset of resource, but typically at least the processor state, may be associated with each of the process' threads in operating systems that support threads or 'daughter' processes.
+Cualquier subgrupo de recursos, menos, generalmente, el estado del procesador, puede estar asociado con cada uno de los threads del proceso (en sistemas operativos que soportan threads) o en los procesos "hijos".
 
-The operating system keeps its processes separated and allocates the resources they need, so that they are less likely to interfere with each other and cause system failures (e.g., deadlock or thrashing). The operating system may also provide mechanisms for inter-process communication to enable processes to interact in safe and predictable ways.
+El sistema operativo mantiene sus procesos separados y reserva los recursos que necesitan, de manera que sean menos propensos a interferir entre ellos y causen fallas del sistema (como deadlocks o thrashing). El sistema operativo también provees mecanismos para la comunicación entre procesos, permitiendoles interactuar de manera segura y predecible.
 
 \subsection{Multiprogramación}
-In computing, multitasking is a method where multiple tasks (also known as processes) are performed during the same period of time – they are executed concurrently (in overlapping time periods, new tasks starting before others have ended) instead of sequentially (one completing before the next starts). The tasks share common processing resources, such as a CPU and main memory.\\
+En computación, \emph{multitasking} es un metodo donde multiples tareas (procesos) son ejecutadas durante el mismo periodo de tiempo. Se ejecutan \emph{concurrentes} (en periodos de tiempo solapados, una tarea puede iniciar antes que otras hayan terminado) en vez de \emph{secuenciales} (una tarea comienza luego de que la anterior haya terminado). Las tareas concurrentes comparten recursos de procesamiento, como la CPU y memoria principal.\\
 
-Multitasking does not necessarily mean that multiple tasks are executing at exactly the same instant. In other words, multitasking does not imply parallelism, but it does mean that more than one task can be part-way through execution at the same time, and more than one task is advancing over a given period of time.
+Multitasking no necesariamente significa que varias tareas se ejecutan en el mismo preciso momento. En otras palabras, multitasking NO implica paralelismo, pero si significa que más de una tarea puede estar en medio de su ejecución al mismo tiempo, y que mas d euna tarea está avanzando dentro de un periodo de tiempo determinado.
 
-In the case of a computer with a single CPU, only one task is said to be running at any point in time, meaning that the CPU is actively executing instructions for that task.\\
+En caso de una computadora con un solo CPU, solo una tarea se dice estar corriendo en determinado tiempo, lo que significa que ese CPU está activamente ejecutando instrucciones para esa tarea.\\
+Multitasking resuelve este problema organizando qué tarea se ejecutará en cada tiempo determinado, y cuándo una tarea en espera obtiene un turno. El acto de reasignar un CPU de una tarea a otra se llama \emph{context switch}, o cambio de contexto. Cuando estos cambios de contexto ocurren lo suficientemente seguidos, se logra una ilusión de paralelismo.
 
-Multitasking solves the problem by scheduling which task may be the one running at any given time, and when another waiting task gets a turn. The act of reassigning a CPU from one task to another one is called a context switch. When context switches occur frequently enough, the illusion of parallelism is achieved.
-
-Even on computers with more than one CPU (called multiprocessor machines) or more than one core in a given CPU (called multicore machines), where more than one task can be executed at a given instant (one per CPU or core), multitasking allows many more tasks to be run than there are CPUs.\\
+Incluso en computadoras con más de un CPU (máquinas \emph{multiprocesadores}) o más de un nucleo en determinado CPU (máquinas \emph{multinúcleo}), donde más de una tarea puede ser ejecutada en un determinado instante (una por núcleo), multitasking permite correr muchas más tareas que la cantidad de CPUs presentes.
 
 Cuando hay más de un procesador se conoce como Multiprocesamiento.
 
@@ -302,9 +325,22 @@ La CPU va conmutando (switching) de un proceso a otro.
 Es un multiplexado de la CPU.
 
 \subsubsection{Implementación de la multiprogramación}
-El \textit{scheduler} decide a que proceso dar el control.
-
-El \textit{dispatcher} realiza el cambio de estado.
+\begin{itemize}
+	\item Se conoce como \emph{scheduler} al mecanismo que permite elegir varios procesos en estado \emph{Ready}, para otorgarles tiempo de CPU y que puedan realizar sus tareas. Para ello aplica un algoritmo de scheduling, que tiene en cuenta los siguientes aspectos
+	\begin{itemize}
+		\item Cantidad requerida de recursos.
+		\item Cantidad actualmente disponible de recursos.
+		\item Prioridad del trabajo o proceso.
+		\item la cantidad de tiempo de espera.
+	\end{itemize}
+	
+	\item \emph{Dispatcher} es el mecanismo que otorga tiempo de CPU al proceso seleccionado por el scheduler. Para esto, se realizan los siguientes pasos:
+	\begin{itemize}
+		\item Cambio de contexto (\emph{Context switching})
+		\item Cambiar a modo usuario (\emph{user mode})
+	\end{itemize}
+	El tiempo se divide en segmentos, denominados \emph{time slices}. Cuando un \emph{time slice} se termina, le permite al scheduler actualizar el estado de cada proceso, y seleccionar el próximo a ejecutar.
+\end{itemize}
 
 Cada vez que se interrumpe un proceso también se pierde el tiempo de guardar el contexto.
 
@@ -343,6 +379,169 @@ A process may be terminated, either from the ``running'' state by completing its
 A child process always first becomes a zombie before being removed from the resource table. In most cases, under normal system operation zombies are immediately waited on by their parent and then reaped by the system – processes that stay zombies for a long time are generally an error and cause a resource leak.\\
 
 Después de terminado un proceso, el mismo queda en estado ``terminado'' hasta que el sistema operativo termina de limpiar las estructuras que usó para ejecutarlo (mientras tanto está en estado zombie).
+
+\begin{lstlisting}
+int main()
+{
+	pid_t child_pid;
+
+	child_pid = fork();
+	if(child_pid > 0){
+		sleep(60);
+	}else{
+		exit(0);
+	}
+	return 0;
+}
+\end{lstlisting}
+
+\subsection{PCB (Process Control Block)}
+Es la estructura de datos con la que el sistema operativo administra los procesos.
+Contiene la información acerca del proceso y su estado.
+Además la información que el S.O. precisa para manejarlo como: Identificador, Estado, Recursos, Historia.
+Ejemplo de datos que maneja: Registros, Program counter, Process ID, Punteros de memoria, etc.
+
+\underline{Estados de un proceso}:
+Los estados se manejan como colas.
+El Dispatcher es el encargado de cambiar los PCBs entre las colas.
+
+\subsubsection{Dispatcher (Scheduler de corto plazo)}
+Decide qué proceso, entre los procesos en memoria y con estado \emph{ready}, será ejecutado (otorgado un CPU) luego de una interrupción del clock, una interrupción de entrada/salida, llamada al sistema operativo u otro tipo de señal. Por este motivo, este scheduler de corto plazo realizar tareas de planificación mucho más seguido que los schedulers de medio y largo plazo. Al menos una decisión de scheduling se realiza luego de cada \emph{time slice}, y estos son bastante cortos.
+
+\begin{itemize}
+	\item Al pasar de Running a Blocked.
+	El manejador de interrupciones lo invoca para cambiar de estado al proceso:\\
+	\begin{itemize}
+		\item Salva los datos necesarios en el PCB.
+		\item Cambia el PCB de cola.
+	\end{itemize}
+	Luego se decide a que proceso dar control (tarea del Scheduler).
+
+	\item Al pasar de Ready a Running \\
+	El Scheduler lo invoca cuando ya decidió a que proceso activar. \\
+	Carga el estado de la CPU con los datos del PCB. \\
+	Continúa la ejecución del proceso.
+\end{itemize}
+
+Scheduler (Long term)
+Decide a cuál de los procesos en ready hay que darle el control.
+In general, most processes can be described as either I/O-bound or CPU-bound. An I/O-bound process is one that spends more of its time doing I/O than it spends doing computations. A CPU-bound process, in contrast, generates I/O requests infrequently, using more of its time doing computations.
+It is important that a long-term scheduler selects a good process mix of I/O-bound and CPU-bound processes. If all processes are I/O-bound, the ready queue will almost always be empty, and the short-term scheduler will have little to do. On the other hand, if all processes are CPU-bound, the I/O waiting queue will almost always be empty, devices will go unused, and again the system will be unbalanced.
+he system with the best performance will thus have a combination of CPU-bound and I/O-bound processes.
+
+Tiene en cuenta las características del proceso:
+\begin{itemize}
+	\item Dar una participación adecuada del reparto de tiempo de CPU (Fairness).
+	\item Equilibrar el uso de recursos (Load Balancing).
+	\item Aplicar las políticas generales del Sistema (prioridades, afinidad, seguridad).
+	\item El resto depende del tipo de Sistema.
+\end{itemize}
+
+In practice, these goals often conflict (e.g. throughput versus latency), thus a scheduler will implement a suitable compromise. Preference is given to any one of the concerns mentioned above, depending upon the user's needs and objectives.
+
+\begin{itemize}
+	\item Batch (por lotes):
+	\begin{itemize}
+		\item maximizar el throughput: cantidad de procesos / tiempo.
+		\item Mantener la CPU ocupada.
+		\item Minimizar el turnaround time.
+	\end{itemize}
+	\item Interactivo:
+	\begin{itemize}
+		\item Buen tiempo de respuesta
+		\item Expectativas del usuario
+	\end{itemize}
+	\item Real time:
+	\begin{itemize}
+		\item Cumplir con los deadlines
+		\item Desempeño predecible
+	\end{itemize}
+\end{itemize}
+
+Las decisiones de scheduling se pueden tomar cuando un proceso:
+
+\begin{itemize}
+	\item Pasa de running a blocked/waiting. (Transicion NO apropiativa)
+	\item Pasa de running a ready. (Transicion apropiativa)
+	\item Pasa de blocked/waiting a ready. (apropiativa)
+	\item Termina. (NO apropiativa)
+\end{itemize}
+
+\textbf{Transicion apropiativa}: es el SO el que interrumpe.
+\textbf{Transcion no apropiativa}: es el propio proceso el que interrumpe.
+
+\textbf{Starvation}: es un problema que ocurre cuando hay multitasking, donde a un proceso se le niega constantemente los recursos necesarios. De esta manera la tarea nunca puede concretarse.
+
+\subsection{Algoritmos de scheduling}
+
+\begin{enumerate}
+	\item FIFO
+	\item Shortest Job Next (SJN)
+	\item Round Robin
+	\item Múltiples colas con prioridad
+\end{enumerate}
+
+\subsubsection{First come-First served (FIFO)}
+Simplemente encola procesos en estado \emph{ready} en el orden de llegada.
+
+\textbf{Características}
+
+\begin{itemize}
+	\item Since context switches only occur upon process termination, and no reorganization of the process queue is required, scheduling overhead is minimal.
+	\item Throughput can be low, since long processes can hold the CPU
+	\item Turnaround time, waiting time and response time can be high for the same reasons above
+	\item No prioritization occurs, thus this system has trouble meeting process deadlines.
+	\item The lack of prioritization means that as long as every process eventually completes, there is no starvation. In an environment where some processes might not complete, there can be starvation.
+	\item It is based on Queuing
+\end{itemize}
+
+\subsubsection{Shortest Job Next}
+Selecciona para ser ejecutado el proceso en espera con el menor tiempo de ejecución.
+
+\textbf{Pros}:
+\begin{itemize}
+	\item Shortest job next is advantageous because of its simplicity and because it minimizes the average amount of time each process has to wait until its execution is complete. 
+\end{itemize}
+
+\textbf{Contras}:
+\begin{itemize}
+	\item However, it has the potential for process starvation for processes which will require a long time to complete if short processes are continually added.
+	\item Another disadvantage of using shortest job next is that the total execution time of a job must be known before execution. While it is not possible to perfectly predict execution time, several methods can be used to estimate the execution time for a job, such as a weighted average of previous execution times.
+\end{itemize}
+
+\subsubsection{Round Robin}
+Time slices are assigned to each process in equal portions and in circular order, handling all processes without priority (also known as cyclic executive). 
+
+\textbf{Pros}:
+\begin{itemize}
+	\item Round-robin scheduling is simple, easy to implement, and starvation-free.
+	\item Good average response time, waiting time is dependent on number of processes, and not average process length.
+	\item Starvation can never occur, since no priority is given. Order of time unit allocation is based upon process arrival time, similar to FCFS.
+\end{itemize}
+
+\textbf{Contras}:
+\begin{itemize}
+	\item Because of high waiting times, deadlines are rarely met in a pure RR system.
+\end{itemize}
+
+\subsubsection{Múltiples colas con Prioridad}
+This is used for situations in which processes are easily divided into different groups. For example, a common division is made between foreground (interactive) processes and background (batch) processes. These two types of processes have different response-time requirements and so may have different scheduling needs. It is very useful for shared memory problems.
+If a process uses too much CPU time, it will be moved to a lower-priority queue. This scheme leaves I/O-bound and interactive processes in the higher priority queues. In addition, a process that waits too long in a lower-priority queue may be moved to a higher priority queue. This form of aging also helps to prevent starvation of certain lower priority processes.
+
+\subsection{Creacion/Terminacion de procesos}
+\subsubsection{Creación de Procesos}
+\begin{itemize}
+	\item Al iniciar el sistema (Booting)
+	\item Por pedido del usuario (Uso de una System Call).
+\end{itemize}
+
+\subsubsection{Terminacion de procesos}
+\begin{itemize}
+	\item Salida normal (voluntaria).
+	\item Salida por error (voluntaria).
+	\item Error “fatal” (involuntaria).
+	\item “Muerte” por otro proceso.
+\end{itemize}
 
 % Bibliografía utilizada en el apunte
 \newpage
