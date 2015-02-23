@@ -1009,6 +1009,192 @@ Se desplaza todo el proceso y se marca en el PCB (process control block). Lo dec
 Se hace cuando no hay más memoria principal disponible. 
 Al hacer swap-in, un proceso puede volver a una dirección distinta. El direccionamiento indirecto resuelve la reubicación.
 
+\section{Memoria virtual}
+
+\subsection{Overlays}
+Solución para correr programas demasiado grandes para la memoria disponible. Se comparten partes de memoria.
+Reemplaza un bloque de código por otro.
+El programador debe planificar el uso de \emph{overlays} según el uso de las rutinas del sistema.
+Aún se usa en PDAs, Celulares y Embedded.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.2\textwidth]{virtual_memory_overlays}
+	%\caption{Overlays}
+	\label{fig:virtual_memory_overlays}
+\end{figure}
+Main puede llamar a cualquier procedimiento.
+\textbf{A} puede llamar a \textbf{B}, pero no a \textbf{C} ni a \textbf{D}, \textbf{E} o \textbf{F}. \textbf{C} no puede llamar a ninguno.
+Cada una de las tres partes son excluyentes
+
+\subsection{Memoria virtual}
+Evita que el programador deba planificar el uso de \emph{overlays}.
+Basicamente, utilizando \emph{memoria virtual}, cada programa tiene su propio espacio de direcciones, que está fragmentado en bloques llamados \emph{páginas}. Cada página es un rango continuo de direcciones. Estas páginas están mapeadas en memoria física, pero no todas las páginas tienen que estar en memoria (física) para correr el programa.
+Cuando el programa referencia una parte de su espacio de direcciones que está presente en memoria física, el hardware ejecuta el mapeo necesario al instante. En el caso que la parte no esté en memoria física, el sistema operativo es alertado para que busque la pieza faltante y reejecute la instrucción fallida.
+
+Las principales ventajas de la memoria principal incluyen:
+\begin{itemize}
+	\item Liberar a las aplicaciones de tener que administrar un espacio de memoria compartido.
+	\item Mejor seguridad debido al aislamiento de la memoria
+	\item Poder ser capaz de, conceptualmente, utilizar más memoria que la disponible físicamente, utilizando la técnica de \emph{paginación}
+\end{itemize}
+Virtual memory makes application programming easier by hiding fragmentation of physical memory; by delegating to the kernel the burden of managing the memory hierarchy (eliminating the need for the program to handle overlays explicitly); and, when each process is run in its own dedicated address space, by obviating the need to relocate program code or to access memory with relative addressing.
+Most virtual memory systems use a technique called paging.
+
+\subsection{Páginas}
+A page, memory page, or virtual page is a fixed-length contiguous block of virtual memory, described by a single entry in the page table. It is the smallest unit of data for memory allocation performed by the operating system on behalf of a program, and for transfers between the main memory and any other auxiliary store, such as a hard disk drive.
+Virtual memory allows a page that does not currently reside in main memory to be addressed and used. If a program tries to access a location in such a page, an exception called a page fault is generated. The hardware or operating system is notified and loads the required page from the auxiliary store (hard disk) automatically. A program addressing the memory has no knowledge of a page fault or a process following it. Thus a program can address more (virtual) RAM than physically exists in the computer. Virtual memory is a scheme that gives users the illusion of working with a large block of contiguous memory space (perhaps even larger than real memory), when in actuality most of their work is on auxiliary storage (disk). Fixed-size blocks (pages) or variable-size blocks of the job are read into main memory as needed.
+A transfer of pages between main memory and an auxiliary store, such as a hard disk drive, is referred to as paging.
+Las direcciones generadas por la CPU se dividen bloques de tamaño fijo llamados páginas.
+Estas direcciones se llaman direcciones virtuales. 
+Generalmente de 2 o 4 KB para evitar fragmentación interna.
+Esta técnica permite el uso de memoria no contigua.
+Las páginas se guardan en disco en un \emph{page data set}.
+
+\subsection{Marcos de paginas (frames)}
+La memoria principal se divide en frames, del mismo tamaño que las páginas.
+Las direcciones de los frames se llaman direcciones reales.
+Una unidad de Hardware, llamada \emph{MMU} (Memory Management Unit) mapea las direcciones virtuales en reales.
+
+\subsubsection{Ejemplo de paging}
+Generalmente las paginas y los frames son del mismo tamaño. Por ejemplo 4KB.
+Si tenemos 64 KB de memoria virtual y 32 KB de memoria fisica, tenemos 16 páginas virtuales y 8 frames. De esta forma solo 8 páginas virtuales pueden estar mapeadas. Si el programa hace referencia a una pagina que no esta mapeada, el CPU hace un trap (\emph{page fault}) al SO, para reemplazar una pagina mapeada (poco usada) por la pagina nueva. Se escribe la pagina vieja en disco y se mapea la nueva.
+
+\subsection{Page table}
+Mapea las paginas con los frames.
+\subsubsection{Estructura}
+La estructura de una entrada en la tabla de paginación puede variar de maquina a maquina.
+Ejemplo:
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.2\textwidth]{virtual_memory_page_entry}
+	%\caption{Entrada a la tabla de paginación}
+	\label{fig:virtual_memory_page_entry}
+\end{figure}
+
+\textbf{Page frame number}
+\textbf{Present/absent bit}: Si es 1, la entrada es válida y se puede usar. Si es 0, la pagina virtual no está actualmente en memoria. Acceder a una página cuyo bit está en 0 causa un page fault.
+\textbf{Protection bit}: Dice que tipo de acceso tiene permitido (lectura, lectura/escritura)
+\textbf{Modified (“dirty") bit}: cuando se escribe en una pagina, el hardware automaticamente setea el bit Modified en 1. Este bit se lee cuando el sistema opeartivo decide bajar esta página de memoria. Si la pagina fue modifica (es “dirty”), se debe guardar de vuelta en disco. Si no fue modificada (“clean”), se puede directamante abandonar, ya que la copia que está en disco es válida.
+\textbf{Referenced bit}: Se setea cuando una pagina es referenciada, ya sea para lectura o escritura. Ayuda al sistema operativo a elegir que pagina dar de baja. Las páginas que no están siendo usadas son mejores candidatas a ser dadas de baja.
+\textbf{Caching}: se puede habilitar o deshabilitar el cacheo de la pagina.
+
+\subsubsection{Tabla de páginas directa}
+Se utiliza una \emph{tabla hash}, donde el valor del hash es el número de la página virtual. Cada entrada en la tabla hash contiene una lista enlazada de elemento que dirigen a la misma posición.
+
+\subsubsection{Tabla de página multinivel}
+Cuando crece mucho el espacio de memoria se usan tablas que referencias otras tablas y estas a su vez referencian a los \subsubsection{frames} como en el caso de paginación directo.
+Se tiene en memoria las tablas que están siendo utilizadas y se deja en disco aquellas que no están siendo referenciadas.
+
+\subsubsection{Tabla de página invertidas}
+Es otra solución al problema del crecimiento del espacio de memoria.
+En este diseño en vez de tener una tabla con cada espacio de memoria virtual referenciando su frame en memoria real es al revés.
+La clave de la tabla es el frame, es decir que hay tantas entradas en la tabla como espacio de memoria real.
+Se ahorra mucho espacio pero el cálculo de dirección es más costoso, para encontrar una dirección hay que iterar sobre la tabla buscando la dirección.
+En la práctica el TBL guarda las páginas más utilizadas.
+
+\subsection{Memory management unit (MMU)}
+\subsubsection{Definición}
+Es el responsable de traducir las direcciones virtuales (o lógicas) a direcciones reales (o físicas).
+En general hace uso de una cache asociativo, el \emph{Translation Lookaside Buffer (TLB)}.
+This solution is based on the observation that most programs tend to make a large number of references to a small number of pages, and not the other way around. Thus only a small fraction of the page table entries are heavily read; the rest are barely used at all.
+The solution is a small hardware device for mapping virtual addresses to physical addresses without going through the page table. It is usually inside the MMU and consits of a small number of entries. Each entry contains information about one page, including the virtual page numbet, a bit that is set when the page is modified, the protection code (read/write/execute permissions), and the physical page frame in which the page is located. These fields have a one-to-one correspondence with the fields in the page table, except for the virtual page number, which is not needed in the page table. Another bit indicates wheter the entry is valid (i.e, in use) or not.
+When a virtual address is presented to the MMU for translation, the hardware first checks to see if its virtual page number is present in the TLB by comparing it to all the entries simultaneously (in parallel). If a valid math is found, the page frame is taken directly from the TLB, without going to the page table.
+If the virtual page number is not in the TLB, the MMU detects the miss and does an ordinary page table lookup. It then evicts one of the entries from the TLB and replaces it with the page table entry just looked up. Thus if that page is used again soon, the second time it will result in a TLB hit rather than a miss. When an entry is purged from the TLB, the modified bit is copied back into the page table entry in memory. The other values are already there, except the reference bit. When the TLB is loaded from the page table, all the fields are taken form memory.
+Si no está el hardware en el \emph{MMU}, existen algunas soluciones para implementar el TLB con software.
+
+\textbf{Hit/miss ratio}: Es la relacion entre aciertos y fracasos.
+
+\subsubsection{Oportunidades de optimizacion}
+\begin{itemize}
+	\item Algoritmos de paginado. 
+	\item Que partes pasar al Hard.
+	\item Como evitar los page faults.
+	\item Estructura de las tablas de páginas.
+	\item Organización del Page Data Set.
+	\item Algunas otras cosas que se resuelven con el paginado.
+\end{itemize}
+
+\subsection{Algoritmos de reemplazo de páginas}
+
+\begin{enumerate}
+	\item The theoretically optimal page replacement algorithm
+	\item Not recently used
+	\item FIFO
+	\item Second-chance
+	\item Clock
+	\item Least recently used
+	\item Random
+	\item Not frequently used
+	\item Aging
+\end{enumerate}
+
+\subsubsection{The theoretically optimal page replacement algorithm}
+The theoretically optimal page replacement algorithm is an algorithm that works as follows: when a page needs to be swapped in, the operating system swaps out the page whose next use will occur farthest in the future.
+This algorithm cannot be implemented in the general purpose operating system because it is impossible to compute reliably how long it will be before a page is going to be used, except when all software that will run on a system is either known beforehand and is amenable to the static analysis of its memory reference patterns, or only a class of applications allowing run-time analysis.
+
+\subsubsection{Not recently used}
+The not recently used (NRU) page replacement algorithm is an algorithm that favours keeping pages in memory that have been recently used. This algorithm works on the following principle: when a page is referenced, a referenced bit is set for that page, marking it as referenced. Similarly, when a page is modified (written to), a modified bit is set. The setting of the bits is usually done by the hardware, although it is possible to do so on the software level as well.
+At a certain fixed time interval, the clock interrupt triggers and clears the referenced bit of all the pages, so only pages referenced within the current clock interval are marked with a referenced bit. When a page needs to be replaced, the operating system divides the pages into four classes:
+3. referenced, modified
+2. referenced, not modified
+1. not referenced, modified
+0. not referenced, not modified
+Although it does not seem possible for a page to be not referenced yet modified, this happens when a class 3 page has its referenced bit cleared by the clock interrupt. The NRU algorithm picks a random page from the lowest category for removal. So out of the above four pages, the NRU algorithm will replace the not referenced, not modified. Note that this algorithm implies that a modified but not referenced (within last clock interval) page is less important than a not modified page that is intensely referenced.
+
+\subsubsection{FIFO}
+Requiere mantener una cola de páginas.
+No es buena idea.
+Reemplaza las páginas del scheduler o del Kernel.
+Este algoritmo experimenta la anomalía de Belady (the phenomenon where increasing the number of page frames results in an increase in the number of page faults for a given memory access pattern)
+
+\subsubsection{Second-chance}
+A modified form of the FIFO page replacement algorithm, known as the Second-chance page replacement algorithm, fares relatively better than FIFO at little cost for the improvement. It works by looking at the front of the queue as FIFO does, but instead of immediately paging out that page, it checks to see if its referenced bit is set. If it is not set, the page is swapped out. Otherwise, the referenced bit is cleared, the page is inserted at the back of the queue (as if it were a new page) and this process is repeated. This can also be thought of as a circular queue. If all the pages have their referenced bit set, on the second encounter of the first page in the list, that page will be swapped out, as it now has its referenced bit cleared. If all the pages have their reference bit set then second chance algorithm degenerates into pure FIFO.
+As its name suggests, Second-chance gives every page a "second-chance" – an old page that has been referenced is probably in use, and should not be swapped out over a new page that has not been referenced.
+
+\subsubsection{Clock}
+Clock is a more efficient version of FIFO than Second-chance because pages don't have to be constantly pushed to the back of the list, but it performs the same general function as Second-Chance. The clock algorithm keeps a circular list of pages in memory, with the "hand" (iterator) pointing to the last examined page frame in the list. When a page fault occurs and no empty frames exist, then the R (referenced) bit is inspected at the hand's location. If R is 0, the new page is put in place of the page the "hand" points to, otherwise the R bit is cleared. Then, the clock hand is incremented and the process is repeated until a page is replaced.
+
+\subsubsection{Least recently used}
+Cada referencia a memoria actualiza un timestamp en la page table. Se reemplaza la página cuyo time stamp sea el más antiguo. Requiere bastante auxilio de hard para tener una performance adecuada.
+
+\subsubsection{Random}
+Random replacement algorithm replaces a random page in memory. This eliminates the overhead cost of tracking page references. Usually it fares better than FIFO, and for looping memory references it is better than LRU, although generally LRU performs better in practice.
+
+\subsubsection{Not frequently used}
+The not frequently used (NFU) page replacement algorithm requires a counter, and every page has one counter of its own which is initially set to 0. At each clock interval, all pages that have been referenced within that interval will have their counter incremented by 1. In effect, the counters keep track of how frequently a page has been used. Thus, the page with the lowest counter can be swapped out when necessary.
+Problema: No tiene en cuenta el tiempo. Nunca olvida!
+
+\subsubsection{Aging}
+The aging algorithm is a descendant of the NFU algorithm, with modifications to make it aware of the time span of use. También tiene un contador, por cada referencia se enciende el primer bit. Cuando se produce una interrupción de reloj (~ 0,02 s), el SO desplaza todos los bits una posición a la derecha. Cuando ocurre un fallo se cambia la página de menor valor en el contador.
+
+\subsection{Otros conceptos}
+\subsubsection{Working set}
+Los programas exhiben un comportamiento conocido como localidad de referencia. En cada fase de su ejecución, el proceso referencia solo a un pequeño número de páginas (no necesariamente contiguas). Ese conjunto se llama Working Set (aunque la definición cambia con la implementación). El Working Set va cambiando a medida que progresa la ejecución.
+
+\subsubsection{Pre-paginado}
+Si un proceso pagina durante mas tiempo que el que ejecuta se dice que hace thrashing. This leads to low CPU utilization.
+Posible solucion: Se pre-pagina (cargan en memoria) todas las páginas del último Working Set del proceso. Se re-calcula el Working Set a intervalos.
+
+\subsubsection{Tablas de páginas Locales y Globales}
+Algunos Sistemas permiten el reemplazo de cualquier página (paginado global).
+Otros solo permiten que un proceso pagine sobre si mismo, evitando efectos en la performance del resto. Esta estrategia es la que se usaría en un Sistema Operativo orientado a Objetos.
+En general, el paginado global funciona mejor. Ya que no todos los procesos tienen los mismos requerimientos.
+
+\subsubsection{Archivos de paginado}
+Una página no es una buena unidad de transferencia.
+Se usan entonces láminas (slab) de páginas en cada transferencia. La ubicación de una página es entonces \#slab + offset. Las slabs se acomodan en el page data set (o partición de paginado). Que se formatea y ubica por anticipado.
+
+\subsubsection{Paginado de código}
+Las páginas de código son read-only.
+Se paginan directamente desde el archivo del programa ejecutable.
+El elf tiene previsiones para ello.
+Es una forma muy eficiente de cargar un programa a memoria. El resto de las páginas tiene su “shadow” en disco.
+
+\subsubsection{Otros tópicos}
+El paginado interactúa con la I/O. Se deben fijar las páginas donde hay transferencia desde memoria secundaria. Los archivos pueden accederse como memoria virtual.
+
+
 % Bibliografía utilizada en el apunte
 \newpage
 \newcommand{\bibliographyname}{Bibliografía} % Defino el nombre de la sección de la bibliografía
