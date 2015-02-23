@@ -841,6 +841,173 @@ An objection to scheduler activations is the fundamental reliance on upcalls, a 
 
 \newpage
 \section{Administracion de memoria}
+\subsection{Definición}
+Suministrar la memoria necesaria para el código de un programa y sus estructuras de datos. Esto incluye:
+\begin{itemize}
+	\item Asignación de memoria.
+	\item Reciclado del almacenamiento.
+\end{itemize}
+Está relacionado con el esquema de manejo de memoria soportado por el lenguaje, el compilador se encarga de intercalar el código correspondiente.
+
+\subsection{Vocabulario de manejo de memoria en los lenguajes}
+\textbf{Declarar una variable}:
+Establecer nomenclatura (introducir el identificador) sin asignar memoria. Es un paso necesario pero no suficiente para usarla. 
+
+\textbf{Definir una variable}:
+Asignarle memoria y posiblemente un valor inicial. Se puede usar una vez que está definida.
+
+\textbf{Ambiente}:
+Porción de código durante el cual una variable está declarada.
+
+\textbf{Vida}:
+Intervalo de la ejecución en el cual una variable tiene memoria asignada.
+
+\textbf{Ámbito (scope)}:
+Cuando una variable está en su ambiente y en su tiempo de vida. Es en tiempo de ejecucion
+
+\subsection{Tipos de variables según su manejo en memoria}
+\subsubsection{Externa}
+Se encuentra definida pero no declarada en el bloque.
+Debido a que las variables externas son accesibles globalmente, puede ser utilizadas para comunicar datos entre funciones, en lugar de una lista de parámetros.
+Además, como las variables externas permanecen en existencia, en vez de aparecer y desaparecer a lo largo de las llamadas y salidas de las funciones, retienen sus valores incluso después que las funciones que las funciones que le asignaron valor salieron.
+
+\subsubsection{Estática}
+Su vida se extiende a toda la duración del programa.
+When a program (executable or library) is loaded into memory, static variables are stored in the data segment of the program's address space (if initialized), or the BSS segment (if uninitialized), and are stored in corresponding sections of object files prior to loading.
+In terms of scope and extent, static variables have extent the entire run of the program, but may have more limited scope. A basic distinction is between a static global variable, which has global scope and thus is in context throughout the program, and a static local variable, which has local scope and thus is only in context within a function (or other local context).
+
+\subsubsection{Dinámica Automática}
+La memoria se asigna y libera automáticamente cuando la ejecución ingresa en el ámbito de la variable.
+Is a variable which is allocated and deallocated automatically when program flow enters and leaves the variable's context. No lo hace el programador, sino el compilador del lenguaje o una biblioteca.
+
+\subsubsection{Dinámica Controlada}
+La ejecución del programa (el programador) controla explícitamente cuando se asigna memoria a la variable.
+\begin{itemize}
+	\item Garbage Collection: Cuando la recuperación de memoria no referenciada es automática.
+	\item Liberación manual: Cuando la recuperación se hace en el código del programa
+\end{itemize}
+
+\subsection{Organización del almacenamiento en tiempo de ejecución}:
+Las variables dinámicas automáticas (o lexically scoped) se manejan por medio de un \emph{stack} (pila). 
+Because the data is added and removed in a last-in-first-out manner, stack-based memory allocation is very simple and typically faster than heap-based memory allocation (also known as dynamic memory allocation). Another feature is that memory on the stack is automatically, and very efficiently, reclaimed when the function exits, which can be convenient for the programmer if the data is no longer required. If however, the data needs to be kept in some form, then it must be copied from the stack before the function exits. Therefore, stack based allocation is suitable for temporary data or data which is no longer required after the creating function exits. 
+Mantiene las variables de llamar de un procedimiento a otro.
+Las funciones recursivas hacen que crezca mucho el stack.
+
+Las variables dinámicas controladas se manejan por medio de una estructura llamada heap. Que se puede implementar de varias formas (Listas o Buddies)
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.2\textwidth]{memory_storage_management}
+	%\caption{Manejo de stack y heap}
+	\label{fig:memory_storage_management}
+\end{figure}
+
+This is the layout in memory of an executable program. Note that in a virtual memory architecture (which is the case for any modern operating system), some parts of the memory layout may in fact be located on disk blocks and they are retrieved in memory by demand (lazily). 
+The machine code of the program is typically located at the lowest part of the layout. Then, after the code, there is a section to keep all the fixed size static data in the program. The dynamically allocated data (ie. the data created using malloc in C) as well as the static data without a fixed size (such as arrays of variable size) are created and kept in the heap. The heap grows from low to high addresses. When you call malloc in C to create a dynamically allocated structure, the program tries to find an empty place in the heap with sufficient space to insert the new data; if it can't do that, it puts the data at the end of the heap and increases the heap size.
+
+The focus of this section is the stack in the memory layout. It is called the run-time stack. The stack, in contrast to the heap, grows in the opposite direction (upside-down): from high to low addresses, which is a bit counterintuitive. The stack is not only used to push the return address when a function is called, but it is also used for allocating some of the local variables of a function during the function call, as well as for some bookkeeping.
+
+Let’s consider the lifetime of a function call. When you call a function you not only want to access its parameters, but you may also want to access the variables local to the function. Worse, in a nested scoped system where nested function definitions are allowed, you may want to access the local variables of an enclosing function. In addition, when a function calls another function, we must forget about the variables of the caller function and work with the variables of the callee function and when we return from the callee, we want to switch back to the caller variables. That is, function calls behave in a stack-like manner.
+
+El Stack mantiene el Registro de Activación o frame. A call stack is composed of stack frames (also called activation records or activation frames). These are machine dependent and ABI-dependent data structures containing subroutine state information. Each stack frame corresponds to a call to a subroutine which has not yet terminated with a return.
+El \emph{stack frame} usualmente incluye al menos los siguientes items (en orden en que se encolan):
+\begin{itemize}
+	\item Argumentos (parámetros) pasados a la rutina (si posee alguno)
+	\item Dirección de retorno a la rutina invocadora (ej. En el stack frame de una función DibujarLinea, una dirección al código de la función que la llamó, como puede ser DibujarCuadrado)
+	\item Espacio para las variables locales de la rutina (si existen).
+\end{itemize}
+Para el procesador es dificil manejar la memoria: no toda la memoria es igual.
+El uso de la memoria cache no depende del programador ni del sistema operativo. Sólo la ve el hardware (la microarquitectura).
+A CPU cache is a cache used by the central processing unit (CPU) of a computer to reduce the average time to access data from the main memory. The cache is a smaller, faster memory which stores copies of the data from frequently used main memory locations. Most CPUs have different independent caches, including instruction and data caches, where the data cache is usually organized as a hierarchy of more cache levels (L1, L2 etc.)
+
+\subsubsection{Ciclo de instruccion}
+An instruction cycle (sometimes called fetch-and-execute cycle, fetch-decode-execute cycle, or FDX) is the basic operation cycle of a computer. It is the process by which a computer retrieves a program instruction from its memory, determines what actions the instruction requires, and carries out those actions. This cycle is repeated continuously by the central processing unit (CPU), from bootup to when the computer is shut down.
+
+\subsection{Modos de direccionamiento}
+
+\subsubsection{Modos de direccionamiento para código}
+El compilador genera las direcciones de las instrucciones:
+\begin{itemize}
+	\item Puede ser una dirección absoluta => secuencial.
+	\item Puede ser relativa al Program Counter (position independent) => secuencial
+	\item Puede generar las direcciones en cada instrucción como SECD para cálculo
+\end{itemize}
+
+\subsubsection{Modos de direccionamiento para datos}
+\begin{itemize}
+	\item Dirección Absoluta
+	\item Operador Inmediato (literal)
+	\item Dirección indirecta (*ptr)
+	\item Dirección relativa a Program Counter (*+ptr)
+	\item Base/Índice/Offset.
+	\item Base + Desplazamiento
+\end{itemize}
+
+\subsection{Proteccion de memoria}
+El Sistema Operativo debe impedir a un proceso invadir la memoria de otro.
+Un espacio de direcciones es un set de direcciones que un proceso puede usar para direccionar memoria. Cada proceso tiene su propio set de direcciones, independiente de aquellos que pertenecen a otro proceso.
+Una forma de hacerlo es por medio de un \emph{registro base} y uno \emph{límite}. El registro base puede usarse para direccionamiento indirecto. Cada dirección se compara con ambos límites.
+El Sistema Operativo no tiene restricciones al operar en Modo Kernel
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.2\textwidth]{memory_protection}
+	%\caption{Protección por espacios de memoria}
+	\label{fig:memory_protection}
+\end{figure}
+
+\subsection{Administracion de memoria por el sistema operativo}
+El Modelo de Procesos añade un área especial para la administración del proceso (La U\_Area).
+El Sistema Operativo debe proveer alojamiento para la ejecución del proceso (Memory Allocation).
+En multiprocesamiento, más de un proceso hace sus requerimientos de memoria.
+
+\subsubsection{Segmentacion}
+\begin{itemize}
+	\item Es una forma de proveer de más de un espacio de direcciones.
+	\item El programador (o el compilador) es quien lo usa.
+	\item Su uso puede superponerse con el del paginado.
+	\item La protección puede asociarse a segmentos.
+	\item Algunos sistemas separan las tablas de segmentos (ej. Intel):
+	\begin{itemize}
+		\item Global (para el Sistema Operativo)
+		\item Local (para los procesos). O hasta una por proceso.
+	\end{itemize}
+\end{itemize}
+Esto permite que los procesos no compitan con el Sistema Operativo por memoria.
+
+\subsection{Administracion del espacio libre/ocupado}
+Memory allocation is the process of assigning blocks of memory on request. Typically the allocator receives memory from the operating system in a small number of large blocks that it must divide up to satisfy the requests for smaller blocks. It must also make any returned blocks available for reuse. There are many common ways to perform this, with different strengths and weaknesses.
+Pueden usarse bitmaps o listas encadenadas. Aparecen distintos Algoritmos de alojamiento: \emph{Best Fit}, \emph{Worst Fit}, \emph{First Fit}, \emph{BuddySystem}, \emph{Swapping}.
+
+\subsubsection{Best fit}
+Buscar el hueco mas ajustado.
+The allocator keeps a list of free blocks (known as the free list) and, on receiving a request for memory, scans along the list for the first block that is large enough to satisfy the request. If the chosen block is significantly larger than that requested, then it is usually split, and the remainder added to the list as another free block. The first fit algorithm performs reasonably well, as it ensures that allocations are quick.
+
+\subsubsection{Worst fit}
+Buscar el hueco más holgado.
+This approach encourages external fragmentation, but allocation is very fast.
+
+\subsubsection{First fit}
+Buscar el primer hueco en que quepa.
+The free block with the “tightest fit” is always chosen. The fit is usually sufficiently tight that the remainder of the block is unusably small.
+
+Tienen rendimientos parecidos, pero generalmente First Fit funciona un poco mejor.
+
+\subsubsection{Buddy system} 
+Usado en los dispositivos modernos que no tienen memoria virtual (la memoria fisica es la que ven los procesos). 
+La memoria se asigna en cantidades potencias de dos.
+Permite una recuperación rápida de huecos grandes. Sufre de fragmentación interna. Su implementación es muy sencilla y rápida.
+No se usa en SO de uso general.
+In a buddy system, the allocator will only allocate blocks of certain sizes, and has many free lists, one for each permitted size. The permitted sizes are usually either powers of two, or form a Fibonacci sequence (see below for example), such that any block except the smallest can be divided into two smaller blocks of permitted sizes.
+When the allocator receives a request for memory, it rounds the requested size up to a permitted size, and returns the first block from that size’s free list. If the free list for that size is empty, the allocator splits a block from a larger size and returns one of the pieces, adding the other to the appropriate free list.
+When blocks are recycled, there may be some attempt to merge adjacent blocks into ones of a larger permitted size (coalescence). To make this easier, the free lists may be stored in order of address. The main advantage of the buddy system is that coalescence is cheap because the “buddy” of any free block can be calculated from its address.
+
+\subsubsection{Swapping}
+Consiste en pasar de memoria principal (RAM) a memoria secundaria (flash o disco rigido) un proceso que no está corriendo y que hace mucho que no está activado (ej: esperando intervencion humana). Se baja todo el proceso. Pueden pasarse procesos bloqueados o disponibles pero sin ejecutarse.
+Debe tenerse en cuenta la interacción con la I/O.
+Se desplaza todo el proceso y se marca en el PCB (process control block). Lo decide el SO.
+Se hace cuando no hay más memoria principal disponible. 
+Al hacer swap-in, un proceso puede volver a una dirección distinta. El direccionamiento indirecto resuelve la reubicación.
 
 % Bibliografía utilizada en el apunte
 \newpage
