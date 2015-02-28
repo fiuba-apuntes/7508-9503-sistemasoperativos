@@ -1194,6 +1194,258 @@ Es una forma muy eficiente de cargar un programa a memoria. El resto de las pág
 \subsubsection{Otros tópicos}
 El paginado interactúa con la I/O. Se deben fijar las páginas donde hay transferencia desde memoria secundaria. Los archivos pueden accederse como memoria virtual.
 
+\section{Linkers y loaders}
+\subsection{Linker}
+\subsubsection{Definición}
+Un \emph{linker} o \emph{link editor} es un programa que toma uno o más \emph{archivos objeto} generados por un compilador y los combina en un único archivo ejecutable, o en un archivo objeto más. 
+Un archivo objeto es un archivo que contiene \emph{código objeto}, es decir, código de máquina reacomodable que usualmente no se puede ejecutar directamente. Los archivo objeto son producidos por un \emph{ensamblador}, \emph{compilador} u otro traductor de lenguajes.
+
+Programa fuente (1 o varios) -> traductor -> Programa objeto (1 o varios)
+
+\subsubsection{Traducción - ensamblado}
+\begin{itemize}
+	\item Si el lenguaje es un assembler, la traducción es un ensamblado (assembly) hecho por un programa ensamblador (assembler).
+	\item Convierte código de lenguaje ensamblador memotécnico a códigos de operación (machine language instruction).
+	\item Resuelve identificadores a posiciones de memoria.
+	\item Algunos proveen abstracciones de programación avanzadas.
+Existe un assembler distinto para cada arquitectura, incluso hay assemblers generales.
+\end{itemize}
+
+\subsubsection{Traducción - compilación}
+Si se trata de un lenguaje de alto o mediano nivel, la traducción es una compilación.
+
+Lenguaje fuente -> Traductor (compilador) -> Lenguaje objeto (.o) (microarquitectura)
+
+\subsubsection{Link-editor}
+Entradas:
+\begin{itemize}
+	\item Programas objeto
+	\item Bibliotecas
+	\item Programas ejecutables: para usarlas como apis. No recomendable.
+\end{itemize}
+
+Salidas:
+\begin{itemize}
+	\item Programas ejecutables
+	\item Programas objeto
+	\item Bibliotecas
+\end{itemize}
+
+Mezcla las direcciones de cada modulo en un único espacio de direcciones.
+
+Biblioteca y programa objeto no ejecutable son diferentes conceptualmente (de objetivos de creación):
+La biblioteca es pensada para usarse en diferentes programas, mientras que el programa objeto se crea para un programa en particular.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{linkers_loaders_linking_1}
+	%\caption{---}
+	\label{fig:linkers_loaders_linking_1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{linkers_loaders_linking_2}
+	%\caption{---}
+	\label{fig:linkers_loaders_linking_2}
+\end{figure}
+
+\subsection{Loader}
+En el linker, el ejecutable puede incluir las bibliotecas o no
+\begin{itemize}
+	\item Si lo incluye (forma \emph{estática}), el programa ya incluye los símbolos y están cargados en memoria.
+	\item Si no se incluyen, las llamadas a la biblioteca se resuelven en tiempo de ejecución (forma \emph{dinámica}). El \textbf{loader} vincula las llamadas con la biblioteca.
+\end{itemize}
+	
+Permite cambiar el funcionamiento actualizando las librerías del SO. Pero depende de que la biblioteca exista en el SO, y existen problemas de seguridad por ejecutar el código externo.
+
+Linker y loader son en momento de post-compilación.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{linkers_loaders_loading_1}
+	%\caption{---}
+	\label{fig:linkers_loaders_loading_1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{linkers_loaders_loading_2}
+	%\caption{---}
+	\label{fig:linkers_loaders_loading_2}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{linkers_loaders_loading_3}
+	%\caption{---}
+	\label{fig:linkers_loaders_loading_3}
+\end{figure}
+
+\subsection{Object file formats (OFF)}
+Es clave para la performance del sistema.
+Algunos prevén su interacción con el paginado.
+Se suele utilizar el mismo formato para ejecutables, objetos y bibliotecas.
+Que dos Sistemas Operativos tengan el mismo OFF no significa que los programas de uno puedan correr en el otro.
+
+\begin{itemize}
+	\item com
+	\begin{itemize}
+		\item Se usan en DOS.
+		\item Son los que tienen extensión .com. Microsoft los llama bin o binary file
+		\item Se cargan en una dirección fija de memoria (0x100).
+		\item Datos y código están en el mismo segmento.
+		\item Son monousuario y monoproceso
+	\end{itemize}
+
+	\item exe
+	\begin{itemize}
+		\item Aparece en DOS 2.0.
+		\item Su primer byte o (Magic Number) es “MZ”, iniciales de Mark Zbikowski.
+		\item Tiene previsión para relocación en memoria.
+	\end{itemize}
+
+	\item Common Object File Format (COFF):
+	\begin{itemize}
+		\item Aparece en Unix pero se usa en otros ambientes.
+		\item Se compone de varias secciones separadas por headers (con limitación de longitud).
+		\item Se usa para bibliotecas (Aunque no de enlace dinámico).
+		\item Soporta debug (pero solo de C): nm(1) lo puede inspeccionar.
+	\end{itemize}
+
+	\item Windows Portable Executable (PE)
+	\begin{itemize}
+		\item Es una adaptación del COFF. El Windows hace un wrapping del COFF.
+		\item Su magic es “PE” pero comienza con un “MZ” por “compatibilidad”.
+		\item Tiene definido espacio para resources.
+		\item Tiene definido tablas para el uso de bibliotecas compartidas.
+	\end{itemize}
+	\item Executable and Linkable Format (ELF)
+	Debido a su diseño, ELF es flexible y extensible, y no está atado a ningún procesador o arquitectura en particular. Esto le permitió ser adoptado por muchos sistemas operativos en distintas plataformas, convirtiéndolo en un estandar de facto.
+	Cada ELF posee un ELF header, seguido de los datos del archivo. Estos datos pueden incluir:
+	\begin{itemize}
+		\item Program header table, describing zero or more segments
+		\item Section header table, describing zero or more sections
+		\item Data referred to by entries in the program header table or section header table
+	\end{itemize}
+	The segments contain information that is necessary for runtime execution of the file, while sections contain important data for linking and relocation. Any byte in the entire file can be owned by at most one section, and there can be orphan bytes, which are not owned by any section.
+	El ELF header define si se utilizan direcciones de 32 o 64 bits.
+	Sirve para ejecutables y bibliotecas.
+	Un directorio permite agregar nuevas secciones.
+	Tiene previsiones para emulación.
+
+	\item Binarios Universales
+	Tiene los códigos de las distintas arquitecturas y cuando se ejecuta decide cual usa.
+	A fat binary (or multiarchitecture binary) is a computer executable program, which has been expanded (or "fattened") with code native to multiple instruction sets which can consequently be run on multiple processor types. The usual method of implementation is to include a version of the machine code for each instruction set, preceded by code compatible with all operating systems, which executes a jump to the appropriate section. This results in a file larger than a normal one-architecture binary file, thus the name.
+\end{itemize}
+
+\subsection{Segmentación de memoria en OFF}
+	Memory segmentation is the division of a computer's primary memory into segments or sections. In a computer system using segmentation, a reference to a memory location includes a value that identifies a segment and an offset within that segment. Segments or sections are also used in object files of compiled programs when they are linked together into a program image and when the image is loaded into memory.
+	Segments usually correspond to natural divisions of a program such as individual routines or data tables so segmentation is generally more visible to the programmer than paging alone. Different segments may be created for different program modules, or for different classes of memory usage such as code and data segments. Certain segments may be shared between programs.
+
+\section{Bibliotecas (Libraries)}
+\subsection{Definición}
+Las bibliotecas son una \emph{colección de subprogramas} usados en el desarrollo de Software.
+Contienen “código auxiliar” y datos que brindan servicios a distintos programas.
+Permiten el desarrollo modular.
+Convierten los servicios en “commodities” entre los cuales se puede elegir.
+The value of a library is the reuse of the behavior. When a program invokes a library, it gains the behavior implemented inside that library without having to implement that behavior itself. Libraries encourage the sharing of code in a modular fashion, and ease the distribution of the code.
+
+\subsection{Tipos de bibliotecas}
+Se clasifican según el tiempo en que se cargan al programa (y por ende la ubicación del código fuente y quien lo hace)
+\begin{enumerate}
+	\item Estáticas
+	\item Dinámicas
+	\item Dinámicas compartidas
+\end{enumerate}
+
+\subsubsection{Estáticas}
+Los subprogramas se incluyen en el ejecutable. El link-editor es quien las incorpora al archivo ejecutable. Los símbolos quedan definidos.
+
+Ventajas
+\begin{itemize}
+	\item Facilitan la instalación de los programas en otras máquinas, ya que la aplicación queda contenida en un único archivo ejecutable.
+	\item The application can be certain that all its libraries are present and that they are the correct version. This avoids dependency problems, known colloquially as DLL Hell or more generally dependency hell.
+	\item Evitan que los troyanos ataquen programas sensibles (se sabe a exactamente qué código se esta corriendo, cosa que no pasa con las bibliotecas dinámicas).
+	\item It is enough to include those parts of the library that are directly and indirectly referenced by the target executable (or target library). With dynamic libraries, the entire library is loaded, as it is not known in advance which functions will be invoked by applications. Whether this advantage is significant in practice depends on the structure of the library.
+\end{itemize}
+Desventaja
+\begin{itemize}
+	\item In static linking, the size of the executable becomes greater than in dynamic linking, as the library code is stored within the executable rather than in separate files. But if library files are counted as part of the application then the total size will be similar.
+\end{itemize}
+
+\subsubsection{Dinámicas}
+El link-editor solo indica las llamadas. Éstas las resuelve el Loader durante la carga o durante la ejecución. Si es en ejecución, no carga la biblioteca cuando se ejecuta, sino cuando la necesita.
+
+Ventajas
+\begin{itemize}
+	\item Permite cambiar el funcionamiento actualizando las librerías del SO.
+	\item Genera ejecutables más pequeños.
+\end{itemize}
+
+Desventajas
+\begin{itemize}
+	\item Depende de que la biblioteca exista en el SO.
+	\item Problemas de seguridad por ejecutar código externo.
+\end{itemize}
+
+Se debe solucionar el problema de la \emph{relocación}: No se puede depender de posiciones “absolutas” de memoria ni en el programa ni en las bibliotecas. Se deben calcular las direcciones cada vez que se carga el programa o la biblioteca.
+
+En general se usa una Import Table como acceso indirecto a las direcciones de la biblioteca para simplificar el proceso de linking.
+
+\textbf{Relocación}:
+Relocation is the process of assigning load addresses to various parts of a program and adjusting the code and data in the program to reflect the assigned addresses. A linker usually performs relocation in conjunction with symbol resolution, the process of searching files and libraries to replace symbolic references or names of libraries with actual usable addresses in memory before running a program.
+
+Relocation is typically done by the linker at link time, but it can also be done at run time by a relocating loader, or by the running program itself. Some architectures avoid relocation entirely by deferring address assignment to run time; this is known as zero address arithmetic.
+
+Relocation is typically done in two steps:
+
+I. Each object file has various sections like code, data, .bss etc. To combine all the objects to a single executable, the linker merges all sections of similar type into a single section of that type. The linker then assigns run time addresses to each section and each symbol. At this point, the code (functions) and data (global variables) will have unique run time addresses.
+
+II. Each section refers to one or more symbols which should be modified so that they point to the correct run time addresses based on information stored in a relocation table in the object file.
+
+
+\subsubsection{Dinamicas Compartidas (DLL de windows)}
+\begin{itemize}
+	\item Están una sola vez en memoria. La comparten todos los procesos que la usan. 
+	\item Se guardan en un PE.
+	\item Pueden contener código, datos o recursos (iconos, menus, bitmaps, templates, fonts, etc).
+	\item Proveen modularidad para desarrollo y mantenimiento.
+\end{itemize}
+
+\textbf{DLL Hell}:
+There are a number of problems commonly encountered with DLLs – especially after numerous applications have been installed and uninstalled on a system. The difficulties include conflicts between DLL versions, difficulty in obtaining required DLLs, and having many unnecessary DLL copies. As a result, an installation of a program that installs a new version of a common object may inadvertently break other programs that were previously installed.
+The ambiguity with which DLLs that are not fully qualified can be loaded in the Windows operating system has been exploited by malware in recent years, opening a new class of vulnerability that affects applications from many different software vendors, as well as Windows itself.
+
+\textbf{Funcionamiento}:
+En Win32 el archivo de las DLL está organizado en secciones:
+Cada sección tiene sus propios atributos (ejecutable, compartible, solo lectura, etc).
+Generalmente hay una sola copia de las secciones de código en memoria (se comparte).
+En cambio las secciones de datos son privadas (aunque pueden compartirse).
+Las bibliotecas comprimidas (con UPX por ejemplo) permanecen privadas.
+Los símbolos exportados tienen como identificador un número y un nombre.
+Solo los nombres se mantienen entre distintas versiones.
+Se puede hacer un bind a una rutina de una versión específica.
+El linkeo puede ser:
+I. Load-time dynamic linking: El linking se hace al cargar el programa. El programador no tiene control si no se encuentra la DLL
+II. Run time dynamic linking: Se hace por medio de un llamado a LoadLibrary(). El programador puede intervenir si hay error.
+
+Para saber que bibliotecas se usan, hay programas como Dependency Walker
+
+\textbf{Bibliotecas en Linux}:
+Las bibliotecas comienzan con lib. Las de enlace estático terminan en .a y las de enlace dinámico en .so. Por ejemplo la biblioteca foo es libfoo.a y dynfoo es libdynfoo.so
+Además se agrega un número de versión.
+Las dependencias se ven con ldd.
+
+\textbf{Position Independent Code (PIC o PIE)}:
+Es código que puede ejecutar correctamente en forma independiente de su posición en la memoria.
+PIC is commonly used for shared libraries, so that the same library code can be loaded in a location in each program address space where it will not overlap any other uses of memory (for example, other shared libraries). 
+Position-independent code can be executed at any memory address without modification. This differs from relocatable code, where a link editor or program loader modifies a program before execution, so that it can be run only from a particular memory location. Position-independent code must adhere to a specific set of semantics in the source code and compiler support is required. Instructions that refer to specific memory addresses, such as absolute branches, must be replaced with equivalent program counter relative instructions.
+Las DLL de Windows no son PIE ni PIC.
+
+\textbf{Run Time Linking en Linux}:
+Se hace por medio de la interface de programador del linker dinámico: dlopen(), dlsym(), dlclose(), dlerror().
+
 
 % Bibliografía utilizada en el apunte
 \newpage
