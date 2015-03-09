@@ -175,7 +175,7 @@ Atrás de la nube puede haber cluster, grid, etc (al cliente no le importa).
 \subsubsection{Tiempo real}
 Distinto de online o de rápido.
 
-Tiempo de respuesta máximo y predecible. 
+Tiempo de respuesta máximo y predecible.
 
 \subsubsection{Multiprocesador}
 Más de un procesador en el mismo chip o board.
@@ -237,7 +237,7 @@ En computación, el \emph{kernel} es un programa que maneja las solicitudes de e
 
 Debido a su naturaleza crítica, el código kernel generalmente se encuentra cargado en un area protegida de la memoria, previniendo que sea sobreescrito por otra parte no tan usada del sistema operativo o por aplicaciones. El kernel realiza sus tareas, como la ejecución de procesos y manejo de interrupciones, en area del kernel, mientras que todo lo que un usuario normalmente haría, como escribir texto en un editor o correr aplicaciones con interfaz gráfica, se realiza en el espacio del usuario. Esta separación se realiza con el fin de prevenir datos del usuario y del kernel interferir uno con el otro, disminuyendo performance o causando el sistema operativo inestable (o incluso colgandolo)
 
-Cuando un programa (o como se lo conoce en este contexto \emph{proceso}) realiza solicitudes al kernel, esta solicitud se llama "llamada al sistema" o \emph{system call}
+Cuando un programa (o como se lo conoce en este contexto \emph{proceso}) realiza solicitudes al kernel, esta solicitud se llama ``llamada al sistema'' o \emph{system call}
 
 \subsubsection{Modo usuario}
 Ejecutando un programa de usuario.
@@ -245,7 +245,7 @@ Ejecutando un programa de usuario.
 The term userland (or user space) refers to all code which runs outside the operating system's kernel. Userland usually refers to the various programs and libraries that the operating system uses to interact with the kernel: software that performs input/output, manipulates file system objects, application software etc.
 
 \subsection{System Calls}
-Si un proceso esta corriendo un programa en modo usuario y necesita un servicio del sistema, como leer data de un archivo, tiene que ejecutar un software trap para transferirle el control al sistema operativo. El sistema operativo se fija lo que necesita el proceso que lo  llamo inspeccionando los parámetros. Hace lo que tenga que hacer y devuelve el control a la instrucción que sigue al system call.\\
+Si un proceso esta corriendo un programa en modo usuario y necesita un servicio del sistema, como leer data de un archivo, tiene que ejecutar un software trap para transferirle el control al sistema operativo. El sistema operativo se fija lo que necesita el proceso que lo llamo inspeccionando los parámetros. Hace lo que tenga que hacer y devuelve el control a la instrucción que sigue al system call.\\
 
 Ejemplos
 \begin{itemize}
@@ -302,7 +302,7 @@ Un proceso tiene:
 
 Esta información la guarda el sistema operativo en estructuras de datos llamadas \emph{Process Control Blocks}.\\
 
-Cualquier subgrupo de recursos, menos, generalmente, el estado del procesador, puede estar asociado con cada uno de los threads del proceso (en sistemas operativos que soportan threads) o en los procesos "hijos".
+Cualquier subgrupo de recursos, menos, generalmente, el estado del procesador, puede estar asociado con cada uno de los threads del proceso (en sistemas operativos que soportan threads) o en los procesos ``hijos''.
 
 El sistema operativo mantiene sus procesos separados y reserva los recursos que necesitan, de manera que sean menos propensos a interferir entre ellos y causen fallas del sistema (como deadlocks o thrashing). El sistema operativo también provees mecanismos para la comunicación entre procesos, permitiendoles interactuar de manera segura y predecible.
 
@@ -360,7 +360,7 @@ Cada vez que se interrumpe un proceso también se pierde el tiempo de guardar el
 \end{figure}
 
 \subsubsection{Created or New}
-When a process is first created, it occupies the ``created'' or ``new'' state. In this state, the process awaits admission to the ``ready'' state. This admission will be approved or delayed by a long-term, or admission, scheduler. Typically in most desktop computer systems, this admission will be approved automatically, however for real-time operating systems this admission may be delayed. In a real time system, admitting too many processes to the "ready" state may lead to oversaturation and over contention for the systems resources, leading to an inability to meet process deadlines.
+When a process is first created, it occupies the ``created'' or ``new'' state. In this state, the process awaits admission to the ``ready'' state. This admission will be approved or delayed by a long-term, or admission, scheduler. Typically in most desktop computer systems, this admission will be approved automatically, however for real-time operating systems this admission may be delayed. In a real time system, admitting too many processes to the ``ready'' state may lead to oversaturation and over contention for the systems resources, leading to an inability to meet process deadlines.
 
 \subsubsection{Ready and waiting}
 A ``ready'' or ``waiting'' process has been loaded into main memory and is awaiting execution on a CPU (to be context switched onto the CPU by the dispatcher, or short-term scheduler). There may be many ``ready'' processes at any one point of the system's execution—for example, in a one-processor system, only one process can be executing at any one time, and all other ``concurrently executing'' processes will be waiting for execution.
@@ -847,6 +847,7 @@ Suministrar la memoria necesaria para el código de un programa y sus estructura
 	\item Asignación de memoria.
 	\item Reciclado del almacenamiento.
 \end{itemize}
+
 Está relacionado con el esquema de manejo de memoria soportado por el lenguaje, el compilador se encarga de intercalar el código correspondiente.
 
 \subsection{Vocabulario de manejo de memoria en los lenguajes}
@@ -1136,7 +1137,6 @@ Se ahorra mucho espacio pero el cálculo de dirección es más costoso, para enc
 En la práctica el TBL guarda las páginas más utilizadas.
 
 \subsection{Memory management unit (MMU)}
-\subsubsection{Definición}
 Es el responsable de traducir las direcciones virtuales (o lógicas) a direcciones reales (o físicas).
 En general hace uso de una cache asociativo, el \emph{Translation Lookaside Buffer (TLB)}.
 
@@ -1429,7 +1429,6 @@ Segments usually correspond to natural divisions of a program such as individual
 
 \newpage
 \section{Bibliotecas (Libraries)}
-\subsection{Definición}
 Las bibliotecas son una \emph{colección de subprogramas} usados en el desarrollo de Software.
 
 Contienen “código auxiliar” y datos que brindan servicios a distintos programas.
@@ -1559,6 +1558,162 @@ Las DLL de Windows no son PIE ni PIC.\\
 \textbf{Run Time Linking en Linux}
 
 Se hace por medio de la interface de programador del linker dinámico: \texttt{dlopen()}, \texttt{dlsym()}, \texttt{dlclose()}, \texttt{dlerror()}.
+
+\newpage
+\section{Virtualización}
+Llamamos virtualización a la abstracción de recursos de computación
+\begin{itemize}
+	\item Virtualización de Aplicaciones.
+	\item Virtualización de Plataforma.
+	\item Virtualización de Escritorio.
+	\item Virtualización de recursos: Red, Memoria, Almacenamiento, clusters, grids.
+\end{itemize}
+
+\begin{description}
+	\item[Objetivos] Permite compartimentar la ejecución de varias aplicaciones en el mismo servidor, de manera independiente y transparente. Independiza la ejecución de la capa física.
+
+	\item[Ventajas] ~
+	\begin{itemize}
+		\item \textbf{Aumento de confiabilidad} Si una maquina que alberga muchos servicios se cae, se ven afectados todos. En cambio, si cada servicio está en maquinas distintas, sólo se ve afectado uno. Una maquina física puede tener varias maquinas virtuales (es mas barato que varias maquinas físicas). Sirve porque es (mucho) más común que falle una maquina debido al software que al hardware.
+		\item \textbf{Aplicaciones antiguas (legacy)}
+		\item \textbf{Desarrollo y prueba en múltiples plataformas}
+		\item \textbf{Balanceo de cargas y escalabilidad futura} Es mas fácil migrar de una VM a otra en un host demasiado cargado.	
+	\end{itemize}
+\end{description}
+
+\subsection{Virtualizacion de aplicaciones}
+Compatibilidad y portabilidad entre distintos Sistemas Operativos y distintas arquitecturas.
+
+Application virtualization is software technology that encapsulates application software from the underlying operating system on which it is executed. A fully virtualized application is not installed in the traditional sense, although it is still executed as if it were. The application behaves at runtime like it is directly interfacing with the original operating system and all the resources managed by it, but can be isolated or sandboxed to varying degrees.
+
+\begin{description}
+	\item[Ventajas] ~
+	\begin{itemize}
+		\item Allows applications to run in environments that do not suit the native application
+		\item May protect the operating system and other applications
+		\item Uses fewer resources than a separate virtual machine (virtualización de plataforma)
+	\end{itemize}
+
+	\item[Ejemplos] ~
+	\begin{itemize}
+		\item Máquinas Virtuales (JVM, .net CLR)
+		\item Compatibility Layers
+	\end{itemize}
+\end{description}
+
+\subsection{Virtualización de plataformas}
+Abstracción de todos los recursos de computación de un huésped dentro de un anfitrión (host). Computer hardware virtualization is the virtualization of computers or operating systems. It hides the physical characteristics of a computing platform from users, instead showing another abstract computing platform. Hace como si fuera otra plataforma en su totalidad.
+
+\begin{description}
+	\item[Tipos de virtualizacion] ~
+	\begin{itemize}
+		\item Virtualización total
+		\begin{itemize}
+			\item Emulación de plataforma.
+			\item Hipervisores
+		\end{itemize}
+		\item Paravirtualización.
+		\item Virtualización del mismo Sistema Operativo.
+	\end{itemize}
+\end{description}
+
+\subsection{Condiciones para virtualizar}
+\begin{description}
+	\item[Instrucciones privilegiadas] Las que ocasionan un software trap.
+	\item[Instrucciones delicadas (``sensitive'')] Las que solo pueden ejecutarse en Modo Supervisor del procesador porque afectan a los recursos del sistema, como I/O o cambios en la configuración del MMU.
+\end{description}
+
+\subsubsection{Teorema de Popek y Goldberg sobre virtualización}
+Una arquitectura es virtualizable si las instrucciones delicadas son un subconjunto de las privilegiadas. Es decir, si en modo usuario tratar de hacer algo que no deberías poder hacer en modo usuario, debería llamarse un software trap.
+
+\subsubsection{Virtualización de la IA32 (x86 virtualization)}
+x86 tiene 17 instrucciones sensibles que no son privilegiadas, violando una de las condiciones de Popeck por lo que no es virtualizable en estas condiciones.
+
+Para realizar la virtualización de esta máquina se requiere de una extensión que la permita, que en este caso es el Intel IVT, que genera containers en los que la ejecución de una instrucción sensible provoca un software trap. Luego, con la trampa se debe emular el comportamiento de la máquina autónoma del sistema operativo guest.
+
+\subsection{Hipervisores}
+Hipervisor es una pieza de software firmware o hardware que crea y ejecuta máquinas virtuales.
+
+Una computadora en la cuál un hipervisor está ejecutando una o más máquinas virtuales es una maquina ``host''. Cada máquina virtual es llamada ``guest''.
+
+El hipervisor se encarga de la ejecución del sistema operativo del guest, el cuál no sabe que está siendo ejecutado sobre una máquina virtual. Quien está consciente de esto es el hipervisor.
+
+\subsubsection{Hipervisor tipo I}
+\textbf{Corren directamente sobre el hardware}, el huésped debe tener una arquitectura virtualizable.
+
+El huésped corre en modo usuario, su Kernel cree haber pasado a modo supervisor, pero continúa en modo usuario.
+Cuando el sistema operativo guest ejecuta una instrucción sensible ocurre una ``kernel trap''.
+
+Tiene que ser virtualizable según Popek y Goldberg.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{\imgdir/virtualization_hipervisor_type_i}
+	%\caption{-}
+	\label{fig:virtualizacion_hipervisor_tipo_i}
+\end{figure}
+
+\subsubsection{Hipervisor tipo II}
+Corre bajo el control de un sistema operativo anfitrión o host. 
+
+Puede virtualizar cualquier ambiente, aún cuando éste no sea virtualizable según las condiciones de Popek y Goldberg.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{\imgdir/virtualization_hipervisor_type_ii}
+	%\caption{-}
+	\label{fig:virtualizacion_hipervisor_tipo_ii}
+\end{figure}
+
+\subsubsection{Paravirtualización}
+Paravirtualizar consiste en reemplazar, en el sistema operativo guest, las instrucciones delicadas por llamadas al hipervisor. En este caso, el sistema operativo huésped debe ser modificado para saber que va a correr en un entorno virtualizado. El huésped utiliza una API especial para comunicarse con la capa de virtualización e interactuar directamente con el hard. Si bien tenemos claros beneficios por el lado de la performance, se pierde compatibilidad ya que el SO huésped debe ser modificado. Requiere código fuente.
+
+\textbf{La paravirtualizacion es distinta del hipervisor tipo II}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{\imgdir/virtualization_paravirtualization}
+	%\caption{-}
+	\label{fig:virtualizacion_paravirtualization}
+\end{figure}
+
+\subsubsection{Traducción binaria}
+\textit{En tiempo de ejecución cambia las instrucciones sensibles por llamados a procedimientos de VM, es decir modifica la ejecución del programa.}\\
+
+Traducción binaria, en cambio, consiste en examinar bloques básicos (código con un punto de entrada, uno de salida y sin jumps).
+
+El Hipervisor modifica de esta forma el programa que está corriendo. Cuando va a ejecutar un programa, la VM primero examina el código buscando instrucciones sensibles, y las reemplaza por llamados a procedimientos de VM que las manejan.
+
+El Hipervisor toma el control: Si la trap proviene del kernel del guest, lleva a cabo la acción correspondiente, si en cambio proviene de un programa en modo usuario, responde como lo haría el Hard.
+Guarda el código traducido en el cache, para mejorar la performance.
+
+Esto genera más sobrecarga que el enfoque de paravirtualización, pero no limita a usar sólo SO modificados, podemos usar cualquier SO. No requiere código fuente.
+
+\subsection{Virtualización del Escritorio}
+Las aplicaciones se hospedan en un sistema central pero cada usuario tiene su escritorio local.
+
+Desktop virtualization is software technology that separates the desktop environment and associated application software from the physical client device that is used to access it.
+
+Desktop virtualization can be used in conjunction with application virtualization and (Windows) user profile management systems, now termed ``user virtualization'', to provide a comprehensive desktop environment management system. In this mode, all the components of the desktop are virtualized, which allows for a highly flexible and much more secure desktop delivery model. In addition, this approach supports a more complete desktop disaster recovery strategy as all components are essentially saved in the data center and backed up through traditional redundant maintenance systems. If a user's device or hardware is lost, the restore is much more straightforward and simple, because basically all the components will be present at login from another device. In addition, because no data is saved to the user's device, if that device is lost, there is much less chance that any critical data can be retrieved and compromised. 
+
+\subsection{Virtualización de recursos}
+Usar los recursos del sistema operativo host para apoyar la ejecución del guest.
+
+\subsection{Virtualización del Sistema Operativo}
+Operating system–level virtualization is a server virtualization method where the kernel of an operating system allows for multiple isolated user space instances, instead of just one. Such instances (often called containers, virtualization engines (VE), virtual private servers (VPS) or jails) may look and feel like a real server from the point of view of its owners and users.
+
+Cuando el Kernel permite distintos ambientes de usuarios aislados entre sí.
+
+Usado por seguridad en aplicaciones como hosting virtual.
+
+Virtual hosting environments commonly use operating system–level virtualization, where it is useful for securely allocating finite hardware resources amongst a large number of mutually-distrusting users. System administrators may also use it, to a lesser extent, for consolidating server hardware by moving services on separate hosts into containers on the one server.
+
+Other typical scenarios include separating several applications to separate containers for improved security, hardware independence, and added resource management features. The improved security provided by the use of a chroot mechanism, however, is nowhere near ironclad.
+
+OS-level virtualization implementations that are capable of live migration can be used for dynamic load balancing of containers between nodes in a cluster.
+
+\newpage
+\section{Archivos}
 
 
 % Bibliografía utilizada en el apunte
