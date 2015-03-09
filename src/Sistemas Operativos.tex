@@ -1714,7 +1714,227 @@ OS-level virtualization implementations that are capable of live migration can b
 
 \newpage
 \section{Archivos}
+We have three essential requirements for long-term information storage:
+\begin{itemize}
+	\item It must be possible to store a very large amount of information (larger than the address space).
+	\item The information must survive the termination of the process using it.
+	\item Multiple processes must be able to access the information concurrently.
+\end{itemize}
 
+\subsection{Archivos}
+Una colección de datos con nombre.
+
+Una unidad lógica de almacenamiento. Abstrae las propiedades físicas del dispositivo de almacenamiento.
+
+Provee persistencia a través de reinicios, activaciones de programas o fallas de energía.\\
+
+\subsubsection{Atributos de un archivo}
+\begin{description}
+	\item[Nombre] When a process creates a file, it gives the file a name. When the process terminates, the file continues to exist and can be accessed by other processes usign its name. Distintos sistemas operativos tienen distintas restricciones respecto del largo, caracteres permitidos y case sensitivity
+	
+	\item[Ubicación] Punto de entrada del archivo (puede estar repartido).
+
+	\item[Tipo] Restringe las operaciones que se pueden realizar sobre el archivo. Qué aplicaciones entienden al archivo.
+
+	\textbf{Regular files} are the ones that contain user information. \textbf{Directories} are system files for maintaining the structure of the file system. \textbf{Character special files} are related to input/output and used to model serial I/O devices, such as terminals, printers and networks. \textbf{Block special files} are used to model disks.
+
+	Regular files are generally ASCII files or binary files. 
+
+	ASCII files consist of lines of text. The great advantage is that they can be displayed and printed as is, and they can be edited with any text editor. Furthermore, if large numbers of programs use ASCII files for input and output, it is easy to connect the output of one program to the input of another, as in shell pipelines.
+
+	Other files are binary, which just means that they are not ASCII files. Listing them on the printer fives an incomprehensible full of random junk. Usually, they have some internal structure known to programs that use them.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.2\textwidth]{\imgdir/filesystem_file}
+		%\caption{-}
+		\label{fig:filesystem_file}
+	\end{figure}	
+	
+	For example, whe see a simple executable binary file taken from an early version of UNIX. Although the file is just a sequence of bytes, the operating system will only execute a file if it has the proper format. It has five sectiones: header, text, data, relocation bits, and symbol table. The header starts with a so-called magic number, identifying the file as an executable file (to prevent the accidental execution of a file not in this format). Then comes the sizes of the various pieces of the file, the address at which execution starts, and some flag bits. Following the header are the text and data of the program itself. These are loaded into memory and relocated using relocation bits. The symbol table is used for debugging.
+
+	Having strongly typed files like this causes problems whenever the user does anything that the system designers did not expect.
+	
+	\item[Acceso de archivo] Tipos de acceso al archivo
+	\begin{description}
+		\item[Acceso secuencial] A process could read all the bytes or records in a file in order, starting at the beginning, but could not skip around and read them out of order.
+		\begin{itemize}
+			\item read next
+			\item write next
+			\item reset
+			\item rewrite
+		\end{itemize}
+
+		\item[Acceso aleatorio] Can read the bytes or record of a file out of order, or to access records by key rather than by position. Random access files are essential for many applications, like database systems.
+		\begin{itemize}
+			\item read n
+			\item write n
+			\item position n
+			\begin{itemize}
+				\item read next
+				\item write next
+			\end{itemize}
+			\item rewrite n
+		\end{itemize}
+	\end{description}
+
+	\item[Metadata] Most file systems store the names of all the files in one directory in one place—the directory table for that directory—which is often stored like any other file. Many file systems put only some of the metadata for a file in the directory table, and the rest of the metadata for that file in a completely separate structure, such as the inode.
+	\begin{itemize}
+		\item Tamaño
+		\item Protección
+		\item Propietario
+		\item Flag hidden
+		\item Time stamp (creacion, modificacion y acceso).
+		\item Etc.
+	\end{itemize}
+\end{description}
+
+\subsubsection{Operaciones sobre archivos}
+\begin{itemize}
+	\item Create
+	\item Delete
+	\item Open
+	\item Close
+	\item Read
+	\item Write
+	\item Append
+	\item Seek
+	\item Get attributes
+	\item Set Attributes
+	\item Rename
+\end{itemize}
+
+\subsection{Directorios}
+File systems typically have directories (also called folders) which allow the user to group files into separate collections. This may be implemented by associating the file name with an index in a table of contents or an inode in a Unix-like file system. Directory structures may be flat (i.e. linear), or allow hierarchies where directories may contain subdirectories.
+
+\subsubsection{Operaciones sobre directorios}
+\begin{itemize}
+	\item Create
+	\item Delete
+	\item Opendir: Abrir un directorio para leer
+	\item Closedir
+	\item Readdir
+	\item Rename
+	\item Link: Agregar acceso directo a un archivo
+	\item Unlink: Eliminar el acceso directo
+\end{itemize}
+
+\subsection{Sistema de archivos}
+In computing, a file system (or filesystem) is used to control how data is stored and retrieved. Without a file system, information placed in a storage area would be one large body of data with no way to tell where one piece of information stops and the next begins. By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified. Taking its name from the way paper-based information systems are named, each group of data is called a "file". 
+
+There are many different kinds of file systems. Each one has different structure and logic, properties of speed, flexibility, security, size and more.
+
+Método para guardar y organizar archivos para computadoras y sus datos. Provee acceso y almacenamiento a datos y programas.
+
+Presenta dos aspectos:
+\begin{itemize}
+	\item Interfaz de usuario: Directorios y Archivos
+	\item Implementación.
+\end{itemize}
+
+\subsubsection{Particion de discos con MBR}
+File systems are stored on disks. Most disks can be divided up into one or more partitions, with independent file systems on each partition. Sector 0 of the disk is called the MBR (Master Boot Record) and is used to boot the computer. The end of the MBR contains the partition table. This table gives the starting and the ending addresses of each partition. One of the partitions in the table is marked as active. When the computer is booted, the BIOS reads in and executes the MBR. The first thing the MBR program does is locate the active partition, read in its first block, called the boot block, and execute it. The program in the boot block loads the operating system contained in that partition. For uniformity, every partition starts with a boot block, even if it does not contain a bootable operating system. Besides, it might contain one in the future.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_mrb}
+	%\caption{-}
+	\label{fig:filesystem_partition_mrb}
+\end{figure}
+
+Superblock contains all the key parameters about the file system and is read into memory when the computer is booted or the file system is first touched. Typical information in the superblock includes a magic number to identify the file system type, the number of blocks in the file system, and other key administrative information.
+
+Next might come information about free blocks in the file system, for example in the form of a bitmap or a list of pointers. This might be followed by the i-nodes, an array of data structures, one per file, telling all about the file. After that might come the root directory, which contains the top of the file system tree. Finally, the remainder of the disk contains all the other directories and files.
+
+\subsubsection{Particion GUID-EFI}
+GUID Partition Table (GPT) is a standard for the layout of the partition table on a physical hard disk, using globally unique identifiers (GUID). Although it forms a part of the Unified Extensible Firmware Interface (UEFI) standard (Unified EFI Forum proposed replacement for the PC BIOS), it is also used on some BIOS systems because of the limitations of master boot record (MBR) partition tables, which use 32 bits for storing logical block addresses (LBA) and size information.
+
+Tiene redundancia.
+
+\subsubsection{Partition table header (LBA 1)}
+The partition table header defines the usable blocks on the disk. It also defines the number and size of the partition entries that make up the partition table. The header contains the disk globally unique identifier (GUID). It records its own size and location (always LBA 1!) and the size and location of the secondary GPT header and table (always the last sectors on the disk).
+
+\subsubsection{Paritition entries}
+The GPT uses simple and straightforward entries to describe partitions. The first 16 bytes designate the partition type globally unique identifier (GUID). For example, the GUID for an EFI System partition is C12A7328-F81F-11D2-BA4B-00A0C93EC93B. The second 16 bytes contain a GUID unique to the partition. Then follow the starting and ending 64-bit LBAs, partition attributes and partition names. As is the nature and purpose of GUIDs, no central registry is needed to ensure the uniqueness of the GUID partition type designators. The location of the partition entries array on disk is defined in the GPT header.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_entries}
+	%\caption{-}
+	\label{fig:filesystem_partition_entries}
+\end{figure}
+
+\subsubsection{FAT File System (Linked Allocation)}
+File Allocation Table (FAT) is a computer file system architecture and a family of industry-standard file systems utilizing it.
+
+The FAT file system is a legacy file system which is simple and robust. It offers good performance even in light-weight implementations, but cannot deliver the same performance, reliability and scalability as some modern file systems. It is, however, supported for compatibility reasons by nearly all currently developed operating systems for personal computers and many mobile devices and embedded systems, and thus is a well-suited format for data exchange between computers and devices of almost any type and age from 1981 up to the present.
+
+\subsubsection{UNIX File System}
+A UNIX directory entry contains one entry for each file in that directory. Each entry is extremely simple because UNIX uses the i-node scheme. A directory entry contains only two fields: the file name and the number of the i-node for that file. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{\imgdir/filesystem_partition_unix_directory_entry}
+	%\caption{-}
+	\label{fig:filesystem_partition_unix_directory_entry}
+\end{figure}
+
+The UNIX i-nodes contain some attributes. The attributes containt the file size, timestamps, owner, group, protection information, and a count of the number of directory entries that pont to the i-node. The latter field is needed due to links. Whenever a new link is made to an i-node, the count in the i-node is increased. When a link is removed, the count is decremented. When it gets to 0, the i-node is reclaimed and the disk blocks are put back in the free list.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_unix_inode}
+	%\caption{-}
+	\label{fig:filesystem_partition_unix_inode}
+\end{figure}
+
+The first 10 disk addresses are stored in the i-node itself, so for small files, all the necessary information is right in the i-node, which is fetched from disk to main memory then the file is opened. For somewhat larger files, one of the addresses in the i-node is the address of a disk block called a single indirect block. This block contains additional disk addresses. If this still is not enough, another address in the i-node, called a double indirect block, contains the address of a block that contains a list of single indirect blocks. Each of these single indirect blocks points to a few hundred data blocks. If even this is not enough, a triple indirect block can be used.
+
+\subsubsection{NTFS (Windows)}
+In NTFS, all file, directory and metafile data—file name, creation date, access permissions (by the use of access control lists), and size—are stored as metadata in the Master File Table (MFT). 
+
+A directory entry consists of a filename and a "file ID", which is the record number representing the file in the Master File Table. Two copies of the MFT are stored in case of corruption. If the first record is corrupted, NTFS reads the second record to find the MFT mirror file. Locations for both files are stored in the boot sector.
+
+To optimize the storage and reduce the I/O overhead for the very common case of attributes with very small associated value, NTFS prefers to place the value within the attribute itself (if the size of the attribute does not then exceed the maximum size of an MFT record), instead of using the MFT record space to list clusters containing the data; in that case, the attribute will not store the data directly but will just store an allocation map (in the form of data runs) pointing to the actual data stored elsewhere on the volume.
+
+\subsubsection{Transactional NTFS}
+Transactional NTFS allows for files and directories to be created, modified, renamed, and deleted atomically. Using transactions ensures correctness of operation; in a series of file operations (done as a transaction), the operation will be committed if all the operations succeed. In case of any failure, the entire operation will rollback and fail. Por ejemplo, ante un corte de energia.
+
+\subsubsection{Log-structured file system}
+A log-structured filesystem is a file system in which data and metadata are written sequentially to a circular buffer, called a log.
+
+\subsubsection{Archivos mapeados a memoria}
+Api que usa el programador para levantar todo el archivo en memoria (mmap, munmap - map or unmap files or devices into memory).
+
+El archivo queda guardado en un buffer cache en memoria.
+
+The primary benefit of memory mapping a file is increasing I/O performance, especially when used on large files.
+
+Certain application-level memory-mapped file operations also perform better than their physical file counterparts. Applications can access and update data in the file directly and in-place, as opposed to seeking from the start of the file or rewriting the entire edited contents to a temporary location.
+
+A possible benefit of memory-mapped files is a "lazy loading", thus using small amounts of RAM even for a very large file. Trying to load the entire contents of a file that is significantly larger than the amount of memory available can cause severe thrashing as the operating system reads from disk into memory and simultaneously writes pages from memory back to disk. Memory-mapping may not only bypass the page file completely, but the system only needs to load the smaller page-sized sections as data is being edited, similarly to demand paging scheme used for programs.
+
+Puede traer:
+\begin{itemize}
+	\item Problemas de sincronismo
+	\item Problemas de performance (manejo de memoria)
+\end{itemize}
+
+\subsubsection{Virtual file system}
+A virtual file system (VFS) or virtual filesystem switch is an abstraction layer on top of a more concrete file system. The purpose of a VFS is to allow client applications to access different types of concrete file systems in a uniform way. A VFS can, for example, be used to access local and network storage devices transparently without the client application noticing the difference. It can be used to bridge the differences in Windows, Mac OS and Unix filesystems, so that applications can access files on local file systems of those types without having to know what type of file system they are accessing.
+
+A VFS specifies an interface (or a "contract") between the kernel and a concrete file system. Therefore, it is easy to add support for new file system types to the kernel simply by fulfilling the contract.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_vfs}
+	%\caption{-}
+	\label{fig:filesystem_partition_vfs}
+\end{figure}
+
+Interactúa con los File Systems, que interactúan con el buffer cache, el pagecache y los dispositivos.
+
+Interactúa con el usuario por medio de las System Calls.
 
 % Bibliografía utilizada en el apunte
 \newpage
@@ -1732,7 +1952,7 @@ OS-level virtualization implementations that are capable of live migration can b
 %\makeseccioncolaboradores % Crea la seccion de colaboradres
 
 % Incluir el historial de cambios
-\revision{21/02/2015}{Versión inicial con las secciones de Introduccion, Mecanismos básicos.}
+\revision{21/02/2015}{Versión inicial con las secciones de Introducción, Mecanismos básicos.}
 \revision{22/02/2015}{Se agregó la sección de procesos y de threads.}
 \makehistorial
 
