@@ -94,8 +94,6 @@
 
 \subfile{\rutapaquetes/acerca-del-proyecto.tex} % Incluye información acerca del proyecto FIUBA Apuntes
 
-% Insertar aquí el contenido del apunte. A continuacion hay secciones a modo de ejemplo.
-
 \section{Introducción}
 \subsection{¿Qué es un sistema operativo?}
 \begin{itemize}
@@ -117,7 +115,7 @@ Computadora central. Gran capacidad de I/O, server para e-commerce a gran escala
 Destinados a ofrecer servicios a través de una red.
 
 \subsubsection{Supercomputadoras}
-Computacion de alto rendimiento. Se usan para hacer simulaciones.\\
+Computación de alto rendimiento. Se usan para hacer simulaciones.\\
 
 \textbf{Limites:}
 \begin{itemize}
@@ -160,7 +158,7 @@ Cluster virtual con recursos distribuidos.
 \textbf{Problemas:} concurrencia (que se choquen tareas), que queden tareas sin cubrir.
 
 \subsubsection{Cloud computing}
-Se provee por internet. Dinamicamente escalable.
+Se provee por internet. Dinámicamente escalable.
 
 Atrás de la nube puede haber cluster, grid, etc (al cliente no le importa).
 
@@ -182,7 +180,7 @@ Más de un procesador en el mismo chip o board.
 
 Soportado en todos los sistemas operativos de escritorio.
 
-La paralelizacion esta limitada por la ley de Amdahl: El \emph{speedup} de un programa que utiliza varios procesadores en paralelo está limitado por el tiempo tomado por la fracción secuencial del programa.
+La paralelización esta limitada por la ley de Amdahl: El \emph{speedup} de un programa que utiliza varios procesadores en paralelo está limitado por el tiempo tomado por la fracción secuencial del programa.
 
 \newpage
 \section{Mecanismos básicos}
@@ -218,7 +216,7 @@ Una interrupción es una suspensión temporal de la ejecución de un proceso, pa
 
 Hay dos tipos de interrupciones:
 \begin{itemize}
-	\item Sincronica o software trap: Una instrucción del programa.
+	\item Sincrónica o software trap: Una instrucción del programa.
 	\item Asincrónica: I/O, timer, external.
 \end{itemize}
 
@@ -233,9 +231,9 @@ Hay dos tipos de interrupciones:
 \subsubsection{Modo Kernel}
 Ejecutando un servicio propio del sistema operativo.
 
-En computación, el \emph{kernel} es un programa que maneja las solicitudes de entrada y salida que realiza el software, traduciendolas en instrucciones de procesamiento de datos para la CPU y otros componenentes electrónicos de una computadora. El kernel es una parte fundamental en un sistema operativo moderno de PC.
+En computación, el \emph{kernel} es un programa que maneja las solicitudes de entrada y salida que realiza el software, traduciéndolas en instrucciones de procesamiento de datos para la CPU y otros componentes electrónicos de una computadora. El kernel es una parte fundamental en un sistema operativo moderno de PC.
 
-Debido a su naturaleza crítica, el código kernel generalmente se encuentra cargado en un area protegida de la memoria, previniendo que sea sobreescrito por otra parte no tan usada del sistema operativo o por aplicaciones. El kernel realiza sus tareas, como la ejecución de procesos y manejo de interrupciones, en area del kernel, mientras que todo lo que un usuario normalmente haría, como escribir texto en un editor o correr aplicaciones con interfaz gráfica, se realiza en el espacio del usuario. Esta separación se realiza con el fin de prevenir datos del usuario y del kernel interferir uno con el otro, disminuyendo performance o causando el sistema operativo inestable (o incluso colgandolo)
+Debido a su naturaleza crítica, el código kernel generalmente se encuentra cargado en un área protegida de la memoria, previniendo que sea sobreescrito por otra parte no tan usada del sistema operativo o por aplicaciones. El kernel realiza sus tareas, como la ejecución de procesos y manejo de interrupciones, en área del kernel, mientras que todo lo que un usuario normalmente haría, como escribir texto en un editor o correr aplicaciones con interfaz gráfica, se realiza en el espacio del usuario. Esta separación se realiza con el fin de prevenir datos del usuario y del kernel interferir uno con el otro, disminuyendo performance o causando el sistema operativo inestable (o incluso colgándolo)
 
 Cuando un programa (o como se lo conoce en este contexto \emph{proceso}) realiza solicitudes al kernel, esta solicitud se llama ``llamada al sistema'' o \emph{system call}
 
@@ -272,7 +270,7 @@ Referencias de la Figura \ref{fig:library_call}:
 	\item 6 implica una software trap, el procesador pasa a modo protegido.
 	\item 7 y 8 se ejecutan en modo protegido del procesador.
 	\item En 9 se vuelve a modo usuario del procesador, pero con el sistema operativo en modo kernel.
-	\item El paso 10 reestablece la protección de memoria del sistema operativo (sale de modo kernel).
+	\item El paso 10 restablece la protección de memoria del sistema operativo (sale de modo kernel).
 \end{itemize}
 
 \newpage
@@ -304,21 +302,21 @@ Esta información la guarda el sistema operativo en estructuras de datos llamada
 
 Cualquier subgrupo de recursos, menos, generalmente, el estado del procesador, puede estar asociado con cada uno de los threads del proceso (en sistemas operativos que soportan threads) o en los procesos ``hijos''.
 
-El sistema operativo mantiene sus procesos separados y reserva los recursos que necesitan, de manera que sean menos propensos a interferir entre ellos y causen fallas del sistema (como deadlocks o thrashing). El sistema operativo también provees mecanismos para la comunicación entre procesos, permitiendoles interactuar de manera segura y predecible.
+El sistema operativo mantiene sus procesos separados y reserva los recursos que necesitan, de manera que sean menos propensos a interferir entre ellos y causen fallas del sistema (como deadlocks o thrashing). El sistema operativo también provees mecanismos para la comunicación entre procesos, permitiéndoles interactuar de manera segura y predecible.
 
 \subsection{Multiprogramación}
-En computación, \emph{multitasking} es un metodo donde multiples tareas (procesos) son ejecutadas durante el mismo periodo de tiempo. Se ejecutan \emph{concurrentes} (en periodos de tiempo solapados, una tarea puede iniciar antes que otras hayan terminado) en vez de \emph{secuenciales} (una tarea comienza luego de que la anterior haya terminado). Las tareas concurrentes comparten recursos de procesamiento, como la CPU y memoria principal.\\
+En computación, \emph{multitasking} es un método donde múltiples tareas (procesos) son ejecutadas durante el mismo periodo de tiempo. Se ejecutan \emph{concurrentes} (en periodos de tiempo solapados, una tarea puede iniciar antes que otras hayan terminado) en vez de \emph{secuenciales} (una tarea comienza luego de que la anterior haya terminado). Las tareas concurrentes comparten recursos de procesamiento, como la CPU y memoria principal.\\
 
-Multitasking no necesariamente significa que varias tareas se ejecutan en el mismo preciso momento. En otras palabras, multitasking NO implica paralelismo, pero si significa que más de una tarea puede estar en medio de su ejecución al mismo tiempo, y que mas d euna tarea está avanzando dentro de un periodo de tiempo determinado.
+Multitasking no necesariamente significa que varias tareas se ejecutan en el mismo preciso momento. En otras palabras, multitasking NO implica paralelismo, pero si significa que más de una tarea puede estar en medio de su ejecución al mismo tiempo, y que mas de una tarea está avanzando dentro de un período de tiempo determinado.
 
 En caso de una computadora con un solo CPU, solo una tarea se dice estar corriendo en determinado tiempo, lo que significa que ese CPU está activamente ejecutando instrucciones para esa tarea.\\
 Multitasking resuelve este problema organizando qué tarea se ejecutará en cada tiempo determinado, y cuándo una tarea en espera obtiene un turno. El acto de reasignar un CPU de una tarea a otra se llama \emph{context switch}, o cambio de contexto. Cuando estos cambios de contexto ocurren lo suficientemente seguidos, se logra una ilusión de paralelismo.
 
-Incluso en computadoras con más de un CPU (máquinas \emph{multiprocesadores}) o más de un nucleo en determinado CPU (máquinas \emph{multinúcleo}), donde más de una tarea puede ser ejecutada en un determinado instante (una por núcleo), multitasking permite correr muchas más tareas que la cantidad de CPUs presentes.
+Incluso en computadoras con más de un CPU (máquinas \emph{multiprocesadores}) o más de un núcleo en determinado CPU (máquinas \emph{multinúcleo}), donde más de una tarea puede ser ejecutada en un determinado instante (una por núcleo), multitasking permite correr muchas más tareas que la cantidad de CPUs presentes.
 
 Cuando hay más de un procesador se conoce como Multiprocesamiento.
 
-Se ejecuta un proceso. Cuando se “bloquea” por I/O, se aprovecha el tiempo para ejecutar otro proceso.
+Se ejecuta un proceso. Cuando se ``bloquea'' por I/O, se aprovecha el tiempo para ejecutar otro proceso.
 
 La CPU va conmutando (switching) de un proceso a otro.
 
@@ -398,7 +396,7 @@ int main()
 \subsection{PCB (Process Control Block)}
 Es la estructura de datos con la que el sistema operativo administra los procesos.
 Contiene la información acerca del proceso y su estado.
-Además la información que el S.O. precisa para manejarlo como: Identificador, Estado, Recursos, Historia.
+Además la información que el SO precisa para manejarlo como: Identificador, Estado, Recursos, Historia.
 Ejemplo de datos que maneja: Registros, Program counter, Process ID, Punteros de memoria, etc.
 
 \underline{Estados de un proceso}:
@@ -480,9 +478,9 @@ Las decisiones de scheduling se pueden tomar cuando un proceso:
 	\item Termina. (NO apropiativa)
 \end{itemize}
 
-\textbf{Transicion apropiativa}: es el SO el que interrumpe.
+\textbf{Transición apropiativa}: es el SO el que interrumpe.
 
-\textbf{Transcion no apropiativa}: es el propio proceso el que interrumpe.
+\textbf{Transición no apropiativa}: es el propio proceso el que interrumpe.
 
 \textbf{Starvation}: es un problema que ocurre cuando hay multitasking, donde a un proceso se le niega constantemente los recursos necesarios. De esta manera la tarea nunca puede concretarse.
 
@@ -553,8 +551,8 @@ If a process uses too much CPU time, it will be moved to a lower-priority queue.
 \begin{itemize}
 	\item Salida normal (voluntaria).
 	\item Salida por error (voluntaria).
-	\item Error “fatal” (involuntaria).
-	\item “Muerte” por otro proceso.
+	\item Error ``fatal'' (involuntaria).
+	\item ``Muerte'' por otro proceso.
 \end{itemize}
 
 \subsection{Booting}
@@ -603,12 +601,12 @@ Mantiene compatibilidad reversa con BIOS
 En Linux, el flujo de control durante el arranque es desde el BIOS, al gestor de arranque y al núcleo (kernel). 
 El núcleo inicia el planificador (para permitir la multitarea) y ejecuta el primer espacio de usuario (es decir, fuera del espacio del núcleo) y el programa de inicialización (que establece el entorno de usuario y permite la interacción del usuario y el inicio de sesión), momento en el que el núcleo se inactiva hasta que sea llamado externamente.
 
-\subsection{Creacion de procesos por el usuario}
+\subsection{Creación de procesos por el usuario}
 Espacio de direcciones de un proceso
 
 \begin{itemize}
 	\item TXT: Ejecutable
-	\item DATA: Variables “static”
+	\item DATA: Variables ``static''
 	\item U\_Area: Stack + Información del proceso
 \end{itemize}
 
@@ -665,11 +663,11 @@ Los dos leen del mismo archivo. Si leen una vez cada uno, cada uno lee salteado.
 
 Si quiero bloquear un archivo (de forma exclusiva) y ya esta bloqueado, se queda esperando hasta que se desbloquea.
 
-El unico caso en que los bloquea al mismo tiempo es que ambos sean compartidos.
+El único caso en que los bloquea al mismo tiempo es que ambos sean compartidos.
 
 El bloqueo no es una cola. Lo hace o se queda esperando, sin orden de prioridad.
 
-El lock es un protocolo o una convencion, pero no impide read, write, delete, etc, si se lo hace sin locks.\\
+El lock es un protocolo o una convención, pero no impide read, write, delete, etc, si se lo hace sin locks.\\
 
 \textbf{Ejecución Foreground con proceso hijo Unix}
 \begin{lstlisting}[language=sh]
@@ -729,7 +727,7 @@ Different threads in a process are not as independent as different processes. Al
 
 \textbf{Thread Control Block (TCB)}
 
-Hay informacion que pasa del PCB al (o los) TCB
+Hay información que pasa del PCB al (o los) TCB
 
 \begin{figure}[H]
 	\centering
@@ -762,7 +760,7 @@ There are two main ways to implement a threads package: in user space and in the
 \subsubsection{Threads in user space}
 The kernel knows nothing about them. As far as the kernel is concerned, it is managing ordinary, single-threaded processes (can be implemented in operating systems than not suport threading). Threads are implemented by a library.
 
-Cada proceso tiene su propia tabla de threads privada, para seguirle el rastro a cada uno de sus threads. En la tabla se guardan las propiedades del thread (program counter, stack pointer, registers, state, etc). La tabla es manejada por el runtime system.
+Cada proceso tiene su propia tabla de threads privada, para seguir el rastro a cada uno de sus threads. En la tabla se guardan las propiedades del thread (program counter, stack pointer, registers, state, etc). La tabla es manejada por el runtime system.
 
 When a thread does something that may cause it to become blocked locally, for example, waiting for another thread in its process to complete some work, it calls a run-time system procedure. This procedure checks to see if the thread must be put in a blocked state. If so, it stores the thread’s registers in the thread table, looks in the table for a ready thread to run, and reloads the machine registers with the new thread’s saved values. As soon as the stack pointer and program counter have been switched, the new thread comes to life again automatically.
 
@@ -860,7 +858,7 @@ Está relacionado con el esquema de manejo de memoria soportado por el lenguaje,
 	
 	\item[Vida] Intervalo de la ejecución en el cual una variable tiene memoria asignada.
 	
-	\item[Ámbito (scope)] Cuando una variable está en su ambiente y en su tiempo de vida. Es en tiempo de ejecucion.
+	\item[Ámbito (scope)] Cuando una variable está en su ambiente y en su tiempo de vida. Es en tiempo de ejecución.
 \end{description}
 
 \subsection{Tipos de variables según su manejo en memoria}
@@ -919,7 +917,7 @@ El \emph{stack frame} usualmente incluye al menos los siguientes items (en orden
 	\item Espacio para las variables locales de la rutina (si existen).
 \end{itemize}
 
-Para el procesador es dificil manejar la memoria: no toda la memoria es igual.
+Para el procesador es difícil manejar la memoria: no toda la memoria es igual.
 
 El uso de la memoria cache no depende del programador ni del sistema operativo. Sólo la ve el hardware (la microarquitectura).
 
@@ -963,7 +961,7 @@ El Sistema Operativo no tiene restricciones al operar en Modo Kernel
 	\label{fig:memory_protection}
 \end{figure}
 
-\subsection{Administracion de memoria por el sistema operativo}
+\subsection{Administración de memoria por el sistema operativo}
 El Modelo de Procesos añade un área especial para la administración del proceso (La U\_Area).
 
 El Sistema Operativo debe proveer alojamiento para la ejecución del proceso (Memory Allocation).
@@ -1007,7 +1005,7 @@ The free block with the “tightest fit” is always chosen. The fit is usually 
 Tienen rendimientos parecidos, pero generalmente First Fit funciona un poco mejor.
 
 \subsubsection{Buddy system} 
-Usado en los dispositivos modernos que no tienen memoria virtual (la memoria fisica es la que ven los procesos). 
+Usado en los dispositivos modernos que no tienen memoria virtual (la memoria física es la que ven los procesos). 
 La memoria se asigna en cantidades potencias de dos.
 
 Permite una recuperación rápida de huecos grandes. Sufre de fragmentación interna. Su implementación es muy sencilla y rápida.
@@ -1020,7 +1018,7 @@ When the allocator receives a request for memory, it rounds the requested size u
 When blocks are recycled, there may be some attempt to merge adjacent blocks into ones of a larger permitted size (coalescence). To make this easier, the free lists may be stored in order of address. The main advantage of the buddy system is that coalescence is cheap because the “buddy” of any free block can be calculated from its address.
 
 \subsubsection{Swapping}
-Consiste en pasar de memoria principal (RAM) a memoria secundaria (flash o disco rígido) un proceso que no está corriendo y que hace mucho que no está activado (ej: esperando intervencion humana). Se baja todo el proceso. Pueden pasarse procesos bloqueados o disponibles pero sin ejecutarse.
+Consiste en pasar de memoria principal (RAM) a memoria secundaria (flash o disco rígido) un proceso que no está corriendo y que hace mucho que no está activado (ej: esperando intervención humana). Se baja todo el proceso. Pueden pasarse procesos bloqueados o disponibles pero sin ejecutarse.
 
 Debe tenerse en cuenta la interacción con la I/O.
 
@@ -1054,7 +1052,7 @@ Cada una de las tres partes son excluyentes
 \subsection{Memoria virtual}
 Evita que el programador deba planificar el uso de \emph{overlays}.
 
-Basicamente, utilizando \emph{memoria virtual}, cada programa tiene su propio espacio de direcciones, que está fragmentado en bloques llamados \emph{páginas}. Cada página es un rango continuo de direcciones. Estas páginas están mapeadas en memoria física, pero no todas las páginas tienen que estar en memoria (física) para correr el programa.
+Básicamente, utilizando \emph{memoria virtual}, cada programa tiene su propio espacio de direcciones, que está fragmentado en bloques llamados \emph{páginas}. Cada página es un rango continuo de direcciones. Estas páginas están mapeadas en memoria física, pero no todas las páginas tienen que estar en memoria (física) para correr el programa.
 
 Cuando el programa referencia una parte de su espacio de direcciones que está presente en memoria física, el hardware ejecuta el mapeo necesario al instante. En el caso que la parte no esté en memoria física, el sistema operativo es alertado para que busque la pieza faltante y reejecute la instrucción fallida.\\
 
@@ -1094,7 +1092,7 @@ Una unidad de Hardware, llamada \emph{MMU} (Memory Management Unit) mapea las di
 \subsubsection{Ejemplo de paging}
 Generalmente las paginas y los frames son del mismo tamaño. Por ejemplo 4KB.
 
-Si tenemos 64 KB de memoria virtual y 32 KB de memoria fisica, tenemos 16 páginas virtuales y 8 frames. De esta forma solo 8 páginas virtuales pueden estar mapeadas. Si el programa hace referencia a una pagina que no esta mapeada, el CPU hace un trap (\emph{page fault}) al SO, para reemplazar una pagina mapeada (poco usada) por la pagina nueva. Se escribe la pagina vieja en disco y se mapea la nueva.
+Si tenemos 64 KB de memoria virtual y 32 KB de memoria física, tenemos 16 páginas virtuales y 8 frames. De esta forma solo 8 páginas virtuales pueden estar mapeadas. Si el programa hace referencia a una pagina que no esta mapeada, el CPU hace un trap (\emph{page fault}) al SO, para reemplazar una pagina mapeada (poco usada) por la pagina nueva. Se escribe la pagina vieja en disco y se mapea la nueva.
 
 \subsection{Page table}
 Mapea las paginas con los frames.
@@ -1112,7 +1110,7 @@ Ejemplo:
 	\item[Page frame number]
 	\item[Present / absent bit] Si es 1, la entrada es válida y se puede usar. Si es 0, la pagina virtual no está actualmente en memoria. Acceder a una página cuyo bit está en 0 causa un page fault.
 	\item[Protection bit] Dice que tipo de acceso tiene permitido (lectura, lectura/escritura).
-	\item[Modified (“dirty") bit] cuando se escribe en una pagina, el hardware automaticamente setea el bit Modified en 1. Este bit se lee cuando el sistema opeartivo decide bajar esta página de memoria. Si la pagina fue modifica (es “dirty”), se debe guardar de vuelta en disco. Si no fue modificada (“clean”), se puede directamante abandonar, ya que la copia que está en disco es válida.
+	\item[Modified (“dirty") bit] cuando se escribe en una pagina, el hardware automáticamente setea el bit Modified en 1. Este bit se lee cuando el sistema operativo decide bajar esta página de memoria. Si la pagina fue modifica (es “dirty”), se debe guardar de vuelta en disco. Si no fue modificada (“clean”), se puede directamente abandonar, ya que la copia que está en disco es válida.
 	\item[Referenced bit] Se setea cuando una pagina es referenciada, ya sea para lectura o escritura. Ayuda al sistema operativo a elegir que pagina dar de baja. Las páginas que no están siendo usadas son mejores candidatas a ser dadas de baja.
 	\item[Caching] Se puede habilitar o deshabilitar el cacheo de la pagina.
 \end{description}
@@ -1150,8 +1148,8 @@ If the virtual page number is not in the TLB, the MMU detects the miss and does 
 Si no está el hardware en el \emph{MMU}, existen algunas soluciones para implementar el TLB con software.
 
 \begin{description}
-	\item[Hit/miss ratio] relacion entre aciertos y fracasos.
-	\item[Oportunidades de optimizacion] ~
+	\item[Hit/miss ratio] relación entre aciertos y fracasos.
+	\item[Oportunidades de optimización] ~
 	\begin{itemize}
 		\item Algoritmos de paginado. 
 		\item Que partes pasar al Hard.
@@ -1231,7 +1229,7 @@ Los programas exhiben un comportamiento conocido como localidad de referencia. E
 \subsubsection{Pre-paginado}
 Si un proceso pagina durante mas tiempo que el que ejecuta se dice que hace thrashing. This leads to low CPU utilization.
 
-Posible solucion: Se pre-pagina (cargan en memoria) todas las páginas del último Working Set del proceso. Se re-calcula el Working Set a intervalos.
+Posible solución: Se pre-pagina (cargan en memoria) todas las páginas del último Working Set del proceso. Se re-calcula el Working Set a intervalos.
 
 \subsubsection{Tablas de páginas Locales y Globales}
 Algunos Sistemas permiten el reemplazo de cualquier página (paginado global).
@@ -1396,7 +1394,7 @@ Que dos Sistemas Operativos tengan el mismo OFF no significa que los programas d
 
 	\item[Executable and Linkable Format (ELF)] ~
 	
-	Debido a su diseño, ELF es flexible y extensible, y no está atado a ningún procesador o arquitectura en particular. Esto le permitió ser adoptado por muchos sistemas operativos en distintas plataformas, convirtiéndolo en un estandar de facto.
+	Debido a su diseño, ELF es flexible y extensible, y no está atado a ningún procesador o arquitectura en particular. Esto le permitió ser adoptado por muchos sistemas operativos en distintas plataformas, convirtiéndolo en un estándar de facto.
 
 	Cada ELF posee un ELF header, seguido de los datos del archivo. Estos datos pueden incluir:
 	\begin{itemize}
@@ -1431,11 +1429,11 @@ Segments usually correspond to natural divisions of a program such as individual
 \section{Bibliotecas (Libraries)}
 Las bibliotecas son una \emph{colección de subprogramas} usados en el desarrollo de Software.
 
-Contienen “código auxiliar” y datos que brindan servicios a distintos programas.
+Contienen ``código auxiliar'' y datos que brindan servicios a distintos programas.
 
 Permiten el desarrollo modular.
 
-Convierten los servicios en “commodities” entre los cuales se puede elegir.
+Convierten los servicios en ``commodities'' entre los cuales se puede elegir.
 
 The value of a library is the reuse of the behavior. When a program invokes a library, it gains the behavior implemented inside that library without having to implement that behavior itself. Libraries encourage the sharing of code in a modular fashion, and ease the distribution of the code.
 
@@ -1581,7 +1579,7 @@ Llamamos virtualización a la abstracción de recursos de computación
 	\end{itemize}
 \end{description}
 
-\subsection{Virtualizacion de aplicaciones}
+\subsection{Virtualización de aplicaciones}
 Compatibilidad y portabilidad entre distintos Sistemas Operativos y distintas arquitecturas.
 
 Application virtualization is software technology that encapsulates application software from the underlying operating system on which it is executed. A fully virtualized application is not installed in the traditional sense, although it is still executed as if it were. The application behaves at runtime like it is directly interfacing with the original operating system and all the resources managed by it, but can be isolated or sandboxed to varying degrees.
@@ -1605,7 +1603,7 @@ Application virtualization is software technology that encapsulates application 
 Abstracción de todos los recursos de computación de un huésped dentro de un anfitrión (host). Computer hardware virtualization is the virtualization of computers or operating systems. It hides the physical characteristics of a computing platform from users, instead showing another abstract computing platform. Hace como si fuera otra plataforma en su totalidad.
 
 \begin{description}
-	\item[Tipos de virtualizacion] ~
+	\item[Tipos de virtualización] ~
 	\begin{itemize}
 		\item Virtualización total
 		\begin{itemize}
@@ -1668,7 +1666,7 @@ Puede virtualizar cualquier ambiente, aún cuando éste no sea virtualizable seg
 \subsubsection{Paravirtualización}
 Paravirtualizar consiste en reemplazar, en el sistema operativo guest, las instrucciones delicadas por llamadas al hipervisor. En este caso, el sistema operativo huésped debe ser modificado para saber que va a correr en un entorno virtualizado. El huésped utiliza una API especial para comunicarse con la capa de virtualización e interactuar directamente con el hard. Si bien tenemos claros beneficios por el lado de la performance, se pierde compatibilidad ya que el SO huésped debe ser modificado. Requiere código fuente.
 
-\textbf{La paravirtualizacion es distinta del hipervisor tipo II}
+\textbf{La paravirtualización es distinta del hipervisor tipo II}
 
 \begin{figure}[H]
 	\centering
@@ -1784,7 +1782,7 @@ Provee persistencia a través de reinicios, activaciones de programas o fallas d
 		\item Protección
 		\item Propietario
 		\item Flag hidden
-		\item Time stamp (creacion, modificacion y acceso).
+		\item Time stamp (creación, modificación y acceso).
 		\item Etc.
 	\end{itemize}
 \end{description}
@@ -1820,7 +1818,7 @@ File systems typically have directories (also called folders) which allow the us
 \end{itemize}
 
 \subsection{Sistema de archivos}
-In computing, a file system (or filesystem) is used to control how data is stored and retrieved. Without a file system, information placed in a storage area would be one large body of data with no way to tell where one piece of information stops and the next begins. By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified. Taking its name from the way paper-based information systems are named, each group of data is called a "file". 
+In computing, a file system (or filesystem) is used to control how data is stored and retrieved. Without a file system, information placed in a storage area would be one large body of data with no way to tell where one piece of information stops and the next begins. By separating the data into individual pieces, and giving each piece a name, the information is easily separated and identified. Taking its name from the way paper-based information systems are named, each group of data is called a ``file''. 
 
 There are many different kinds of file systems. Each one has different structure and logic, properties of speed, flexibility, security, size and more.
 
@@ -1832,7 +1830,7 @@ Presenta dos aspectos:
 	\item Implementación.
 \end{itemize}
 
-\subsubsection{Particion de discos con MBR}
+\subsubsection{Partición de discos con MBR}
 File systems are stored on disks. Most disks can be divided up into one or more partitions, with independent file systems on each partition. Sector 0 of the disk is called the MBR (Master Boot Record) and is used to boot the computer. The end of the MBR contains the partition table. This table gives the starting and the ending addresses of each partition. One of the partitions in the table is marked as active. When the computer is booted, the BIOS reads in and executes the MBR. The first thing the MBR program does is locate the active partition, read in its first block, called the boot block, and execute it. The program in the boot block loads the operating system contained in that partition. For uniformity, every partition starts with a boot block, even if it does not contain a bootable operating system. Besides, it might contain one in the future.
 
 \begin{figure}[H]
@@ -1893,7 +1891,7 @@ The first 10 disk addresses are stored in the i-node itself, so for small files,
 \subsubsection{NTFS (Windows)}
 In NTFS, all file, directory and metafile data—file name, creation date, access permissions (by the use of access control lists), and size—are stored as metadata in the Master File Table (MFT). 
 
-A directory entry consists of a filename and a "file ID", which is the record number representing the file in the Master File Table. Two copies of the MFT are stored in case of corruption. If the first record is corrupted, NTFS reads the second record to find the MFT mirror file. Locations for both files are stored in the boot sector.
+A directory entry consists of a filename and a ``file ID'', which is the record number representing the file in the Master File Table. Two copies of the MFT are stored in case of corruption. If the first record is corrupted, NTFS reads the second record to find the MFT mirror file. Locations for both files are stored in the boot sector.
 
 To optimize the storage and reduce the I/O overhead for the very common case of attributes with very small associated value, NTFS prefers to place the value within the attribute itself (if the size of the attribute does not then exceed the maximum size of an MFT record), instead of using the MFT record space to list clusters containing the data; in that case, the attribute will not store the data directly but will just store an allocation map (in the form of data runs) pointing to the actual data stored elsewhere on the volume.
 
@@ -1912,7 +1910,7 @@ The primary benefit of memory mapping a file is increasing I/O performance, espe
 
 Certain application-level memory-mapped file operations also perform better than their physical file counterparts. Applications can access and update data in the file directly and in-place, as opposed to seeking from the start of the file or rewriting the entire edited contents to a temporary location.
 
-A possible benefit of memory-mapped files is a "lazy loading", thus using small amounts of RAM even for a very large file. Trying to load the entire contents of a file that is significantly larger than the amount of memory available can cause severe thrashing as the operating system reads from disk into memory and simultaneously writes pages from memory back to disk. Memory-mapping may not only bypass the page file completely, but the system only needs to load the smaller page-sized sections as data is being edited, similarly to demand paging scheme used for programs.
+A possible benefit of memory-mapped files is a ``lazy loading'', thus using small amounts of RAM even for a very large file. Trying to load the entire contents of a file that is significantly larger than the amount of memory available can cause severe thrashing as the operating system reads from disk into memory and simultaneously writes pages from memory back to disk. Memory-mapping may not only bypass the page file completely, but the system only needs to load the smaller page-sized sections as data is being edited, similarly to demand paging scheme used for programs.
 
 Puede traer:
 \begin{itemize}
@@ -1923,7 +1921,7 @@ Puede traer:
 \subsubsection{Virtual file system}
 A virtual file system (VFS) or virtual filesystem switch is an abstraction layer on top of a more concrete file system. The purpose of a VFS is to allow client applications to access different types of concrete file systems in a uniform way. A VFS can, for example, be used to access local and network storage devices transparently without the client application noticing the difference. It can be used to bridge the differences in Windows, Mac OS and Unix filesystems, so that applications can access files on local file systems of those types without having to know what type of file system they are accessing.
 
-A VFS specifies an interface (or a "contract") between the kernel and a concrete file system. Therefore, it is easy to add support for new file system types to the kernel simply by fulfilling the contract.
+A VFS specifies an interface (or a ``contract'') between the kernel and a concrete file system. Therefore, it is easy to add support for new file system types to the kernel simply by fulfilling the contract.
 
 \begin{figure}[H]
 	\centering
@@ -1935,6 +1933,137 @@ A VFS specifies an interface (or a "contract") between the kernel and a concrete
 Interactúa con los File Systems, que interactúan con el buffer cache, el pagecache y los dispositivos.
 
 Interactúa con el usuario por medio de las System Calls.
+
+\newpage
+\section{Clustered file systems}
+Es un file system que va ser accedido simultáneamente desde más de un cliente.
+
+En general NO es usado por los clusters.
+
+Proveen un mecanismo de control de concurrencia y de serialización.
+
+\subsection{RAID: Redundant Array of (Inexpensive/ Independent) Disks}
+RAID (originally redundant array of inexpensive disks; now commonly redundant array of independent disks) is a data storage virtualization technology that combines multiple disk drive components into a logical unit for the purposes of data redundancy or performance improvement.
+
+Data is distributed across the drives in one of several ways, referred to as RAID levels, depending on the specific level of redundancy and performance required. The different schemes or architectures are named by the word RAID followed by a number (e.g. RAID 0, RAID 1). Each scheme provides a different balance between the key goals: reliability, availability, performance, and capacity. RAID levels greater than RAID 0 provide protection against unrecoverable (sector) read errors, as well as whole disk failure.
+
+Hoy es un término ``paraguas'' para replicar y dividir datos entre varios discos. Pero vistos como un solo disco por el Sistema Operativo.
+
+
+\subsubsection{Principios del RAID}
+Combinar varios discos físicos en una única unidad lógica por Software o Hardware
+
+Para lograr estos objetivos utiliza los conceptos de Mirror o redundancia de datos, Stripping o distribución de bloques de datos y Corrección de errores.
+
+\begin{description}
+	\item[Data Stripping o Distribución de Bloques de datos] Es la técnica de segmentar datos secuencialmente lógicos, como un archivo, de manera que segmentos consecutivos son almacenados en dispositivos de almacenamiento distintos. Este mecanismo es útil cuando un proceso que accede a un dispositivo necesita acceso a datos de manera más veloz de la que este dispositivo puede proveer. Permite acceder a los datos de manera concurrente.
+
+	\item[Disk mirroring o Redundancia de Datos] Es la replicación de volúmenes de discos en discos duros separados para asegurar la disponibilidad continua. La replicación se realiza a través de microcódigo en el controlador del disco o mediante software de servidor. Sirve como copia de seguridad de los datos ante alguna falla de hardware.
+
+	\item[Error detection and correction o Corrección de errors] Son técnicas que permiten tener datos seguros de información digitalizada a través de canales de comunicación inseguros. Se basa en utilizar bits de paridad para detector fallas en los datos.
+\end{description}
+
+\subsubsection{Niveles de RAID}
+\begin{description}
+	\item[RAID 0] \emph{A RAID 0 (also known as a stripe set or striped volume) splits data evenly across two or more disks (striped)}, without parity information and with speed as the intended goal. RAID 0 was not one of the original RAID levels and provides no data redundancy. RAID 0 is normally used to increase performance, although it can also be used as a way to create a large logical disk out of two or more physical ones.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.15\textwidth]{\imgdir/clustered_filesystem_raid_0}
+		%\caption{-}
+		\label{fig:clustered_filesystem_raid_0}
+	\end{figure}
+	Accessing the stripes in the order A1, A2, A3, ... provides the illusion of a larger and faster drive.
+
+	\item[RAID 1] \emph{An exact copy (or mirror) of a set of data on two disks}. This is useful when read performance or reliability is more important than data storage capacity. Such an array can only be as big as the smallest member disk. A classic RAID 1 mirrored pair contains two disks.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.15\textwidth]{\imgdir/clustered_filesystem_raid_1}
+		%\caption{-}
+		\label{fig:clustered_filesystem_raid_1}
+	\end{figure}
+
+	\item[RAID 2] A RAID 2 stripes data at the bit (rather than block) level, and uses a Hamming code for error correction. All hard disks eventually implemented Hamming code error correction. This made RAID 2 error correction redundant and unnecessarily complex. This level quickly became useless and is now obsolete. There are no commercial applications of RAID 2.
+
+	\item[RAID 3] Byte stripping con disco de paridad (para detectar si hubo errores).
+
+	\item[RAID 4] Block-level striping with a dedicated parity disk. A block, sometimes called a physical record, is a sequence of bytes or bits, usually containing some whole number of records.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\textwidth]{\imgdir/clustered_filesystem_raid_4}
+		%\caption{-}
+		\label{fig:clustered_filesystem_raid_4}
+	\end{figure}
+
+	\item[RAID 5] A RAID 5 comprises block-level striping with distributed parity. Unlike in RAID 4, parity information is distributed among the drives. RAID 5 requires at least three disks.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\textwidth]{\imgdir/clustered_filesystem_raid_5}
+		%\caption{-}
+		\label{fig:clustered_filesystem_raid_5}
+	\end{figure}
+
+	\item[RAID 6] Block Stripping con doble paridad distribuida.
+
+	\item[RAID anidados] Levels of nested RAID, also known as hybrid RAID, combine two or more of the standard levels of RAID (redundant array of independent disks) to gain performance, additional redundancy, or both. Muchos de estos niveles están en software.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.45\textwidth]{\imgdir/clustered_filesystem_raid_hybrid}
+		%\caption{-}
+		\label{fig:clustered_filesystem_raid_hybrid}
+	\end{figure}
+\end{description}
+
+\subsubsection{Software RAID vs. Hardware RAID}
+\begin{description}
+	\item[Software RAID] El procesador debe usar su tiempo para las operaciones de RAID en una capa entre el File System y el Device Driver.
+
+	\item[Hardware RAID] Requiere un controlador dedicado. Este controlador dedicado es un dispositivo que maneja los discos físicos y los presenta al computador como unidades lógicas. Dado que eventualmente este controlador implementa hardware RAID es llamado frecuentemente controlador RAID. Además provee cache adicional.
+
+	Un disk array controller debe proveer interfaces fron-end hacia los disco y back-end hacia el host.
+
+	A disk array controller provides front-end interfaces and back-end interfaces.
+	\begin{itemize}
+		\item Back-end interface communicates with controlled disks. Hence protocol is usually ATA (a.k.a. PATA; incorrectly called IDE), SATA, SCSI, FC or SAS.
+		\item Front-end interface communicates with a computer's host adapter (HBA, Host Bus Adapter)
+	\end{itemize}
+
+	\item[Fake RAID] Es un controlador de firmware que toma las funciones de raid durante el boot. Una vez que el kernel de un SO está cargado, el control pasa al SO.
+
+	Esto se debe a que Windows no puede bootear de software RAID y por lo tanto durante el boot delega esta tarea en el controlador de firmware. 
+
+	Se trata de un software RAID que carga al procesador con un  controlador de múltiples canales ATA.
+\end{description}
+
+\subsection{NAS (Network Attached Storage)}
+Network Attached Storage conecta un file-sytem remoto a una red, proveyendo el acceso a clientes heterogéneos. NAS aparece ante un sistema operativo cliente como un servidor.
+
+NAS devices began gaining popularity as a convenient method of sharing files among multiple computers. Potential benefits of dedicated network-attached storage, compared to general-purpose servers also serving files, include faster data access, easier administration, and simple configuration. Provee servicios basados en archivos.\\
+
+Generalmente es una versión reducida empotrada de algún Sistema Operativo.
+
+NAS is useful for more than just general centralized storage provided to client computers in environments with large amounts of data. NAS can enable simpler and lower cost systems such as load-balancing and fault-tolerant email and web server systems by providing storage services.
+
+\subsection{SAN (Storage Area Network)}
+Storage Area Network conecta dispositivos remotos que el SO ve como locales (e implementa el file system).
+One way to loosely conceptualize the difference between a NAS and a SAN is that NAS appears to the client OS (operating system) as a file server (the client can map network drives to shares on that server) whereas a disk available through a SAN still appears to the client OS as a disk, visible in disk and volume management utilities (along with client's local disks), and available to be formatted with a file system and mounted. SAN no provee la abstracción de archivos, solo operaciones en bloques.
+
+Consolida las ``islas de discos'' con conexiones de red.
+
+Pueden ser discos o RAIDs o alguna arquitectura no RAID
+
+Requieren de un software de administración.
+
+Algunas proveen capacidades RAID.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\textwidth]{\imgdir/clustered_filesystem_san_nas}
+	%\caption{-}
+	\label{fig:clustered_filesystem_san_nas}
+\end{figure}
+
+\newpage
+\section{Móviles}
 
 % Bibliografía utilizada en el apunte
 \newpage
@@ -1949,7 +2078,7 @@ Interactúa con el usuario por medio de las System Calls.
 %\colaborador{Colaborador 1}
 %\colaborador{Colaborador 2}
 %\revisor{Dr. Profesor}{10/01/2015}
-%\makeseccioncolaboradores % Crea la seccion de colaboradres
+%\makeseccioncolaboradores % Crea la sección de colaboradores
 
 % Incluir el historial de cambios
 \revision{21/02/2015}{Versión inicial con las secciones de Introducción, Mecanismos básicos.}
