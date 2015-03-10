@@ -1747,7 +1747,7 @@ Provee persistencia a través de reinicios, activaciones de programas o fallas d
 		\includegraphics[width=0.2\textwidth]{\imgdir/filesystem_file}
 		%\caption{-}
 		\label{fig:filesystem_file}
-	\end{figure}	
+	\end{figure}
 	
 	For example, whe see a simple executable binary file taken from an early version of UNIX. Although the file is just a sequence of bytes, the operating system will only execute a file if it has the proper format. It has five sectiones: header, text, data, relocation bits, and symbol table. The header starts with a so-called magic number, identifying the file as an executable file (to prevent the accidental execution of a file not in this format). Then comes the sizes of the various pieces of the file, the address at which execution starts, and some flag bits. Following the header are the text and data of the program itself. These are loaded into memory and relocated using relocation bits. The symbol table is used for debugging.
 
@@ -2064,6 +2064,178 @@ Algunas proveen capacidades RAID.
 
 \newpage
 \section{Móviles}
+\subsection{Sistemas operativos en móviles}
+Usuarios están poco tiempo en varias aplicaciones (Con interacciones cortas).
+
+Lanzamiento y conmutación (switching) rápida entre apps. (200 ms)
+
+Simplificar el uso de las apps (lanzamiento, cierre, inter-operación)
+
+Neutralidad del diseño del Sistema Operativo: el diseño te fuerza solo al look \& feel (siempre que no comprometa al SO).
+
+\subsection{Android}
+Usó hasta la versión 4.4.3 una JVM llamada Dalvik basada en Apache Harmony. Dalvik es una JVM más reducida que la JVM común.
+
+Programs are commonly written in Java and compiled to bytecode for the Java virtual machine, which is then translated to Dalvik bytecode and stored in .dex (Dalvik EXecutable) and .odex (Optimized Dalvik EXecutable) files; related terms odex and de-odex are associated with respective bytecode conversions. The compact Dalvik Executable format is designed for systems that are constrained in terms of memory and processor speed.
+
+Desde Lolipop usa Android Runtime.
+
+\subsubsection{Arquitectura}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{\imgdir/android_arquitectura}
+	%\caption{-}
+	\label{fig:android_arquitectura}
+\end{figure}
+
+\subsubsection{Android Run Time (ART)}
+Compila al instalar la aplicación. AOT (Ahead of Time) Compilation.
+\begin{itemize}
+	\item Mejora el tiempo de respuesta y la vida de la batería
+	\item Aunque el código AOT no es mas rápido que el JIT (Just in Time).
+	\item Y se pierden aspectos dinámicos
+\end{itemize}
+Transforma DEX en ELF
+
+\subsubsection{Aplicaciones}
+Las aplicaciones vienen empaquetadas en un archivo .apk. Una vez instalada tiene su sandbox, cada apk es un usuario de linux con permisos y directorio propios.
+
+Cada aplicación corre en su propio proceso con su propia copia de Dalvik. Los procesos son provistos por el kernel y manejados por el Android Run Time. Para mantener la respuesta del sistema, el sistema Android puede matar sin aviso a procesos que considera que no están respondiendo (y las aplicaciones contenidas dentro del mismo).
+
+Los componentes están descriptos en un Manifest (XML).
+
+Hay mecanismos para compartir datos entre distintas aplicaciones.
+
+Hay una previsión para notificaciones asincrónicas
+
+\subsubsection{Activity}
+Una activity es una aplicación que se comunica por medio de una pantalla con el usuario. Generalmente, esta comunicación se realiza fullscreen, pero puede ser una pantalla flotante. Una aplicación está compuesta por una o más activities, pero sólo una puede estar activa a la vez. El resto de las activities se guarda en un stack.
+
+\begin{description}
+	\item[Ciclo de vida] ~
+	\begin{description}
+		\item[Active] está al tope del stack e interactuando con el usuario.
+		\item [Paused] visible pero sin foco.
+		\item [Stopped] queda en memoria pero ya terminó. Candidata al kill.
+		\item [Inactive] fuera de la memoria. Debe lanzarse nuevamente.
+	\end{description}		
+\end{description}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{\imgdir/android_activity_lifecycle}
+	%\caption{-}
+	\label{fig:android_activity_lifecycle}
+\end{figure}
+
+\subsubsection{Zygote}
+Zygote is a daemon which only mission is to launch applications. This means that Zygote is the parent of all App process. When app\_process launches Zygote, it creates the first Dalvik VM and calls Zygote's \texttt{main()} method. Once Zygote starts, it preloads all necessary Java classes and resources, starts System Server and opens a socket \texttt{/dev/socket/zygote} to listen for requests for starting applications. 
+
+Zygote receives a request to launch an App through \texttt{/dev/socket/zygote}. Once it happens it trigger a \texttt{fork()} call. Here is where the virtues of a great design take action. When a process forks, it creates a clone of itself. It replicates itself in another memory space. This is done pretty efficiently. When this happens to Zygote, it creates an exact and clean new Dalvik VM, preloaded with all necessary classes and resources that any App will need. This makes the process of creating a VM and load resources pretty efficiently. But the design goes farther. As we know, Android runs on Linux. The Linux Kernel implements a strategy call Copy On Write (COW). What this means is that during the fork process, no memory is actually copy to another space. It is shared and marked as copy-on-write. Which means that when a process attempt to modify that memory, the kernel will intercept the call and do the copy of that piece of memory. In the case of Android those libraries are not writable. This means that all process forked from Zygote are using the exact same copy of the system classes and resources. 
+
+Another benefit is the real memory saving. No matter how many applications are started the increase in memory usage will be a lot smaller.
+
+\subsubsection{Wake locks}
+El hardware de Android pasa a sleep apenas queda ocioso. Si se necesita mantener a la CPU activa se pueden usar Wake Locks. Los Wake Locks sirven para que la aplicación quede activa, a costa de gastar la batería.
+
+\subsection{Apple IOS}
+Sistema operativo de iPhone, iPod touch, Apple TV e iPad.
+
+Basado en Darwin.
+
+Objective-C como lenguaje preferido.
+
+\subsubsection{Kernel}
+\textbf{Usa un Kernel híbrido}
+
+The idea behind a hybrid kernel is to have a kernel structure similar to that of a microkernel, but to implement that structure in the manner of a monolithic kernel. In contrast to a microkernel, all (or nearly all) operating system services in a hybrid kernel are still in kernel space. So there are none of the reliability benefits of having services in user space, as with a microkernel. However, just as with an ordinary monolithic kernel, there is none of the performance overhead for message passing and context switching between kernel and user mode that normally comes with a microkernel. Pasaje de mensajes y protección de memoria.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.35\textwidth]{\imgdir/ios_capas_abstraccion}
+	\caption{Las 4 capas de abstracción de IOS}
+	\label{fig:ios_capas_abstraccion}
+\end{figure}
+
+\subsubsection{Cocoa Touch}
+Es el framework para el desarrollo de aplicaciones
+\begin{itemize}
+	\item Auto-Layout y StoryBoards
+	\item Multitasking y Printing
+	\item Data Protection (encriptado)
+	\item Push y Local Notifications
+	\item UIState Preservation
+	\item Reconocimiento de gestos y display externo
+	\item MVC standards
+\end{itemize}
+
+\begin{description}
+	\item[Media Layer] Manejo de Audio, Video y Gráficos.
+
+	\item[Core Services Layer] ~
+	\begin{itemize}
+		\item Servicios fundamentales usados por las aplicaciones: iCloud, Bloqueo de Objetos, Grand Central Dispatch, SQLite, XML, InAppPurchase
+		\item Core Frameworks: Foundation, AddressBook, Location, TE, Eventos, Store
+	\end{itemize}
+
+	\item[Core OS Layer] Frameworks de bajo nivel
+	\begin{itemize}
+		\item Accelerate (math,DSP, vector)
+		\item External Accesories (hardware externo)
+		\item Security
+		\item System: Threading (POSIX threads), Networking (BSD sockets), File-system access, Standard I/O, Bonjour and DNS services, Locale information, Memory allocation
+	\end{itemize}
+\end{description}
+
+\subsubsection{Procesos}
+\textbf{Corren bajo dos UIDs, root (0), algunos del sistema y mobile (501).}
+
+\textbf{Todos los procesos tienen la misma UID, pero no se comunican directamente.}
+
+No se pueden manejar en forma directa.
+
+Al pasar a background provocan un evento y quedan suspendidos.
+
+Pueden cerrarse usando la taskbar.
+
+\subsubsection{iCloud}
+Sincroniza los datos del usuario en todos los dispositivos asociados a la cuenta de iCloud.
+
+Usa Ubiquity Containers, se guardan:
+\begin{itemize}
+	\item Key-Value files 
+	\item Document Files
+	\item Core-Data Files
+\end{itemize}
+
+To save data to iCloud, your app places data in special file system locations known as iCloud containers. An iCloud container (also referred to as a ubiquity container) serves as the local representation of the corresponding iCloud storage. It is separate from the rest of your app's data. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.35\textwidth]{\imgdir/ios_icloud}
+	%\caption{-}
+	\label{fig:ios_icloud}
+\end{figure}
+
+\subsubsection{Procesos y Tasks en XNU}
+Un proceso BSD tiene al menos una task.
+
+Las tasks indican una unidad ejecutable en su ambiente de ejecución (flavor). Puede haber tasks sin procesos BSD asociados.
+
+Los threads son las unidades de ejecución.
+
+\subsubsection{Concurrencia GCD}
+Permite que las tasks corran en paralelo encolándolas y planificándolas (``routing'').
+
+Maneja la concurrencia usando Dispatch Queues.
+
+\subsubsection{Threads}
+Apple trata que no se usen threads en forma directa.
+
+Cada thread tiene un run-loop para manejar eventos. Un run-loop tiene un ``modo'' que indica que eventos recibe.
+
+\subsubsection{Grand Central Dispatch}
+Tecnología para soportar multiprocesamiento simétrico. Es una implementación del patrón thread-pool. Semaforo para los threads.
 
 % Bibliografía utilizada en el apunte
 \newpage
@@ -2081,8 +2253,13 @@ Algunas proveen capacidades RAID.
 %\makeseccioncolaboradores % Crea la sección de colaboradores
 
 % Incluir el historial de cambios
-\revision{21/02/2015}{Versión inicial con las secciones de Introducción, Mecanismos básicos.}
-\revision{22/02/2015}{Se agregó la sección de procesos y de threads.}
+\revision{21/02/2015}{Versión inicial con las secciones de Introducción y de Mecanismos básicos.}
+\revision{22/02/2015}{Se agregó la sección de Procesos y de Threads.}
+\revision{23/02/2015}{Se agregó la sección de Administración de memoria y de Memoria virtual.}
+\revision{28/02/2015}{Se agregó la sección de Linker y de Bibliotecas.}
+\revision{08/03/2015}{Se agregó la sección de Virtualización.}
+\revision{09/03/2015}{Se agregó la sección de Sistemas de archivos y Clustered filesystem.}
+\revision{10/03/2015}{Se agregó la sección de Móviles.}
 \makehistorial
 
 \end{document}
