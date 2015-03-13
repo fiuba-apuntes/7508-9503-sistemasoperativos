@@ -20,7 +20,7 @@
 \newcommand{\rutapaquetes}{./paquetes-apunte}
 
 \usepackage[mostrarlicencia]{\rutapaquetes/caratula} % Caratula personalizada (cargada desde caratula.sty)
-\usepackage[mostrarrevisores]{\rutapaquetes/colaboradores} % Seccion de colaboradores (cargada y creada con colaboradores.sty)
+\usepackage[ocultarrevisores]{\rutapaquetes/colaboradores} % Seccion de colaboradores (cargada y creada con colaboradores.sty)
 \usepackage{\rutapaquetes/historial} % Seccion de historial de cambios (cargada y creada con historial.sty)
 
 % Define los estilos de los enlaces interpretados por el paquete hyperref
@@ -2247,10 +2247,12 @@ Tecnología para soportar multiprocesamiento simétrico. Es una implementación 
 \end{thebibliography}
 
 % Incluir los nombres de las personas que han colaborado en la creación del apunte
-%\colaborador{Colaborador 1}
-%\colaborador{Colaborador 2}
+\colaborador{Kaoru Heanna}
+\colaborador{Darío Miñones}
+\colaborador{Matías Lafroce}
+\colaborador{Ezequiel Pérez Dittler}
 %\revisor{Dr. Profesor}{10/01/2015}
-%\makeseccioncolaboradores % Crea la sección de colaboradores
+\makeseccioncolaboradores % Crea la sección de colaboradores
 
 % Incluir el historial de cambios
 \revision{21/02/2015}{Versión inicial con las secciones de Introducción y de Mecanismos básicos.}
