@@ -1,3 +1,12 @@
+%% sistemas-operativos.tex
+%% 2016/06/18
+%% por FIUBA Apuntes
+%% http://fiuba-apuntes.github.io/
+%%
+%% Apunte para la asignatura Sistemas Operativos de FIUBA.
+%%
+%% Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0
+%%
 \documentclass[a4paper, twoside]{article}
 
 \usepackage[utf8]{inputenc} % Indica cuál es la codificación de este archivo
@@ -1022,13 +1031,15 @@ Los dos leen del mismo archivo. Si leen una vez cada uno, cada uno lee salteado.
 \textbf{Lock compartido}: Asociado al read.
 \textbf{Lock exclusivo}: Asociado al write.
 
-Si quiero bloquear un archivo (de forma exclusiva) y ya esta bloqueado, se queda esperando hasta que se desbloquea.
+Si quiero bloquear un archivo (de forma exclusiva) y ya esta bloqueado,
+se queda esperando hasta que se desbloquea.
 
 El único caso en que los bloquea al mismo tiempo es que ambos sean compartidos.
 
 El bloqueo no es una cola. Lo hace o se queda esperando, sin orden de prioridad.
 
-El lock es un protocolo o una convención, pero no impide read, write, delete, etc, si se lo hace sin locks.\\
+El lock es un protocolo o una convención, pero no impide read, write, delete,
+etc, si se lo hace sin locks.\\
 
 \textbf{Ejecución Foreground con proceso hijo Unix}
 \begin{lstlisting}[language=sh]
@@ -1055,236 +1066,439 @@ El lock es un protocolo o una convención, pero no impide read, write, delete, e
 
 \newpage
 \section{Threads}
-Los thread son mini-procesos en el mismo espacio de direcciones que corren casi en paralelo. Como están en el mismo espacio de direcciones, comparten la data. Es decir, son hilos de ejecución que comparten el agrupamiento de recursos.
 
-Son más livianos que los procesos, así es que es más fácil y rápido crearlos y destruirlos.\\
+Los thread son mini-procesos en el mismo espacio de direcciones que corren
+casi en paralelo.
+Como están en el mismo espacio de direcciones, comparten la data.
+Es decir, son hilos de ejecución que comparten el agrupamiento de recursos.
+
+Son más livianos que los procesos, así es que es más fácil y rápido crearlos y
+destruirlos.\\
 
 Threads differ from traditional multitasking operating system processes in that:
 \begin{itemize}
-	\item processes are typically independent, while threads exist as subsets of a process
-	\item processes carry considerably more state information than threads, whereas multiple threads within a process share process state as well as memory and other resources
-	\item processes have separate address spaces, whereas threads share their address space
-	\item processes interact only through system-provided inter-process communication mechanisms
-	\item context switching between threads in the same process is typically faster than context switching between processes.
+  \item processes are typically independent, while threads exist as subsets
+  of a process
+  \item processes carry considerably more state information than threads,
+  whereas multiple threads within a process share process state as well as
+  memory and other resources
+  \item processes have separate address spaces, whereas threads share their
+  address space
+  \item processes interact only through system-provided inter-process
+  communication mechanisms
+  \item context switching between threads in the same process is typically
+  faster than context switching between processes.
 \end{itemize}
 
-Cada thread tiene sus propios program counters, registros donde almacena sus variables,su stack y su estado. Pero comparten code, data y files.\\
+Cada thread tiene sus propios program counters, registros donde almacena sus
+variables,su stack y su estado.
+Pero comparten code, data y files.\\
 
-Different threads in a process are not as independent as different processes. All threads have exactly the same address space, which means that they also share the same global variables. Since every thread can access every memory address within the process’ address space, one thread can read, write, or even wipe out anothre thread’s stack. There is no protection between threads because should not be necessary. All threads are owned by a single user, who has presumably created multiple threads so that the can cooperate, not fight. In addition to sharing an address space, all the threads can share the same set of open files, child processes, alarms, and signals.
+Different threads in a process are not as independent as different processes.
+All threads have exactly the same address space, which means that they also
+share the same global variables.
+Since every thread can access every memory address within the process's address
+space, one thread can read, write, or even wipe out anothre thread's stack.
+There is no protection between threads because should not be necessary.
+All threads are owned by a single user, who has presumably created multiple
+threads so that the can cooperate, not fight.
+In addition to sharing an address space, all the threads can share the same
+set of open files, child processes, alarms, and signals.
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.66\textwidth]{differences_between_processes_and_threads_1}
-	%\caption{Diferencia entre procesos y threads}
-	\label{fig:differences_between_processes_and_threads_1}
+  \centering
+  \includegraphics[
+    width=0.66\textwidth
+  ]{differences_between_processes_and_threads_1}
+  \caption{Diferencia entre procesos y threads (simplificado)}
+  \label{fig:differences_between_processes_and_threads_1}
 \end{figure}
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.65\textwidth]{differences_between_processes_and_threads_2}
-	%\caption{Diferencia entre procesos y threads}
-	\label{fig:differences_between_processes_and_threads_2}
+  \centering
+  \includegraphics[
+    width=0.65\textwidth
+  ]{differences_between_processes_and_threads_2}
+  \caption{Diferencia entre procesos y threads}
+  \label{fig:differences_between_processes_and_threads_2}
 \end{figure}
 
 \textbf{Thread Control Block (TCB)}
 
-Hay información que pasa del PCB al (o los) TCB
+Hay información que pasa del PCB al (o los) TCB.
+La Figura~\ref{fig:differences_between_processes_and_threads_3} detalla la
+información que es transmitida.
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\textwidth]{differences_between_processes_and_threads_3}
-	%\caption{Diferencia entre procesos y threads}
-	\label{fig:differences_between_processes_and_threads_3}
+  \centering
+  \includegraphics[
+    width=0.7\textwidth
+  ]{differences_between_processes_and_threads_3}
+  \caption{Diferencia entre procesos y threads (elementos)}
+  \label{fig:differences_between_processes_and_threads_3}
 \end{figure}
 
-Like traditional process, thread can be in any of several states: running, blocked, ready or terminated. A running thread concurrently has the CPU and is active. A blocked thread is waiting for some event (or other thread) to unblock it. A ready thread is scheduled to run and will as soon as its turn come up. The transitions between threads states are the same as transitions between process states.
+Like traditional process, thread can be in any of several states:
+running, blocked, ready or terminated.
+A running thread concurrently has the CPU and is active.
+A blocked thread is waiting for some event (or other thread) to unblock it.
+A ready thread is scheduled to run and will as soon as its turn come up.
+The transitions between threads states are the same as transitions between
+process states.
 
+\newpage
 \subsection{Aplicaciones de multithreading}
+
 Varias aplicaciones que concurren sobre los mismo datos como:
 \begin{itemize}
-	\item Un server que lanza un thread por cada pedido.
-	\item Un procesador de texto concurrente con su corrector y su armador de pagina.
-	\item El manejo de Interfaces Gráficas.
+  \item Un server que lanza un thread por cada pedido.
+  \item Un procesador de texto concurrente con su corrector y su armador
+  de pagina.
+  \item El manejo de Interfaces Gráficas.
 \end{itemize}
 
 Algunos de los sistemas hechos con threads podrían hacerse con eventos.
 
-Eventos usan handlers y callbacks, los threads quedan congelados hasta que se les devuelve el control.
+Eventos usan handlers y callbacks, los threads quedan congelados hasta que
+se les devuelve el control.
 
-Escalar con threads es casi trivial, escalar con eventos tiene un techo (stack ripping).
+Escalar con threads es casi trivial, escalar con eventos tiene un techo
+(stack ripping).
 
 No mezclar threads con eventos.
 
 \subsection{Implementacion de threading}
-There are two main ways to implement a threads package: in user space and in the kernel (a hybrid implementation is also possible).
+
+There are two main ways to implement a threads package: in user space and in
+the kernel (a hybrid implementation is also possible).
 
 \subsubsection{Threads in user space}
-The kernel knows nothing about them. As far as the kernel is concerned, it is managing ordinary, single-threaded processes (can be implemented in operating systems than not suport threading). Threads are implemented by a library.
 
-Cada proceso tiene su propia tabla de threads privada, para seguir el rastro a cada uno de sus threads. En la tabla se guardan las propiedades del thread (program counter, stack pointer, registers, state, etc). La tabla es manejada por el runtime system.
+The kernel knows nothing about them. As far as the kernel is concerned,
+it is managing ordinary, single-threaded processes (can be implemented
+in operating systems than not suport threading).
+Threads are implemented by a library.
 
-When a thread does something that may cause it to become blocked locally, for example, waiting for another thread in its process to complete some work, it calls a run-time system procedure. This procedure checks to see if the thread must be put in a blocked state. If so, it stores the thread’s registers in the thread table, looks in the table for a ready thread to run, and reloads the machine registers with the new thread’s saved values. As soon as the stack pointer and program counter have been switched, the new thread comes to life again automatically.
+Cada proceso tiene su propia tabla de threads privada, para seguir el rastro
+a cada uno de sus threads.
+En la tabla se guardan las propiedades del thread (program counter,
+stack pointer, registers, state, etc).
+La tabla es manejada por el runtime system.
+
+When a thread does something that may cause it to become blocked locally,
+for example, waiting for another thread in its process to complete some work,
+it calls a run-time system procedure.
+This procedure checks to see if the thread must be put in a blocked state.
+If so, it stores the thread’s registers in the thread table, looks in the table
+for a ready thread to run, and reloads the machine registers with the new
+thread's saved values.
+As soon as the stack pointer and program counter have been switched,
+the new thread comes to life again automatically.
 
 La biblioteca de threads permite al usuario multiplexar su time slice.
 
-Time slice: tiempo que puede ejecutarse un proceso sin que el SO lo pare (impide que el usuario bloquee el sistema).\\
+Time slice: tiempo que puede ejecutarse un proceso sin que el SO lo pare
+(impide que el usuario bloquee el sistema).\\
 
 \textbf{Ventajas}
 \begin{itemize}
-	\item Doing thread switching like this is at least an order of magnitude (maybe more) faster than trapping to the kernel. The procedure that saves the thread’s state and the scheduler are just local procedures, so invoking them is much more efficient than making a kernel call. Among other issues, no trap is needed, no context switch is needed, the memory cache need not be flushed, and so on. This makes thread scheduling very fast.
-	\item Customized scheduling algorithm.
-	\item Scale better, since kernel threads require some table space and stack space in the kernel, which can be a problem if there are a very large number of threads.
+  \item Doing thread switching like this is at least an order of magnitude
+  (maybe more) faster than trapping to the kernel.
+  The procedure that saves the thread's state and the scheduler are just
+  local procedures, so invoking them is much more efficient than making a
+  kernel call.
+  Among other issues, no trap is needed, no context switch is needed,
+  the memory cache need not be flushed, and so on.
+  This makes thread scheduling very fast.
+
+  \item Customized scheduling algorithm.
+
+  \item Scale better, since kernel threads require some table space and
+  stack space in the kernel, which can be a problem if there are a very large
+  number of threads.
 \end{itemize}
 
 \textbf{Problemas}
 \begin{itemize}
-	\item How to implement blocking systems calls. It should prevent one blocked thread from affecting others.
-	\item If a thread starts running, no other thread in that process will ever run unless the first thread voluntarily gives up the CPU
+  \item How to implement blocking systems calls.
+  It should prevent one blocked thread from affecting others.
+
+  \item If a thread starts running, no other thread in that process will
+  ever run unless the first thread voluntarily gives up the CPU
 \end{itemize}
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\textwidth]{threads_user_space}
-	\caption{Threads en el espacio de usuario}
-	\label{fig:threads_user_space}
+  \centering
+  \includegraphics[width=0.5\textwidth]{threads_user_space}
+  \caption{Threads en el espacio de usuario}
+  \label{fig:threads_user_space}
 \end{figure}
 
 \subsubsection{Kernel threads}
-The kernel has a thread table that keeps track of all the threads in the system. When a thread wants to create a new thread or destroy an exisiting one, it makes a kernel call, which then does the creation or destruction by updating the kernel thread table.
 
-La tabla del kernel es igual a la que se usa en los threads en el espacio de usuario, pero almacenada en el kernel.
+The kernel has a thread table that keeps track of all the threads in
+the system.
+When a thread wants to create a new thread or destroy an exisiting one,
+it makes a kernel call, which then does the creation or destruction by
+updating the kernel thread table.
 
-All calls that might block a thread are implemented as system calls, at considerably greater cost than a call to a run-time system procedure. When a thread blocks, the kernel, at its options, can run either another thread from the same process (if one is ready) or a thread from a different process. With user-level threads, the run-time system keeps running threads from its own process until the kernel takes the CPU away from it (or there are no ready threads left to run).
+La tabla del kernel es igual a la que se usa en los threads en el espacio
+de usuario, pero almacenada en el kernel.
 
-Due to the relatively greater cost of creating and destroying threads in the kernel, some systems recycle their threads. When a thread is destroyed, it is marked as not runnable, but its kernel data structures are not otherwise affected. Later, when a new thread must be ccreated, and old thread is reactivated, saving some overhead.
+All calls that might block a thread are implemented as system calls,
+at considerably greater cost than a call to a run-time system procedure.
+When a thread blocks, the kernel, at its options, can run either another thread
+from the same process (if one is ready) or a thread from a different process.
+With user-level threads, the run-time system keeps running threads from its
+own process until the kernel takes the CPU away from it (or there are no ready
+threads left to run).
+
+Due to the relatively greater cost of creating and destroying threads in the
+kernel, some systems recycle their threads.
+When a thread is destroyed, it is marked as not runnable, but its kernel
+data structures are not otherwise affected.
+Later, when a new thread must be ccreated, and old thread is reactivated,
+saving some overhead.
 
 Kernel threads do not require any new, nonblocking system calls.
 
-Their main disadvantage is that the cost of a system call is substantial, so if thread operations (creation, termination, etc) are common, much more overhead will be incurred.\\
+Their main disadvantage is that the cost of a system call is substantial,
+so if thread operations (creation, termination, etc) are common, much more
+overhead will be incurred.\\
 
 \textbf{Some problems}
 \begin{itemize}
-	\item Multithreaded process fork: How many threads for the new one?
-	\item Signals: when a signal comes in, which thread should handle it?
+  \item Multithreaded process fork: How many threads for the new one?
+  \item Signals: when a signal comes in, which thread should handle it?
 \end{itemize}
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\textwidth]{kernel_threads}
-	\caption{Kernel Threads}
-	\label{fig:kernel_threads}
+  \centering
+  \includegraphics[width=0.5\textwidth]{kernel_threads}
+  \caption{Kernel Threads}
+  \label{fig:kernel_threads}
 \end{figure}
 
 \subsubsection{Implementaciones hibridas}
-One way is use kernel-level threads and then multiplex user-level threads onto some or all the kernel threads. The programmer can determine how many kernel threads to use and how many user-level threads to multiplex on each one.
 
-The kernel is aware of only the kernel-level threads and schedules those. Some of those threads may have multiple user-level threads multiplexed on top of them. These user level threads are created, destroyed and scheduled just like user-level threads in a process.Each kernel-level thread has some set of user-level threads that take turns using it.
+One way is use kernel-level threads and then multiplex user-level threads
+onto some or all the kernel threads.
+The programmer can determine how many kernel threads to use and how many
+user-level threads to multiplex on each one.
+
+The kernel is aware of only the kernel-level threads and schedules those.
+Some of those threads may have multiple user-level threads multiplexed on
+top of them.
+These user level threads are created, destroyed and scheduled just like
+user-level threads in a process.
+Each kernel-level thread has some set of user-level threads that take turns
+using it.\\
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\textwidth]{hybrid_threads}
-	\caption{Threads híbridos}
-	\label{fig:hybrid_threads}
+  \centering
+  \includegraphics[width=0.5\textwidth]{hybrid_threads}
+  \caption{Threads híbridos}
+  \label{fig:hybrid_threads}
 \end{figure}
 
 \textbf{Scheduler activations}
 
-Mimic the funcionality of kernel threads but with better performance (similar to user space threads).
+Mimic the funcionality of kernel threads but with better performance
+(similar to user space threads).
 Cuando se produce una interrupcion, el SO le devuelve el control al usuario.
 
-The kernel assigns a certain number of virtual processors to each process and lets the user space runtime system allocate threads to processors.
+The kernel assigns a certain number of virtual processors to each process and
+lets the user space runtime system allocate threads to processors.
 
-The basic idea is that when the kernel knows that a thread has blocked, the kernel notifies the process runtime system by an “upcall”. The runtime system, at its own discretion, can either restart the blocked thread immediately or put it on the ready list to be run later.
+The basic idea is that when the kernel knows that a thread has blocked,
+the kernel notifies the process runtime system by an ``upcall''.
+The runtime system, at its own discretion, can either restart the blocked
+thread immediately or put it on the ready list to be run later.
 
-An objection to scheduler activations is the fundamental reliance on upcalls, a concept tha violates the structure inherent in any layered system. Normally, layer n offers certain services that layer n+1 can call on, but layer n may not call procedures in layer n + 1. Upcalls do not follow this fundamental principle.
+An objection to scheduler activations is the fundamental reliance on upcalls,
+a concept tha violates the structure inherent in any layered system.
+Normally, layer $n$ offers certain services that layer $ n + 1 $ can call on,
+but layer $n$ may not call procedures in layer $ n + 1 $.
+Upcalls do not follow this fundamental principle.
 
 \newpage
 \section{Administracion de memoria}
+
 \subsection{Definición}
-Suministrar la memoria necesaria para el código de un programa y sus estructuras de datos. Esto incluye:
+
+Suministrar la memoria necesaria para el código de un programa y sus
+estructuras de datos.
+Esto incluye:
 \begin{itemize}
-	\item Asignación de memoria.
-	\item Reciclado del almacenamiento.
+  \item Asignación de memoria.
+  \item Reciclado del almacenamiento.
 \end{itemize}
 
-Está relacionado con el esquema de manejo de memoria soportado por el lenguaje, el compilador se encarga de intercalar el código correspondiente.
+Está relacionado con el esquema de manejo de memoria soportado por el lenguaje,
+el compilador se encarga de intercalar el código correspondiente.
 
 \subsection{Vocabulario de manejo de memoria en los lenguajes}
 \begin{description}
-	\item[Declarar una variable] Establecer nomenclatura (introducir el identificador) sin asignar memoria. Es un paso necesario pero no suficiente para usarla.
-	
-	\item[Definir una variable] Asignarle memoria y posiblemente un valor inicial. Se puede usar una vez que está definida.
-	
-	\item[Ambiente] Porción de código durante el cual una variable está declarada.
-	
-	\item[Vida] Intervalo de la ejecución en el cual una variable tiene memoria asignada.
-	
-	\item[Ámbito (scope)] Cuando una variable está en su ambiente y en su tiempo de vida. Es en tiempo de ejecución.
+  \item[Declarar una variable] Establecer nomenclatura (introducir el
+  identificador) sin asignar memoria.
+  Es un paso necesario pero no suficiente para usarla.
+
+  \item[Definir una variable] Asignarle memoria y posiblemente un valor inicial.
+  Se puede usar una vez que está definida.
+
+  \item[Ambiente] Porción de código durante el cual una variable está declarada.
+
+  \item[Vida] Intervalo de la ejecución en el cual una variable tiene
+  memoria asignada.
+
+  \item[Ámbito (scope)] Cuando una variable está en su ambiente y
+  en su tiempo de vida. Es en tiempo de ejecución.
 \end{description}
 
 \subsection{Tipos de variables según su manejo en memoria}
+
 \subsubsection{Externa}
+
 Se encuentra definida pero no declarada en el bloque.
-Debido a que las variables externas son accesibles globalmente, puede ser utilizadas para comunicar datos entre funciones, en lugar de una lista de parámetros.
-Además, como las variables externas permanecen en existencia, en vez de aparecer y desaparecer a lo largo de las llamadas y salidas de las funciones, retienen sus valores incluso después que las funciones que las funciones que le asignaron valor salieron.
+Debido a que las variables externas son accesibles globalmente,
+puede ser utilizadas para comunicar datos entre funciones,
+en lugar de una lista de parámetros.
+Además, como las variables externas permanecen en existencia, en vez de
+aparecer y desaparecer a lo largo de las llamadas y salidas de las funciones,
+retienen sus valores incluso después que las funciones que las funciones que
+le asignaron valor salieron.
 
 \subsubsection{Estática}
+
 Su vida se extiende a toda la duración del programa.
-When a program (executable or library) is loaded into memory, static variables are stored in the data segment of the program's address space (if initialized), or the BSS segment (if uninitialized), and are stored in corresponding sections of object files prior to loading.
-In terms of scope and extent, static variables have extent the entire run of the program, but may have more limited scope. A basic distinction is between a static global variable, which has global scope and thus is in context throughout the program, and a static local variable, which has local scope and thus is only in context within a function (or other local context).
+When a program (executable or library) is loaded into memory, static variables
+are stored in the data segment of the program's address space (if initialized),
+or the BSS segment (if uninitialized), and are stored in corresponding sections
+of object files prior to loading.
+In terms of scope and extent, static variables have extent the entire run of
+the program, but may have more limited scope.
+A basic distinction is between a static global variable, which has global scope
+and thus is in context throughout the program, and a static local variable,
+which has local scope and thus is only in context within a function (or other
+local context).
 
 \subsubsection{Dinámica Automática}
-La memoria se asigna y libera automáticamente cuando la ejecución ingresa en el ámbito de la variable.
-Is a variable which is allocated and deallocated automatically when program flow enters and leaves the variable's context. No lo hace el programador, sino el compilador del lenguaje o una biblioteca.
+
+La memoria se asigna y libera automáticamente cuando la ejecución ingresa en el
+ámbito de la variable.
+Is a variable which is allocated and deallocated automatically when program
+flow enters and leaves the variable's context.
+No lo hace el programador, sino el compilador del lenguaje o una biblioteca.
 
 \subsubsection{Dinámica Controlada}
-La ejecución del programa (el programador) controla explícitamente cuando se asigna memoria a la variable.
+
+La ejecución del programa (el programador) controla explícitamente cuando se
+asigna memoria a la variable.
 \begin{description}
-	\item[Garbage Collection] Cuando la recuperación de memoria no referenciada es automática.
-	\item[Liberación manual] Cuando la recuperación se hace en el código del programa
+  \item[Garbage Collection] Cuando la recuperación de memoria no referenciada
+  es automática.
+  \item[Liberación manual] Cuando la recuperación se hace en el código del
+  programa
 \end{description}
 
 \subsection{Organización del almacenamiento en tiempo de ejecución}
-Las variables dinámicas automáticas (o lexically scoped) se manejan por medio de un \emph{stack} (pila).
 
-Because the data is added and removed in a last-in-first-out manner, stack-based memory allocation is very simple and typically faster than heap-based memory allocation (also known as dynamic memory allocation). Another feature is that memory on the stack is automatically, and very efficiently, reclaimed when the function exits, which can be convenient for the programmer if the data is no longer required. If however, the data needs to be kept in some form, then it must be copied from the stack before the function exits. Therefore, stack based allocation is suitable for temporary data or data which is no longer required after the creating function exits. 
+Las variables dinámicas automáticas (o lexically scoped) se manejan por medio
+de un \emph{stack} (pila).
+
+Because the data is added and removed in a last-in-first-out manner,
+stack-based memory allocation is very simple and typically faster than
+heap-based memory allocation (also known as dynamic memory allocation).
+Another feature is that memory on the stack is automatically, and very
+efficiently, reclaimed when the function exits, which can be convenient for
+the programmer if the data is no longer required.
+If however, the data needs to be kept in some form, then it must be copied
+from the stack before the function exits.
+Therefore, stack based allocation is suitable for temporary data or data which
+is no longer required after the creating function exits.
 
 Mantiene las variables de llamar de un procedimiento a otro.
 
 Las funciones recursivas hacen que crezca mucho el stack.
 
-Las variables dinámicas controladas se manejan por medio de una estructura llamada heap. Que se puede implementar de varias formas (Listas o Buddies)
+Las variables dinámicas controladas se manejan por medio de una estructura
+llamada heap.
+Que se puede implementar de varias formas (Listas o Buddies)
 
 \begin{figure}[h]
-	\centering
-	\includegraphics[width=0.2\textwidth]{memory_storage_management}
-	%\caption{Manejo de stack y heap}
-	\label{fig:memory_storage_management}
+  \centering
+  \includegraphics[width=0.2\textwidth]{memory_storage_management}
+  \caption{Manejo de stack y heap}
+  \label{fig:memory_storage_management}
 \end{figure}
 
-This is the layout in memory of an executable program. Note that in a virtual memory architecture (which is the case for any modern operating system), some parts of the memory layout may in fact be located on disk blocks and they are retrieved in memory by demand (lazily).
+This is the layout in memory of an executable program.
+Note that in a virtual memory architecture (which is the case for any modern
+operating system), some parts of the memory layout may in fact be located on
+disk blocks and they are retrieved in memory by demand (lazily).
 
-The machine code of the program is typically located at the lowest part of the layout. Then, after the code, there is a section to keep all the fixed size static data in the program. The dynamically allocated data (ie. the data created using malloc in C) as well as the static data without a fixed size (such as arrays of variable size) are created and kept in the heap. The heap grows from low to high addresses. When you call malloc in C to create a dynamically allocated structure, the program tries to find an empty place in the heap with sufficient space to insert the new data; if it can't do that, it puts the data at the end of the heap and increases the heap size.
+The machine code of the program is typically located at the lowest part of
+the layout.
+Then, after the code, there is a section to keep all the fixed size static data
+in the program.
+The dynamically allocated data (ie. the data created using malloc in C) as
+well as the static data without a fixed size (such as arrays of variable size)
+are created and kept in the heap.
+The heap grows from low to high addresses.
+When you call malloc in C to create a dynamically allocated structure,
+the program tries to find an empty place in the heap with sufficient space to
+insert the new data; if it can't do that, it puts the data at the end of the
+heap and increases the heap size.
 
-The focus of this section is the stack in the memory layout. It is called the run-time stack. The stack, in contrast to the heap, grows in the opposite direction (upside-down): from high to low addresses, which is a bit counterintuitive. The stack is not only used to push the return address when a function is called, but it is also used for allocating some of the local variables of a function during the function call, as well as for some bookkeeping.
+The focus of this section is the stack in the memory layout.
+It is called the run-time stack.
+The stack, in contrast to the heap, grows in the opposite direction
+(upside-down): from high to low addresses, which is a bit counterintuitive.
+The stack is not only used to push the return address when a function is
+called, but it is also used for allocating some of the local variables of
+a function during the function call, as well as for some bookkeeping.
 
-Let’s consider the lifetime of a function call. When you call a function you not only want to access its parameters, but you may also want to access the variables local to the function. Worse, in a nested scoped system where nested function definitions are allowed, you may want to access the local variables of an enclosing function. In addition, when a function calls another function, we must forget about the variables of the caller function and work with the variables of the callee function and when we return from the callee, we want to switch back to the caller variables. That is, function calls behave in a stack-like manner.
+Let's consider the lifetime of a function call.
+When you call a function you not only want to access its parameters, but you
+may also want to access the variables local to the function.
+Worse, in a nested scoped system where nested function definitions are allowed,
+you may want to access the local variables of an enclosing function.
+In addition, when a function calls another function, we must forget about
+the variables of the caller function and work with the variables of the callee
+function and when we return from the callee, we want to switch back to the
+caller variables.
+That is, function calls behave in a stack-like manner.
 
-El Stack mantiene el Registro de Activación o frame. A call stack is composed of stack frames (also called activation records or activation frames). These are machine dependent and ABI-dependent data structures containing subroutine state information. Each stack frame corresponds to a call to a subroutine which has not yet terminated with a return.
+El Stack mantiene el Registro de Activación o frame.
+A call stack is composed of stack frames (also called activation records or activation frames).
+These are machine dependent and ABI-dependent data structures containing
+subroutine state information.
+Each stack frame corresponds to a call to a subroutine which has not yet
+terminated with a return.
 El \emph{stack frame} usualmente incluye al menos los siguientes items (en orden en que se encolan):
 \begin{itemize}
-	\item Argumentos (parámetros) pasados a la rutina (si posee alguno)
-	\item Dirección de retorno a la rutina invocadora (ej. En el stack frame de una función \texttt{DibujarLinea}, una dirección al código de la función que la llamó, como puede ser \texttt{DibujarCuadrado})
-	\item Espacio para las variables locales de la rutina (si existen).
+  \item Argumentos (parámetros) pasados a la rutina (si posee alguno)
+  \item Dirección de retorno a la rutina invocadora (ej. En el stack frame
+  de una función \texttt{DibujarLinea}, una dirección al código de la función
+  que la llamó, como puede ser \texttt{DibujarCuadrado})
+  \item Espacio para las variables locales de la rutina (si existen).
 \end{itemize}
 
 Para el procesador es difícil manejar la memoria: no toda la memoria es igual.
 
-El uso de la memoria cache no depende del programador ni del sistema operativo. Sólo la ve el hardware (la microarquitectura).
+El uso de la memoria cache no depende del programador ni del sistema operativo.
+Sólo la ve el hardware (la microarquitectura).
 
-A CPU cache is a cache used by the central processing unit (CPU) of a computer to reduce the average time to access data from the main memory. The cache is a smaller, faster memory which stores copies of the data from frequently used main memory locations. Most CPUs have different independent caches, including instruction and data caches, where the data cache is usually organized as a hierarchy of more cache levels (L1, L2 etc.)
+A CPU cache is a cache used by the central processing unit (CPU) of a computer
+to reduce the average time to access data from the main memory.
+The cache is a smaller, faster memory which stores copies of the data from
+frequently used main memory locations.
+Most CPUs have different independent caches, including instruction and data
+caches, where the data cache is usually organized as a hierarchy of more cache
+levels (L1, L2 etc.)
 
 \subsubsection{Ciclo de instruccion}
+
 An instruction cycle (sometimes called fetch-and-execute cycle, fetch-decode-execute cycle, or FDX) is the basic operation cycle of a computer. It is the process by which a computer retrieves a program instruction from its memory, determines what actions the instruction requires, and carries out those actions. This cycle is repeated continuously by the central processing unit (CPU), from bootup to when the computer is shut down.
 
 \subsection{Modos de direccionamiento}
