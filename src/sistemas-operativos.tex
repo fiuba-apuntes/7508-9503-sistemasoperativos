@@ -1,43 +1,37 @@
 \documentclass[a4paper, twoside]{article}
-\usepackage[utf8]{inputenc} % Especifica la codificación de caracteres de los documentos.
-\usepackage[spanish]{babel} % Indica que el documento se escribirá en español.
-\usepackage[top=3cm, bottom=2.5cm, inner=1.5cm, outer=2.5cm]{geometry} % Márgenes personalizados
+
+\usepackage[utf8]{inputenc} % Indica cuál es la codificación de este archivo
+\usepackage[spanish]{babel} % Indica el idioma en que está escrito el documento
+\usepackage[
+  top=3cm,
+  bottom=2.5cm,
+  inner=1.5cm,
+  outer=2.5cm
+]{geometry} % Márgenes personalizados
 \usepackage{subfiles} % Paquete para incluir el preambulo en los sub archivos.
 \usepackage{afterpage} % Permite añadir páginas despues de una página dada.
-\usepackage{hyperref} % Permite incluir enlaces en los archivos.
-\usepackage{lastpage} % Paquete para poder contabilizar el total de páginas del documento.
-\usepackage{fancyhdr} % Permite personalizar los header y footer del documento.
-\usepackage{graphicx} % Permite incluir gráficos
-\usepackage[hang, bf]{caption} % Personaliza los subtítulos de las figuras y tablas
-\usepackage{float} % Permite posicionar mejor las figuras y tablas
-\usepackage{listings} % Permite insertar código fuente
-\usepackage{xcolor} % Permite utilizar más colores.
+\usepackage[svgnames]{xcolor} % Permite usar colores en el documento
 
-\definecolor{darkblue}{rgb}{0,0,0.4}
-\definecolor{darkgreen}{rgb}{0,0.4,0}
-
-% Defino la ruta de los paquetes personalizados para el apunte
-\newcommand{\rutapaquetes}{./paquetes-apunte}
-
-\usepackage[mostrarlicencia]{\rutapaquetes/caratula} % Caratula personalizada (cargada desde caratula.sty)
-\usepackage[ocultarrevisores]{\rutapaquetes/colaboradores} % Seccion de colaboradores (cargada y creada con colaboradores.sty)
-\usepackage{\rutapaquetes/historial} % Seccion de historial de cambios (cargada y creada con historial.sty)
+% *** HYPERREF PACKAGE ***
+% Permite incluir enlaces en los archivos
+%
+\usepackage{hyperref}
 
 % Define los estilos de los enlaces interpretados por el paquete hyperref
 \hypersetup{
-	colorlinks=true,   % false: boxed links; true: colored links
-	linkcolor=black,   % color of internal links (change box color with linkbordercolor)
-	citecolor=green,   % color of links to bibliography
-	filecolor=magenta, % color of file links
-	urlcolor=blue     % color of external links
+  colorlinks=true,   % false: boxed links; true: colored links
+  linkcolor=black,   % color of internal links (change box color with linkbordercolor)
+  citecolor=green,   % color of links to bibliography
+  filecolor=magenta, % color of file links
+  urlcolor=blue      % color of external links
 }
 
-\newcommand{\imgdir}{../resources/images} % Ruta de las imágenes
+\usepackage{lastpage} % Permite contabilizar el total de páginas del documento
 
-% Define los directorios de las imágenes y gráficos
-\graphicspath{ {\imgdir/} {\rutapaquetes/} }
-
-\newcommand{\nombremateria}{Sistemas Operativos (75.08 - 95.03)} % Defino el comando "\nombremateria" para no harcodear el nombre en varios lugares.
+% *** FANCYHDR PACKAGE ***
+% Permite personalizar el estilo del documento
+%
+\usepackage{fancyhdr}
 
 % Define el pagestyle personalizado
 \pagestyle{fancy}
@@ -49,37 +43,69 @@
 \fancyhead[OL]{\rightmark}
 % Define footer para pagina par
 \fancyfoot[EL]{\nombremateria} % Nombre del apunte a la izquierda
-\fancyfoot[ER]{Página \thepage\ de \pageref{LastPage}} % Numero de pagina a la derecha
+\fancyfoot[ER]{Página \thepage\ de~\pageref{LastPage}} % Numero de pagina a la derecha
 % Define footer para pagina impar
-\fancyfoot[OL]{Página \thepage\ de \pageref{LastPage}} % Numero de pagina a la izquierda
+\fancyfoot[OL]{Página \thepage\ de~\pageref{LastPage}} % Numero de pagina a la izquierda
 \fancyfoot[OR]{\nombremateria} % Nombre del apunte a la derecha
 
 \renewcommand{\footrulewidth}{0.4pt} % Agrego linea que separa el footer
 
+% *** GRAPHICX PACKAGE ***
+% Permite incluir gráficos
+%
+\usepackage{graphicx}
+
+\newcommand{\imgdir}{../resources/images} % Ruta de las imágenes
+
+% Define los directorios de las imágenes y gráficos
+\graphicspath{ {\imgdir/} {\rutapaquetes/} }
+
+\usepackage{float} % Permite posicionar mejor las figuras y tablas
+
+% *** LISTINGS PACKAGE ***
+% Permite insertar código fuente de software
+%
+\usepackage{listings}
+
 % Elijo formato de bloques de código fuente
 \lstset{ 
-	backgroundcolor=\color{white},
-	basicstyle=\ttfamily\footnotesize,
-	breaklines=true,
-	commentstyle=\color{darkgreen},
-	extendedchars=true,
-	frame=single,
-	language=C++,
-	literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1, % Escapeo caracteres especiales
-	keywordstyle=\color{darkblue},
-	numbers=left,
-	numberstyle=\tiny\color{gray},
-	tabsize=4,
-	showspaces=false,
-	showstringspaces=false,
-	stringstyle=\color{red}
+  backgroundcolor=\color{white},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  commentstyle=\color{DarkGreen},
+  extendedchars=true,
+  frame=single,
+  language=C++,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+           {ñ}{{\~n}}1,
+  keywordstyle=\color{DarkBlue},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  tabsize=4,
+  showspaces=false,
+  showstringspaces=false,
+  stringstyle=\color{red}
 }
+
+% Defino la ruta de los paquetes personalizados para el apunte
+\newcommand{\rutapaquetes}{./paquetes-apunte}
+
+% *** CARATULA PACKAGE ***
+% Caratula personalizada (cargada desde caratula.sty)
+%
+\usepackage[mostrarlicencia]{\rutapaquetes/caratula}
+
+% Defino el comando "\nombremateria" para no harcodear el nombre en varios lugares.
+\newcommand{\nombremateria}{Sistemas Operativos (75.08 - 95.03)}
 
 % Configura la caratula
 \materia{\nombremateria}
 \tipoapunte{Resumen teórico}
 %\tema{Tema de la Materia}
 %\subtema{Subtema}
+
+\usepackage[ocultarrevisores]{\rutapaquetes/colaboradores} % Seccion de colaboradores (cargada y creada con colaboradores.sty)
+\usepackage{\rutapaquetes/historial} % Seccion de historial de cambios (cargada y creada con historial.sty)
 
 \begin{document}
 % Página en blanco agregada después de la carátula
@@ -92,42 +118,62 @@
 
 \tableofcontents % Genera el índice
 
-\subfile{\rutapaquetes/acerca-del-proyecto.tex} % Incluye información acerca del proyecto FIUBA Apuntes
+% Se incluye la información acerca del proyecto FIUBA Apuntes
+\subfile{\rutapaquetes/acerca-del-proyecto.tex}
 
 \section{Introducción}
+
 \subsection{¿Qué es un sistema operativo?}
+
 \begin{itemize}
-	\item Un programa que hace de intermediario entre el usuario de la computadora y su hardware (Oculta los detalles finos de la arquitectura).
-	\item Un programa que administra los recursos de un sistema de computación: permite administrar el tiempo de procesador y el espacio (memoria, disco, etc).
+  \item Un programa que hace de intermediario entre el usuario de la
+  computadora y su hardware (Oculta los detalles finos de la arquitectura).
+
+  \item Un programa que administra los recursos de un sistema de computación:
+  permite administrar el tiempo de procesador y el espacio (memoria, disco,
+  etc).
 \end{itemize}
 
 \subsection{Arquitecturas}
+
 \subsubsection{Mainframe}
+
 Computadora central. Gran capacidad de I/O, server para e-commerce a gran escala.\\
 
-\textbf{Seguridad y disponibilidad:} 
+\textbf{Seguridad y disponibilidad:}
+
 \begin{itemize}
-	\item Transaction processing: es procesamiento de información distribuido en operaciones individuales e indivisibles, llamadas \emph{transacciones}. Cada transacción debe ser exitosa o fallar como unidad entera, no puede haber transacciones parcialmente completas.
-	\item Batch processing: Es la ejecución de una serie de programas ("tareas") en una computadora sin intervención del usuario.
+  \item Transaction processing: es procesamiento de información distribuido en
+  operaciones individuales e indivisibles, llamadas \emph{transacciones}.
+  Cada transacción debe ser exitosa o fallar como unidad entera, no puede haber
+  transacciones parcialmente completas.
+
+  \item Batch processing: Es la ejecución de una serie de programas
+  (``tareas'') en una computadora sin intervención del usuario.
 \end{itemize}
 
 \subsubsection{Servidores}
+
 Destinados a ofrecer servicios a través de una red.
 
 \subsubsection{Supercomputadoras}
+
 Computación de alto rendimiento. Se usan para hacer simulaciones.\\
 
 \textbf{Limites:}
+
 \begin{itemize}
-	\item Concurrencia: los procesos no son 100\% independientes
-	\item Costo
-	\item Programación del software
+  \item Concurrencia: los procesos no son 100\% independientes
+  \item Costo
+  \item Programación del software
 \end{itemize}
 
 \subsubsection{Server operating system}
+
 Interfaz solo línea de comando o EFI (estándar de firmware).
 
 \subsubsection{Computadora personal}
+
 No requiere conocimientos especiales.
 
 \subsubsection{Tablets, PDA}
@@ -135,6 +181,7 @@ No requiere conocimientos especiales.
 \subsubsection{Consolas}
 
 \subsubsection{Sistemas operativos embebidos}
+
 Dispositivos que no aceptan instalación de nuevo software por el usuario.
 
 No deberían tener bugs.
@@ -142,102 +189,159 @@ No deberían tener bugs.
 Se usan en tvs, autos, etc.
 
 \subsubsection{Cluster}
+
 Un grupo de computadoras interconectadas por una red local de alta velocidad.
 
 Se comportan como si fuese una única computadora.
 
-Si es de alta disponibilidad tiene nodos redundantes en caso de falla. Retoma en otro equipo en el estado en el que estaba. 
+Si es de alta disponibilidad tiene nodos redundantes en caso de falla.
+Retoma en otro equipo en el estado en el que estaba.
 
 Balance de carga, con dispositivo físico o de software.
 
 \subsubsection{Grid}
+
 Cluster virtual con recursos distribuidos.
 
 \textbf{Ejemplo:} BOINC, SETI.
 
-\textbf{Problemas:} concurrencia (que se choquen tareas), que queden tareas sin cubrir.
+\textbf{Problemas:} concurrencia (que se choquen tareas), que queden tareas sin
+cubrir.
 
 \subsubsection{Cloud computing}
+
 Se provee por internet. Dinámicamente escalable.
 
 Atrás de la nube puede haber cluster, grid, etc (al cliente no le importa).
 
 \textbf{Servicios posibles de cloud computing:}
+
 \begin{itemize}
-	\item Cloud Storage: Dropbox.
-	\item Infraestructura (infraestructura as a service (IaaS)):Tipicamente plataformas virtualizadas. Ejemplo: Amazon EC2
-	\item Plataforma (PaaS): Provee la plataforma y un ambiente de desarrollo y soporte. Ejemplo: Google Code.
-	\item Software (SaaS): Software on demand provisto por terceros. Ejemplo: Amazon Services, Paypal. 
+  \item Cloud Storage: Dropbox.
+  \item Infraestructura (infraestructura as a service (IaaS)):Típicamente
+  plataformas virtualizadas. Ejemplo: Amazon EC2
+  \item Plataforma (PaaS): Provee la plataforma y un ambiente de desarrollo y
+  soporte. Ejemplo: Google Code.
+  \item Software (SaaS): Software on demand provisto por terceros.
+  Ejemplo: Amazon Services, Paypal.
 \end{itemize}
 
 \subsubsection{Tiempo real}
+
 Distinto de online o de rápido.
 
 Tiempo de respuesta máximo y predecible.
 
 \subsubsection{Multiprocesador}
+
 Más de un procesador en el mismo chip o board.
 
 Soportado en todos los sistemas operativos de escritorio.
 
-La paralelización esta limitada por la ley de Amdahl: El \emph{speedup} de un programa que utiliza varios procesadores en paralelo está limitado por el tiempo tomado por la fracción secuencial del programa.
+La paralelización esta limitada por la ley de Amdahl: El \emph{speedup} de un
+programa que utiliza varios procesadores en paralelo está limitado por el
+tiempo tomado por la fracción secuencial del programa.
 
 \newpage
 \section{Mecanismos básicos}
+
 Sistema operativo es software que extiende un poco la capa de hardware.
 
-El hardware es lo que le provee recursos al sistema operativo: CPU, memoria, dispositivos I/O. Cada nivel interpreta al nivel superior.
+El hardware es lo que le provee recursos al sistema operativo: CPU, memoria,
+dispositivos I/O. Cada nivel interpreta al nivel superior.
 
-El estado de una maquina virtual sólo está definido entre instrucción e instrucción.
+El estado de una maquina virtual sólo está definido entre instrucción e
+instrucción.
 
 Una instrucción en una capa equivale a muchas instrucciones de la capa inferior.
 
 \subsection{Modos de CPU}
+
 Son distintos niveles de permisos o privilegios.
 
-Se suele trabajar con dos modos: \textbf{Modo Supervisor} (puede hacer todo) y \textbf{Modo Usuario} (tiene restricciones).
+Se suele trabajar con dos modos: \textbf{Modo Supervisor} (puede hacer todo) y
+\textbf{Modo Usuario} (tiene restricciones).
 
-Se pasa de modo usuario a modo supervisor por medio de una interrupción. 
+Se pasa de modo usuario a modo supervisor por medio de una interrupción.
 
-El retorno a modo usuario está a cargo del programa. Motivo para querer pasar de modo supervisor a modo usuario: Control de riesgo de código desconocido (ejemplo: escribir en las direcciones de memoria del SO).\\
+El retorno a modo usuario está a cargo del programa.
+Motivo para querer pasar de modo supervisor a modo usuario: Control de riesgo
+de código desconocido (ejemplo: escribir en las direcciones de memoria del
+SO).\\
 
 Algunas arquitecturas incluyen más modos:
+
 \begin{itemize}
-	\item X86 Modo real, protegido y virtual.
-	\item Modo hypervisor
+  \item X86 Modo real, protegido y virtual.
+  \item Modo hypervisor
 \end{itemize}
 
 Un sistema operativo puede tener partes corriendo en cada uno de los modos.
 
-Un programa de usuario sólo corre en modo usuario. El único programa que debiera ser capaz de pasar a modo supervisor es el sistema operativo.
+Un programa de usuario sólo corre en modo usuario.
+El único programa que debiera ser capaz de pasar a modo supervisor es el
+sistema operativo.
 
 \subsection{Interrupciones}
-Una interrupción es una suspensión temporal de la ejecución de un proceso, para pasar a ejecutar una subrutina de servicio de interrupción, la cual, por lo general, no forma parte del programa, sino que pertenece al sistema operativo o al BIOS. Una vez finalizada dicha subrutina, se reanuda la ejecución del programa.\\
+
+Una interrupción es una suspensión temporal de la ejecución de un proceso,
+para pasar a ejecutar una subrutina de servicio de interrupción, la cual,
+por lo general, no forma parte del programa, sino que pertenece al sistema
+operativo o al BIOS.
+Una vez finalizada dicha subrutina, se reanuda la ejecución del programa.\\
 
 Hay dos tipos de interrupciones:
+
 \begin{itemize}
-	\item Sincrónica o software trap: Una instrucción del programa.
-	\item Asincrónica: I/O, timer, external.
+  \item Sincrónica o software trap: Una instrucción del programa.
+  \item Asincrónica: I/O, timer, external.
 \end{itemize}
 
 \subsubsection{Atención de interrupciones}
+
 \begin{enumerate}
-	\item \textbf{Primer nivel de atención:} Salvar el contexto (registros, código de condición, dirección de retorno). El objetivo es poder proseguir el proceso (después de atendida la interrupción) desde el estado en el que estaba. Que un proceso sufra o no una interrupción no cambia su resultado, solamente el tiempo que le insume.
-	
-	\item \textbf{Segundo nivel de atención:} Se decide si se atiende en el momento la interrupción o se deja para después. Si vienen 2 interrupciones al mismo tiempo puede llegar a perderse una. Por eso los que envían la interrupción deben estar preparados para repetirla.
+  \item \textbf{Primer nivel de atención:} Salvar el contexto (registros,
+  código de condición, dirección de retorno).
+  El objetivo es poder proseguir el proceso (después de atendida la
+  interrupción) desde el estado en el que estaba.
+  Que un proceso sufra o no una interrupción no cambia su resultado,
+  solamente el tiempo que le insume.
+
+  \item \textbf{Segundo nivel de atención:} Se decide si se atiende en el
+  momento la interrupción o se deja para después.
+  Si vienen 2 interrupciones al mismo tiempo puede llegar a perderse una.
+  Por eso los que envían la interrupción deben estar preparados para repetirla.
 \end{enumerate}
 
 \subsection{Modos del sistema operativo}
+
 \subsubsection{Modo Kernel}
+
 Ejecutando un servicio propio del sistema operativo.
 
-En computación, el \emph{kernel} es un programa que maneja las solicitudes de entrada y salida que realiza el software, traduciéndolas en instrucciones de procesamiento de datos para la CPU y otros componentes electrónicos de una computadora. El kernel es una parte fundamental en un sistema operativo moderno de PC.
+En computación, el \emph{kernel} es un programa que maneja las solicitudes de
+entrada y salida que realiza el software, traduciéndolas en instrucciones de
+procesamiento de datos para la CPU y otros componentes electrónicos de una
+computadora.
+El kernel es una parte fundamental en un sistema operativo moderno de PC.
 
-Debido a su naturaleza crítica, el código kernel generalmente se encuentra cargado en un área protegida de la memoria, previniendo que sea sobreescrito por otra parte no tan usada del sistema operativo o por aplicaciones. El kernel realiza sus tareas, como la ejecución de procesos y manejo de interrupciones, en área del kernel, mientras que todo lo que un usuario normalmente haría, como escribir texto en un editor o correr aplicaciones con interfaz gráfica, se realiza en el espacio del usuario. Esta separación se realiza con el fin de prevenir datos del usuario y del kernel interferir uno con el otro, disminuyendo performance o causando el sistema operativo inestable (o incluso colgándolo)
+Debido a su naturaleza crítica, el código kernel generalmente se encuentra
+cargado en un área protegida de la memoria, previniendo que sea sobreescrito
+por otra parte no tan usada del sistema operativo o por aplicaciones.
+El kernel realiza sus tareas, como la ejecución de procesos y manejo de
+interrupciones, en área del kernel, mientras que todo lo que un usuario
+normalmente haría, como escribir texto en un editor o correr aplicaciones con
+interfaz gráfica, se realiza en el espacio del usuario.
+Esta separación se realiza con el fin de prevenir datos del usuario y del
+kernel interferir uno con el otro, disminuyendo performance o causando el
+sistema operativo inestable (o incluso colgándolo)
 
-Cuando un programa (o como se lo conoce en este contexto \emph{proceso}) realiza solicitudes al kernel, esta solicitud se llama ``llamada al sistema'' o \emph{system call}
+Cuando un programa (o como se lo conoce en este contexto \emph{proceso})
+realiza solicitudes al kernel, esta solicitud se llama ``llamada al sistema'' o
+\emph{system call}
 
 \subsubsection{Modo usuario}
+
 Ejecutando un programa de usuario.
 
 The term userland (or user space) refers to all code which runs outside the operating system's kernel. Userland usually refers to the various programs and libraries that the operating system uses to interact with the kernel: software that performs input/output, manipulates file system objects, application software etc.
@@ -254,129 +358,236 @@ Ejemplos
 \end{itemize}
 
 \subsection{Library Calls}
-Son llamados a procedimientos de bibliotecas provistas por el lenguaje en el que se está programando.\\
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{library_call}
-	\caption{Llamado a procedimientos de bibliotecas}
-	\label{fig:library_call}
+Son llamados a procedimientos de bibliotecas provistas por el lenguaje en el que se está programando.
+
+La Figura~\ref{fig:library_call} detalla la secuencia de llamadas a
+procedimientos de bibliotecas.\\
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{library_call}
+  \caption{Llamado a procedimientos de bibliotecas}
+  \label{fig:library_call}
 \end{figure}
 
-Referencias de la Figura \ref{fig:library_call}:
+Referencias de la Figura~\ref{fig:library_call}:
 \begin{itemize}
-	\item 1, 2, 3 y 4 corresponden a un llamado convencional a un procedimiento.
-	\item Antes de hacer 5, el sistema operativo habilita el acceso a la memoria del sistema operativo (pasa a modo kernel).
-	\item 6 implica una software trap, el procesador pasa a modo protegido.
-	\item 7 y 8 se ejecutan en modo protegido del procesador.
-	\item En 9 se vuelve a modo usuario del procesador, pero con el sistema operativo en modo kernel.
-	\item El paso 10 restablece la protección de memoria del sistema operativo (sale de modo kernel).
+  \item 1, 2, 3 y 4 corresponden a un llamado convencional a un procedimiento.
+  \item Antes de hacer 5, el sistema operativo habilita el acceso a la memoria
+  del sistema operativo (pasa a modo kernel).
+  \item 6 implica una software trap, el procesador pasa a modo protegido.
+  \item 7 y 8 se ejecutan en modo protegido del procesador.
+  \item En 9 se vuelve a modo usuario del procesador, pero con el sistema
+  operativo en modo kernel.
+  \item El paso 10 restablece la protección de memoria del sistema operativo
+  (sale de modo kernel).
 \end{itemize}
 
 \newpage
 \section{Procesos}
+
 \subsection{Modelo de procesos}
-El sistema operativo debe organizar el software que corre en unidades secuenciales, a esta organización se le llama proceso.\\
+
+El sistema operativo debe organizar el software que corre en unidades
+secuenciales, a esta organización se le llama proceso.\\
 
 Un proceso es:
 \begin{itemize}
-	\item La imagen de un programa en ejecución (una copia del programa).
-	\item Con las estructuras del sistema operativo para administrarlo.
-	\item Varios procesos pueden estar asociados a un mismo programa; por ejemplo, iniciar varias instancias de un mismo programa generalmente significa que más de un proceso está siendo ejecutado.
+  \item La imagen de un programa en ejecución (una copia del programa).
+  \item Con las estructuras del sistema operativo para administrarlo.
+  \item Varios procesos pueden estar asociados a un mismo programa;
+  por ejemplo, iniciar varias instancias de un mismo programa generalmente
+  significa que más de un proceso está siendo ejecutado.
 \end{itemize}
 
 Un proceso tiene:
 \begin{itemize}
-	\item La imagen del programa (una copia de su código ejecutable y de su área de datos).
-	\item La información acerca de sus estado de ejecución:
-	\begin{itemize}
-		\item Los valores del program counter, registros y variables.
-		\item Información necesaria para su administración por parte del Sistema Operativo (id, prioridad, ...).
-	\end{itemize}
-	\item Memoria (generalmente una región de memoria virtual); que incluye el código ejecutable, datos específicos del proceso (entrada y salida), un stack de llamadas (para mantener registro de las subrutinas activas y otros eventos), y un heap para mantener datos intermedios generados durante el tiempo de ejecución.
-	\item Descriptores de recursos del sistema operativos, reservados por el proceso, como pueden ser los \emph{file descriptors} (Unix), o \emph{handles} (Windows), y fuentes y sumideros de datos.
-	\item Atributos de seguridad, como el propietario del proceso y los permisos (operaciones permmitidas) del mismo.
+  \item La imagen del programa (una copia de su código ejecutable y de su área
+  de datos).
+  \item La información acerca de sus estado de ejecución:
+  \begin{itemize}
+    \item Los valores del program counter, registros y variables.
+    \item Información necesaria para su administración por parte del Sistema
+    Operativo (id, prioridad, etc.).
+  \end{itemize}
+  \item Memoria (generalmente una región de memoria virtual);
+  que incluye el código ejecutable, datos específicos del proceso (entrada y
+  salida), un stack de llamadas (para mantener registro de las subrutinas
+  activas y otros eventos), y un heap para mantener datos intermedios generados
+  durante el tiempo de ejecución.
+  \item Descriptores de recursos del sistema operativos, reservados por el
+  proceso, como pueden ser los \emph{file descriptors} (Unix), o \emph{handles}
+  (Windows), y fuentes y sumideros de datos.
+  \item Atributos de seguridad, como el propietario del proceso y los permisos
+  (operaciones permmitidas) del mismo.
 \end{itemize}
 
-Esta información la guarda el sistema operativo en estructuras de datos llamadas \emph{Process Control Blocks}.\\
+Esta información la guarda el sistema operativo en estructuras de datos
+llamadas \emph{Process Control Blocks}.\\
 
-Cualquier subgrupo de recursos, menos, generalmente, el estado del procesador, puede estar asociado con cada uno de los threads del proceso (en sistemas operativos que soportan threads) o en los procesos ``hijos''.
+Cualquier subgrupo de recursos, menos, generalmente, el estado del procesador,
+puede estar asociado con cada uno de los threads del proceso (en sistemas
+operativos que soportan threads) o en los procesos ``hijos''.
 
-El sistema operativo mantiene sus procesos separados y reserva los recursos que necesitan, de manera que sean menos propensos a interferir entre ellos y causen fallas del sistema (como deadlocks o thrashing). El sistema operativo también provees mecanismos para la comunicación entre procesos, permitiéndoles interactuar de manera segura y predecible.
+El sistema operativo mantiene sus procesos separados y reserva los recursos que
+necesitan, de manera que sean menos propensos a interferir entre ellos y causen
+fallas del sistema (como deadlocks o thrashing).
+El sistema operativo también provees mecanismos para la comunicación entre
+procesos, permitiéndoles interactuar de manera segura y predecible.
 
 \subsection{Multiprogramación}
-En computación, \emph{multitasking} es un método donde múltiples tareas (procesos) son ejecutadas durante el mismo periodo de tiempo. Se ejecutan \emph{concurrentes} (en periodos de tiempo solapados, una tarea puede iniciar antes que otras hayan terminado) en vez de \emph{secuenciales} (una tarea comienza luego de que la anterior haya terminado). Las tareas concurrentes comparten recursos de procesamiento, como la CPU y memoria principal.\\
 
-Multitasking no necesariamente significa que varias tareas se ejecutan en el mismo preciso momento. En otras palabras, multitasking NO implica paralelismo, pero si significa que más de una tarea puede estar en medio de su ejecución al mismo tiempo, y que mas de una tarea está avanzando dentro de un período de tiempo determinado.
+En computación, \emph{multitasking} es un método donde múltiples tareas
+(procesos) son ejecutadas durante el mismo periodo de tiempo.
+Se ejecutan \emph{concurrentes} (en periodos de tiempo solapados, una tarea
+puede iniciar antes que otras hayan terminado) en vez de \emph{secuenciales}
+(una tarea comienza luego de que la anterior haya terminado).
+Las tareas concurrentes comparten recursos de procesamiento, como la CPU y
+memoria principal.\\
 
-En caso de una computadora con un solo CPU, solo una tarea se dice estar corriendo en determinado tiempo, lo que significa que ese CPU está activamente ejecutando instrucciones para esa tarea.\\
-Multitasking resuelve este problema organizando qué tarea se ejecutará en cada tiempo determinado, y cuándo una tarea en espera obtiene un turno. El acto de reasignar un CPU de una tarea a otra se llama \emph{context switch}, o cambio de contexto. Cuando estos cambios de contexto ocurren lo suficientemente seguidos, se logra una ilusión de paralelismo.
+Multitasking no necesariamente significa que varias tareas se ejecutan en el
+mismo preciso momento.
+En otras palabras, multitasking NO implica paralelismo, pero si significa que
+más de una tarea puede estar en medio de su ejecución al mismo tiempo, y que
+mas de una tarea está avanzando dentro de un período de tiempo determinado.
 
-Incluso en computadoras con más de un CPU (máquinas \emph{multiprocesadores}) o más de un núcleo en determinado CPU (máquinas \emph{multinúcleo}), donde más de una tarea puede ser ejecutada en un determinado instante (una por núcleo), multitasking permite correr muchas más tareas que la cantidad de CPUs presentes.
+En caso de una computadora con un solo CPU, solo una tarea se dice estar
+corriendo en determinado tiempo, lo que significa que ese CPU está activamente
+ejecutando instrucciones para esa tarea.
+Multitasking resuelve este problema organizando qué tarea se ejecutará en cada
+tiempo determinado, y cuándo una tarea en espera obtiene un turno.
+El acto de reasignar un CPU de una tarea a otra se llama \emph{context switch},
+o cambio de contexto.
+Cuando estos cambios de contexto ocurren lo suficientemente seguidos,
+se logra una ilusión de paralelismo.
+
+Incluso en computadoras con más de un CPU (máquinas \emph{multiprocesadores}) o
+más de un núcleo en determinado CPU (máquinas \emph{multinúcleo}),
+donde más de una tarea puede ser ejecutada en un determinado instante
+(una por núcleo), multitasking permite correr muchas más tareas que la cantidad
+de CPUs presentes.
 
 Cuando hay más de un procesador se conoce como Multiprocesamiento.
 
-Se ejecuta un proceso. Cuando se ``bloquea'' por I/O, se aprovecha el tiempo para ejecutar otro proceso.
+Se ejecuta un proceso. Cuando se ``bloquea'' por I/O, se aprovecha el tiempo
+para ejecutar otro proceso.
 
 La CPU va conmutando (switching) de un proceso a otro.
 
 Es un multiplexado de la CPU.
 
 \subsubsection{Implementación de la multiprogramación}
+
 \begin{itemize}
-	\item Se conoce como \emph{scheduler} al mecanismo que permite elegir varios procesos en estado \emph{Ready}, para otorgarles tiempo de CPU y que puedan realizar sus tareas. Para ello aplica un algoritmo de scheduling, que tiene en cuenta los siguientes aspectos
-	\begin{itemize}
-		\item Cantidad requerida de recursos.
-		\item Cantidad actualmente disponible de recursos.
-		\item Prioridad del trabajo o proceso.
-		\item la cantidad de tiempo de espera.
-	\end{itemize}
-	
-	\item \emph{Dispatcher} es el mecanismo que otorga tiempo de CPU al proceso seleccionado por el scheduler. Para esto, se realizan los siguientes pasos:
-	\begin{itemize}
-		\item Cambio de contexto (\emph{Context switching})
-		\item Cambiar a modo usuario (\emph{user mode})
-	\end{itemize}
-	El tiempo se divide en segmentos, denominados \emph{time slices}. Cuando un \emph{time slice} se termina, le permite al scheduler actualizar el estado de cada proceso, y seleccionar el próximo a ejecutar.
+  \item Se conoce como \emph{scheduler} al mecanismo que permite elegir varios
+  procesos en estado \emph{Ready}, para otorgarles tiempo de CPU y que puedan
+  realizar sus tareas. Para ello aplica un algoritmo de scheduling, que tiene
+  en cuenta los siguientes aspectos
+  \begin{itemize}
+    \item Cantidad requerida de recursos.
+    \item Cantidad actualmente disponible de recursos.
+    \item Prioridad del trabajo o proceso.
+    \item la cantidad de tiempo de espera.
+  \end{itemize}
+
+  \item \emph{Dispatcher} es el mecanismo que otorga tiempo de CPU al proceso
+  seleccionado por el scheduler. Para esto, se realizan los siguientes pasos:
+  \begin{itemize}
+    \item Cambio de contexto (\emph{Context switching})
+    \item Cambiar a modo usuario (\emph{user mode})
+  \end{itemize}
+  El tiempo se divide en segmentos, denominados \emph{time slices}.
+  Cuando un \emph{time slice} se termina, le permite al scheduler actualizar
+  el estado de cada proceso, y seleccionar el próximo a ejecutar.
 \end{itemize}
 
-Cada vez que se interrumpe un proceso también se pierde el tiempo de guardar el contexto.
+Cada vez que se interrumpe un proceso también se pierde el tiempo de guardar
+el contexto.
 
 \subsection{Estados de un proceso}
+
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{process_states_simple}
-	\caption{Estados de un procedimiento (simplificado)}
-	\label{fig:process_states_simple}
+  \centering
+  \includegraphics[width=0.7\textwidth]{process_states_simple}
+  \caption{Estados de un procedimiento (simplificado)}
+  \label{fig:process_states_simple}
 \end{figure}
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\textwidth]{process_states_full}
-	\caption{Estados de un procedimiento}
-	\label{fig:process_states_full}
+  \centering
+  \includegraphics[width=0.5\textwidth]{process_states_full}
+  \caption{Estados de un procedimiento}
+  \label{fig:process_states_full}
 \end{figure}
 
 \subsubsection{Created or New}
-When a process is first created, it occupies the ``created'' or ``new'' state. In this state, the process awaits admission to the ``ready'' state. This admission will be approved or delayed by a long-term, or admission, scheduler. Typically in most desktop computer systems, this admission will be approved automatically, however for real-time operating systems this admission may be delayed. In a real time system, admitting too many processes to the ``ready'' state may lead to oversaturation and over contention for the systems resources, leading to an inability to meet process deadlines.
+When a process is first created, it occupies the ``created'' or ``new'' state.
+In this state, the process awaits admission to the ``ready'' state.
+This admission will be approved or delayed by a long-term, or admission,
+scheduler.
+Typically in most desktop computer systems, this admission will be approved
+automatically, however for real-time operating systems this admission may be
+delayed.
+In a real time system, admitting too many processes to the ``ready'' state may
+lead to oversaturation and over contention for the systems resources, leading
+to an inability to meet process deadlines.
 
 \subsubsection{Ready and waiting}
-A ``ready'' or ``waiting'' process has been loaded into main memory and is awaiting execution on a CPU (to be context switched onto the CPU by the dispatcher, or short-term scheduler). There may be many ``ready'' processes at any one point of the system's execution—for example, in a one-processor system, only one process can be executing at any one time, and all other ``concurrently executing'' processes will be waiting for execution.
 
-A ready queue or run queue is used in computer scheduling. Modern computers are capable of running many different programs or processes at the same time. However, the CPU is only capable of handling one process at a time. Processes that are ready for the CPU are kept in a queue for ``ready'' processes. Other processes that are waiting for an event to occur, such as loading information from a hard drive or waiting on an internet connection, are not in the ready queue.
+A ``ready'' or ``waiting'' process has been loaded into main memory and is
+awaiting execution on a CPU (to be context switched onto the CPU by the
+dispatcher, or short-term scheduler).
+There may be many ``ready'' processes at any one point of the system's
+execution—for example, in a one-processor system, only one process can be
+executing at any one time, and all other ``concurrently executing'' processes
+will be waiting for execution.
+
+A ready queue or run queue is used in computer scheduling.
+Modern computers are capable of running many different programs or processes at
+the same time.
+However, the CPU is only capable of handling one process at a time.
+Processes that are ready for the CPU are kept in a queue for ``ready''
+processes.
+Other processes that are waiting for an event to occur, such as loading
+information from a hard drive or waiting on an internet connection,
+are not in the ready queue.
 
 \subsubsection{Running}
-A process moves into the running state when it is chosen for execution. The process's instructions are executed by one of the CPUs (or cores) of the system. There is at most one running process per CPU or core. A process can run in either of the two modes, namely kernel mode or user mode.
+
+A process moves into the running state when it is chosen for execution.
+The process's instructions are executed by one of the CPUs (or cores) of the
+system.
+There is at most one running process per CPU or core.
+A process can run in either of the two modes, namely kernel mode or user mode.
 
 \subsubsection{Blocked (Waiting)}
-A process that is blocked on some event (such as I/O operation completion or a signal). A process may be blocked due to various reasons such as when a particular process has exhausted the CPU time allocated to it or it is waiting for an event to occur.
+A process that is blocked on some event (such as I/O operation completion or
+a signal).
+A process may be blocked due to various reasons such as when a particular
+process has exhausted the CPU time allocated to it or it is waiting for an
+event to occur.
 
 \subsubsection{Terminated}
-A process may be terminated, either from the ``running'' state by completing its execution or by explicitly being killed. In either of these cases, the process moves to the ``terminated'' state. The underlying program is no longer executing, but the process remains in the process table as a zombie process until its parent process calls the wait system call to read its exit status, at which point the process is removed from the process table, finally ending the process's lifetime. If the parent fails to call wait, this continues to consume the process table entry (concretely the process identifier or PID), and causes a resource leak.\\
+A process may be terminated, either from the ``running'' state by completing
+its execution or by explicitly being killed.
+In either of these cases, the process moves to the ``terminated'' state.
+The underlying program is no longer executing, but the process remains in the
+process table as a zombie process until its parent process calls the wait
+system call to read its exit status, at which point the process is removed from
+the process table, finally ending the process's lifetime.
+If the parent fails to call wait, this continues to consume the process table
+entry (concretely the process identifier or PID), and causes a resource leak.\\
 
-A child process always first becomes a zombie before being removed from the resource table. In most cases, under normal system operation zombies are immediately waited on by their parent and then reaped by the system – processes that stay zombies for a long time are generally an error and cause a resource leak.\\
+A child process always first becomes a zombie before being removed from the
+resource table.
+In most cases, under normal system operation zombies are immediately waited on
+by their parent and then reaped by the system – processes that stay zombies for
+a long time are generally an error and cause a resource leak.\\
 
-Después de terminado un proceso, el mismo queda en estado ``terminado'' hasta que el sistema operativo termina de limpiar las estructuras que usó para ejecutarlo (mientras tanto está en estado zombie).
+Después de terminado un proceso, el mismo queda en estado ``terminado'' hasta
+que el sistema operativo termina de limpiar las estructuras que usó para
+ejecutarlo (mientras tanto está en estado zombie).
 
 \begin{lstlisting}
 int main()
@@ -394,242 +605,392 @@ int main()
 \end{lstlisting}
 
 \subsection{PCB (Process Control Block)}
-Es la estructura de datos con la que el sistema operativo administra los procesos.
+
+Es la estructura de datos con la que el sistema operativo administra los
+procesos.
 Contiene la información acerca del proceso y su estado.
-Además la información que el SO precisa para manejarlo como: Identificador, Estado, Recursos, Historia.
-Ejemplo de datos que maneja: Registros, Program counter, Process ID, Punteros de memoria, etc.
+Además la información que el SO precisa para manejarlo como: Identificador,
+Estado, Recursos, Historia.
+Ejemplo de datos que maneja: Registros, Program counter, Process ID, Punteros
+de memoria, etc.
 
 \underline{Estados de un proceso}:
 Los estados se manejan como colas.
 El Dispatcher es el encargado de cambiar los PCBs entre las colas.
 
 \subsubsection{Dispatcher (Scheduler de corto plazo)}
-Decide qué proceso, entre los procesos en memoria y con estado \emph{ready}, será ejecutado (otorgado un CPU) luego de una interrupción del clock, una interrupción de entrada/salida, llamada al sistema operativo u otro tipo de señal. Por este motivo, este scheduler de corto plazo realizar tareas de planificación mucho más seguido que los schedulers de medio y largo plazo. Al menos una decisión de scheduling se realiza luego de cada \emph{time slice}, y estos son bastante cortos.
+
+Decide qué proceso, entre los procesos en memoria y con estado \emph{ready},
+será ejecutado (otorgado un CPU) luego de una interrupción del clock,
+una interrupción de entrada/salida, llamada al sistema operativo u otro tipo de
+señal.
+Por este motivo, este scheduler de corto plazo realizar tareas de planificación
+mucho más seguido que los schedulers de medio y largo plazo.
+Al menos una decisión de scheduling se realiza luego de cada \emph{time slice},
+y estos son bastante cortos.
 
 \begin{itemize}
-	\item Al pasar de Running a Blocked.
-	El manejador de interrupciones lo invoca para cambiar de estado al proceso:
-	\begin{itemize}
-		\item Salva los datos necesarios en el PCB.
-		\item Cambia el PCB de cola.
-	\end{itemize}
-	Luego se decide a que proceso dar control (tarea del Scheduler).
+  \item Al pasar de Running a Blocked.
+  El manejador de interrupciones lo invoca para cambiar de estado al proceso:
+  \begin{itemize}
+    \item Salva los datos necesarios en el PCB.
+    \item Cambia el PCB de cola.
+  \end{itemize}
+  Luego se decide a que proceso dar control (tarea del Scheduler).
 
-	\item Al pasar de Ready a Running \\
-	El Scheduler lo invoca cuando ya decidió a que proceso activar. \\
-	Carga el estado de la CPU con los datos del PCB. \\
-	Continúa la ejecución del proceso.
+  \item Al pasar de Ready a Running\\
+  El Scheduler lo invoca cuando ya decidió a que proceso activar.\\
+  Carga el estado de la CPU con los datos del PCB.\\
+  Continúa la ejecución del proceso.
 \end{itemize}
 
 \subsubsection{Scheduler (Long term)}
 Decide a cuál de los procesos en ready hay que darle el control.
-In general, most processes can be described as either I/O-bound or CPU-bound. An I/O-bound process is one that spends more of its time doing I/O than it spends doing computations. A CPU-bound process, in contrast, generates I/O requests infrequently, using more of its time doing computations.
-It is important that a long-term scheduler selects a good process mix of I/O-bound and CPU-bound processes. If all processes are I/O-bound, the ready queue will almost always be empty, and the short-term scheduler will have little to do. On the other hand, if all processes are CPU-bound, the I/O waiting queue will almost always be empty, devices will go unused, and again the system will be unbalanced.
-he system with the best performance will thus have a combination of CPU-bound and I/O-bound processes.\\
+In general, most processes can be described as either I/O-bound or CPU-bound.
+An I/O-bound process is one that spends more of its time doing I/O than it
+spends doing computations.
+A CPU-bound process, in contrast, generates I/O requests infrequently, using
+more of its time doing computations.
+It is important that a long-term scheduler selects a good process mix of
+I/O-bound and CPU-bound processes.
+If all processes are I/O-bound, the ready queue will almost always be empty,
+and the short-term scheduler will have little to do. On the other hand, if all
+processes are CPU-bound, the I/O waiting queue will almost always be empty,
+devices will go unused, and again the system will be unbalanced.
+The system with the best performance will thus have a combination of CPU-bound
+and I/O-bound processes.\\
 
 Tiene en cuenta las características del proceso:
 
 \begin{itemize}
-	\item \textbf{Throughput} - The total number of processes that complete their execution per time unit.
-	\item \textbf{Latency}, specifically:
-	\begin{itemize}
-		\item \textbf{Turnaround time} - total time between submission of a process and its completion.
-		\item \textbf{Response time} - amount of time it takes from when a request was submitted until the first response is produced.
-	\end{itemize}
-	\item \textbf{Fairness} - Equal CPU time to each process (or more generally appropriate times according to each process' priority and workload).
-	\item \textbf{Waiting Time} - The time the process remains in the ready queue.
+  \item \textbf{Throughput} --- The total number of processes that complete
+  their execution per time unit.
+  \item \textbf{Latency}, specifically:
+  \begin{itemize}
+    \item \textbf{Turnaround time} --- total time between submission of
+    a process and its completion.
+    \item \textbf{Response time} --- amount of time it takes from when a request
+    was submitted until the first response is produced.
+  \end{itemize}
+  \item \textbf{Fairness} --- Equal CPU time to each process (or more generally
+  appropriate times according to each process' priority and workload).
+  \item \textbf{Waiting Time} --- The time the process remains in the ready
+  queue.
 \end{itemize}
 
 \paragraph{Objetivos del Scheduler:}
+
 \begin{itemize}
-	\item Dar una participación adecuada del reparto de tiempo de CPU (Fairness).
-	\item Equilibrar el uso de recursos (Load Balancing).
-	\item Aplicar las políticas generales del Sistema (prioridades, afinidad, seguridad).
-	\item El resto depende del tipo de Sistema.
+  \item Dar una participación adecuada del reparto de tiempo de CPU (Fairness).
+  \item Equilibrar el uso de recursos (Load Balancing).
+  \item Aplicar las políticas generales del Sistema (prioridades, afinidad,
+  seguridad).
+  \item El resto depende del tipo de Sistema.
 \end{itemize}
 
-In practice, these goals often conflict (e.g. throughput versus latency), thus a scheduler will implement a suitable compromise. Preference is given to any one of the concerns mentioned above, depending upon the user's needs and objectives.
+In practice, these goals often conflict (e.g. throughput versus latency),
+thus a scheduler will implement a suitable compromise.
+Preference is given to any one of the concerns mentioned above, depending upon
+the user's needs and objectives.
 
 \begin{itemize}
-	\item Batch (por lotes):
-	\begin{itemize}
-		\item maximizar el throughput: cantidad de procesos / tiempo.
-		\item Mantener la CPU ocupada.
-		\item Minimizar el turnaround time.
-	\end{itemize}
-	\item Interactivo:
-	\begin{itemize}
-		\item Buen tiempo de respuesta
-		\item Expectativas del usuario
-	\end{itemize}
-	\item Real time:
-	\begin{itemize}
-		\item Cumplir con los deadlines
-		\item Desempeño predecible
-	\end{itemize}
+  \item Batch (por lotes):
+  \begin{itemize}
+    \item maximizar el throughput: cantidad de procesos / tiempo.
+    \item Mantener la CPU ocupada.
+    \item Minimizar el turnaround time.
+  \end{itemize}
+  \item Interactivo:
+  \begin{itemize}
+    \item Buen tiempo de respuesta
+    \item Expectativas del usuario
+  \end{itemize}
+  \item Real time:
+  \begin{itemize}
+    \item Cumplir con los deadlines
+    \item Desempeño predecible
+  \end{itemize}
 \end{itemize}
 
 Las decisiones de scheduling se pueden tomar cuando un proceso:
 
 \begin{itemize}
-	\item Pasa de running a blocked/waiting. (Transicion NO apropiativa)
-	\item Pasa de running a ready. (Transicion apropiativa)
-	\item Pasa de blocked/waiting a ready. (apropiativa)
-	\item Termina. (NO apropiativa)
+  \item Pasa de running a blocked/waiting. (Transicion NO apropiativa)
+  \item Pasa de running a ready. (Transicion apropiativa)
+  \item Pasa de blocked/waiting a ready. (apropiativa)
+  \item Termina. (NO apropiativa)
 \end{itemize}
 
 \textbf{Transición apropiativa}: es el SO el que interrumpe.
 
 \textbf{Transición no apropiativa}: es el propio proceso el que interrumpe.
 
-\textbf{Starvation}: es un problema que ocurre cuando hay multitasking, donde a un proceso se le niega constantemente los recursos necesarios. De esta manera la tarea nunca puede concretarse.
+\textbf{Starvation}: es un problema que ocurre cuando hay multitasking, donde
+a un proceso se le niega constantemente los recursos necesarios.
+De esta manera la tarea nunca puede concretarse.
 
 \subsection{Algoritmos de scheduling}
 
 \begin{enumerate}
-	\item FIFO
-	\item Shortest Job Next (SJN)
-	\item Round Robin
-	\item Múltiples colas con prioridad
+  \item FIFO
+  \item Shortest Job Next (SJN)
+  \item Round Robin
+  \item Múltiples colas con prioridad
 \end{enumerate}
 
 \subsubsection{First come-First served (FIFO)}
+
 Simplemente encola procesos en estado \emph{ready} en el orden de llegada.\\
 
 \textbf{Características}
 
 \begin{itemize}
-	\item Since context switches only occur upon process termination, and no reorganization of the process queue is required, scheduling overhead is minimal.
-	\item Throughput can be low, since long processes can hold the CPU
-	\item Turnaround time, waiting time and response time can be high for the same reasons above
-	\item No prioritization occurs, thus this system has trouble meeting process deadlines.
-	\item The lack of prioritization means that as long as every process eventually completes, there is no starvation. In an environment where some processes might not complete, there can be starvation.
-	\item It is based on Queuing
+  \item Since context switches only occur upon process termination,
+  and no reorganization of the process queue is required, scheduling overhead
+  is minimal.
+  \item Throughput can be low, since long processes can hold the CPU
+  \item Turnaround time, waiting time and response time can be high for
+  the same reasons above
+  \item No prioritization occurs, thus this system has trouble meeting process
+  deadlines.
+  \item The lack of prioritization means that as long as every process
+  eventually completes, there is no starvation.
+  In an environment where some processes might not complete, there can be
+  starvation.
+  \item It is based on Queuing
 \end{itemize}
 
 \subsubsection{Shortest Job Next}
-Selecciona para ser ejecutado el proceso en espera con el menor tiempo de ejecución.
+
+Selecciona para ser ejecutado el proceso en espera con el menor tiempo de
+ejecución.
 
 \textbf{Pros}:
 \begin{itemize}
-	\item Shortest job next is advantageous because of its simplicity and because it minimizes the average amount of time each process has to wait until its execution is complete. 
+  \item Shortest job next is advantageous because of its simplicity and because
+  it minimizes the average amount of time each process has to wait until its
+  execution is complete. 
 \end{itemize}
 
 \textbf{Contras}:
 \begin{itemize}
-	\item However, it has the potential for process starvation for processes which will require a long time to complete if short processes are continually added.
-	\item Another disadvantage of using shortest job next is that the total execution time of a job must be known before execution. While it is not possible to perfectly predict execution time, several methods can be used to estimate the execution time for a job, such as a weighted average of previous execution times.
+  \item However, it has the potential for process starvation for processes
+  which will require a long time to complete if short processes are continually
+  added.
+  \item Another disadvantage of using shortest job next is that the total
+  execution time of a job must be known before execution. While it is not
+  possible to perfectly predict execution time, several methods can be used to
+  estimate the execution time for a job, such as a weighted average of previous
+  execution times.
 \end{itemize}
 
 \subsubsection{Round Robin}
-Time slices are assigned to each process in equal portions and in circular order, handling all processes without priority (also known as cyclic executive). 
+
+Time slices are assigned to each process in equal portions and in circular
+order, handling all processes without priority (also known as cyclic
+executive). 
 
 \textbf{Pros}:
 \begin{itemize}
-	\item Round-robin scheduling is simple, easy to implement, and starvation-free.
-	\item Good average response time, waiting time is dependent on number of processes, and not average process length.
-	\item Starvation can never occur, since no priority is given. Order of time unit allocation is based upon process arrival time, similar to FCFS.
+  \item Round-robin scheduling is simple, easy to implement, and
+  starvation-free.
+  \item Good average response time, waiting time is dependent on number of
+  processes, and not average process length.
+  \item Starvation can never occur, since no priority is given.
+  Order of time unit allocation is based upon process arrival time,
+  similar to FCFS.
 \end{itemize}
 
 \textbf{Contras}:
 \begin{itemize}
-	\item Because of high waiting times, deadlines are rarely met in a pure RR system.
+  \item Because of high waiting times, deadlines are rarely met in a pure RR
+  system.
 \end{itemize}
 
 \subsubsection{Múltiples colas con Prioridad}
-This is used for situations in which processes are easily divided into different groups. For example, a common division is made between foreground (interactive) processes and background (batch) processes. These two types of processes have different response-time requirements and so may have different scheduling needs. It is very useful for shared memory problems.
-If a process uses too much CPU time, it will be moved to a lower-priority queue. This scheme leaves I/O-bound and interactive processes in the higher priority queues. In addition, a process that waits too long in a lower-priority queue may be moved to a higher priority queue. This form of aging also helps to prevent starvation of certain lower priority processes.
+
+This is used for situations in which processes are easily divided into
+different groups.
+For example, a common division is made between foreground (interactive)
+processes and background (batch) processes.
+These two types of processes have different response-time requirements and so
+may have different scheduling needs.
+It is very useful for shared memory problems.
+If a process uses too much CPU time, it will be moved to a lower-priority
+queue.
+This scheme leaves I/O-bound and interactive processes in the higher priority
+queues.
+In addition, a process that waits too long in a lower-priority queue may be
+moved to a higher priority queue.
+This form of aging also helps to prevent starvation of certain lower priority
+processes.
 
 \subsection{Creacion/Terminacion de procesos}
+
 \subsubsection{Creación de Procesos}
+
 \begin{itemize}
-	\item Al iniciar el sistema (Booting)
-	\item Por pedido del usuario (Uso de una System Call).
+  \item Al iniciar el sistema (Booting)
+  \item Por pedido del usuario (Uso de una System Call).
 \end{itemize}
 
 \subsubsection{Terminación de procesos}
+
 \begin{itemize}
-	\item Salida normal (voluntaria).
-	\item Salida por error (voluntaria).
-	\item Error ``fatal'' (involuntaria).
-	\item ``Muerte'' por otro proceso.
+  \item Salida normal (voluntaria).
+  \item Salida por error (voluntaria).
+  \item Error ``fatal'' (involuntaria).
+  \item ``Muerte'' por otro proceso.
 \end{itemize}
 
 \subsection{Booting}
-A boot loader is a computer program that loads an operating system or some other system software for the computer after completion of the power-on self-tests; it is the loader for the operating system itself, which has its own loader for loading ordinary user programs and libraries. Within the hard reboot process, it runs after completion of the self-tests, then loads and runs the software. A boot loader is loaded into main memory from persistent memory, such as a hard disk drive or, in some older computers, from a medium such as punched cards, punched tape, or magnetic tape. The boot loader then loads and executes the processes that finalize the boot.
+A boot loader is a computer program that loads an operating system or some
+other system software for the computer after completion of the power-on
+self-tests; it is the loader for the operating system itself, which has its own
+loader for loading ordinary user programs and libraries.
+Within the hard reboot process, it runs after completion of the self-tests,
+then loads and runs the software.
+A boot loader is loaded into main memory from persistent memory, such as a hard
+disk drive or, in some older computers, from a medium such as punched cards,
+punched tape, or magnetic tape.
+The boot loader then loads and executes the processes that finalize the boot.
 
 \begin{itemize}
-	\item Cargar en memoria un software que pueda lanzar un Sistema Operativo.
-	\begin{itemize}
-		\item Switches en el panel.
-		\item Flash boot loader.
-		\item MBR (Master Boot Record) program.
-		\item EFI (Extended Firmware Interface).
-	\end{itemize}
-	\item Termina cargando el first stage boot loader.
+  \item Cargar en memoria un software que pueda lanzar un Sistema Operativo.
+  \begin{itemize}
+    \item Switches en el panel.
+    \item Flash boot loader.
+    \item MBR (Master Boot Record) program.
+    \item EFI (Extended Firmware Interface).
+  \end{itemize}
+  \item Termina cargando el first stage boot loader.
 \end{itemize}
 
 \subsection{EFI (Extensible Firmware Interface)}
-Interfaz Extensible del Firmware, Extensible Firmware Interface (EFI), es una especificación desarrollada por Intel dirigida a reemplazar la antigua interfaz del estándar IBM PC ROM BIOS, e interactúa como puente entre el sistema operativo y el firmware base.
+Interfaz Extensible del Firmware, Extensible Firmware Interface (EFI), es una
+especificación desarrollada por Intel dirigida a reemplazar la antigua interfaz
+del estándar IBM PC ROM BIOS, e interactúa como puente entre el sistema
+operativo y el firmware base.
 
 \begin{itemize}
-	\item Boot Services:
-	\begin{itemize}
-		\item Soporte de consola.
-		\item Soporte gráfico.
-	\end{itemize}
-	\item Runtime Services:
-	\begin{itemize}
-		\item Device Drivers
-		\item Fecha y Hora
-	\end{itemize}
-	\item Carga de código desde Internet
+  \item Boot Services:
+  \begin{itemize}
+    \item Soporte de consola.
+    \item Soporte gráfico.
+  \end{itemize}
+  \item Runtime Services:
+  \begin{itemize}
+    \item Device Drivers
+    \item Fecha y Hora
+  \end{itemize}
+  \item Carga de código desde Internet
 \end{itemize}
 
-Las especificaciones de la EFI permiten ofrecer un controlador de dispositivo independiente del procesador denominado EFI Byte Code o simplemente EBC. Gracias a esto, se permite soporte para la carga de gráficos, red, sonido y opciones avanzadas del sistema, sin haber precargado el sistema operativo en cuestión. Esto era totalmente imposible en el BIOS, ya que cargaba funciones muy limitadas y necesarias como el soporte de periféricos como teclado y ratón.
+Las especificaciones de la EFI permiten ofrecer un controlador de dispositivo
+independiente del procesador denominado EFI Byte Code o simplemente EBC.
+Gracias a esto, se permite soporte para la carga de gráficos, red, sonido y
+opciones avanzadas del sistema, sin haber precargado el sistema operativo en
+cuestión.
+Esto era totalmente imposible en el BIOS, ya que cargaba funciones muy
+limitadas y necesarias como el soporte de periféricos como teclado y ratón.
 
 \subsection{UEFI}
-El 25 de julio de 2005 se creó la fundación UEFI (Unified Extensible Firmware Interface) cuya labor consistía en desarrollar y promocionar la plataforma EFI.
 
-Define un “boot manager” (a firmware policy engine) que carga el loader del SO y los drivers que se necesiten.
-La configuración del booteo se almacena en variables NVRAM (path de loaders)
-Los loaders del SO son “clases” de aplicaciones UEFI, como clases que son, se almacenan en el file system (EFI System partition) que es independiente del medio (HD, Optical Disk, etc).
-Especifica un Shell para ejecutar aplicaciones (eje boot loaders), modificar variables, etc
-Mantiene compatibilidad reversa con BIOS
+El 25 de julio de 2005 se creó la fundación UEFI (Unified Extensible Firmware
+Interface) cuya labor consistía en desarrollar y promocionar la plataforma EFI.
+
+Define un ``boot manager'' (a firmware policy engine) que carga el loader
+del SO y los drivers que se necesiten.
+La configuración del booteo se almacena en variables NVRAM (path de loaders).
+Los loaders del SO son ``clases'' de aplicaciones UEFI, como clases que son,
+se almacenan en el file system (EFI System partition) que es independiente del
+medio (HD, Optical Disk, etc).
+Especifica un Shell para ejecutar aplicaciones (eje boot loaders),
+modificar variables, etc.
+Mantiene compatibilidad reversa con BIOS.
 
 \subsection{Proceso de BOOT – Linux}
-En Linux, el flujo de control durante el arranque es desde el BIOS, al gestor de arranque y al núcleo (kernel). 
-El núcleo inicia el planificador (para permitir la multitarea) y ejecuta el primer espacio de usuario (es decir, fuera del espacio del núcleo) y el programa de inicialización (que establece el entorno de usuario y permite la interacción del usuario y el inicio de sesión), momento en el que el núcleo se inactiva hasta que sea llamado externamente.
+
+En Linux, el flujo de control durante el arranque es desde el BIOS,
+al gestor de arranque y al núcleo (kernel). 
+El núcleo inicia el planificador (para permitir la multitarea) y ejecuta el
+primer espacio de usuario (es decir, fuera del espacio del núcleo) y
+el programa de inicialización (que establece el entorno de usuario y
+permite la interacción del usuario y el inicio de sesión), momento en el que
+el núcleo se inactiva hasta que sea llamado externamente.
 
 \subsection{Creación de procesos por el usuario}
+
 Espacio de direcciones de un proceso
 
 \begin{itemize}
-	\item TXT: Ejecutable
-	\item DATA: Variables ``static''
-	\item U\_Area: Stack + Información del proceso
+  \item TXT: Ejecutable
+  \item DATA: Variables ``static''
+  \item U\_Area: Stack + Información del proceso
 \end{itemize}
 
 \subsubsection{TXT}
-The Text segment (a.k.a the Instruction segment) contains the executable program code and constant data. The text segment is marked by the operating system as read-only and can not be modified by the process. Multiple processes can share the same text segment. Processes share the text segment if a second copy of the program is to be executed concurrently.
+
+The Text segment (a.k.a the Instruction segment) contains the executable
+program code and constant data.
+The text segment is marked by the operating system as read-only and can not be
+modified by the process.
+Multiple processes can share the same text segment.
+Processes share the text segment if a second copy of the program is to be
+executed concurrently.
 
 \subsubsection{Data}
-The data segment, which is contiguous (in a virtual sense) with the text segment, can be subdivided into initialized data (e.g. in C/C++, variables that are declared as static or are static by virtual of their placement) and uninitialized (or 0-initizliazed) data. The uninitialized data area is also called BSS (Block Started By Symbol). For example, Initialized Data section is for initialized global variables or static variables, and BSS is for uninitialized.
+
+The data segment, which is contiguous (in a virtual sense) with the text
+segment, can be subdivided into initialized data (e.g. in C/C++, variables that
+are declared as static or are static by virtual of their placement) and
+uninitialized (or 0-initizliazed) data.
+The uninitialized data area is also called BSS (Block Started By Symbol).
+For example, Initialized Data section is for initialized global variables or
+static variables, and BSS is for uninitialized.
 
 \subsubsection{U\_Area (STACK + Process info)}
-In addition to the text, data, and stack segment, the OS also maintains for each process a region called the u area (User Area). The u area contains information specific to the process (e.g. open files, current directory, signal action, accounting information) and a system stack segment for process use. If the process makes a system call (e.g., the system call to write in the function in main ), the stack frame information for the system is stored in the system stack segment. Again, this information is kept by the OS in an area that the process doesn't normally have access to. Thus, if this information is needed, the process must use special system call to access it. Like the process itself, the contents of the u area for the process are paged in and out by the OS.
+
+In addition to the text, data, and stack segment, the OS also maintains for
+each process a region called the u area (User Area).
+The u area contains information specific to the process (e.g. open files,
+current directory, signal action, accounting information) and a system stack
+segment for process use.
+If the process makes a system call (e.g., the system call to write in the
+function in main), the stack frame information for the system is stored in
+the system stack segment.
+Again, this information is kept by the OS in an area that the process doesn't
+normally have access to.
+Thus, if this information is needed, the process must use special system call
+to access it.
+Like the process itself, the contents of the u area for the process are paged
+in and out by the OS.
 
 \subsection{Fork y Exec}
+
 \subsubsection{Exec}
+
 Reemplaza al proceso actual con un nuevo programa.
 
 \subsubsection{Fork}
-Lanza un nuevo proceso a imagen y semejanza de sí mismo. El hijo tiene el mismo código ejecutable que su padre.
-The fork operation creates a separate address space for the child
-When a process calls fork, it is deemed the parent process, and the newly created process, its child. After the fork, both processes not only run the same program, but they resume execution as though both had called the system call. They can then inspect the call's return value to determine their status, child or parent, and act accordingly.
-Cada uno tiene su propio espacio de direcciones. No se comparte memoria de escritura.
 
-So, \texttt{fork()} and \texttt{exec()} are often used in sequence to get a new program running as a child of a current process. Shells typically do this whenever you try to run a program like \texttt{find} - the shell forks, then the child loads the \texttt{find} program into memory, setting up all command line arguments, standard I/O and so forth.\\
+Lanza un nuevo proceso a imagen y semejanza de sí mismo.
+El hijo tiene el mismo código ejecutable que su padre.
+The fork operation creates a separate address space for the child
+When a process calls fork, it is deemed the parent process, and the newly
+created process, its child.
+After the fork, both processes not only run the same program, but they resume
+execution as though both had called the system call.
+They can then inspect the call's return value to determine their status,
+child or parent, and act accordingly.
+Cada uno tiene su propio espacio de direcciones.
+No se comparte memoria de escritura.
+
+So, \texttt{fork()} and \texttt{exec()} are often used in sequence to get a new
+program running as a child of a current process.
+Shells typically do this whenever you try to run a program like \texttt{find}
+--- the shell forks, then the child loads the \texttt{find} program into memory,
+setting up all command line arguments, standard I/O and so forth.\\
 
 \textbf{Laboratorio}
 
@@ -711,14 +1072,14 @@ Cada thread tiene sus propios program counters, registros donde almacena sus var
 
 Different threads in a process are not as independent as different processes. All threads have exactly the same address space, which means that they also share the same global variables. Since every thread can access every memory address within the process’ address space, one thread can read, write, or even wipe out anothre thread’s stack. There is no protection between threads because should not be necessary. All threads are owned by a single user, who has presumably created multiple threads so that the can cooperate, not fight. In addition to sharing an address space, all the threads can share the same set of open files, child processes, alarms, and signals.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.66\textwidth]{differences_between_processes_and_threads_1}
 	%\caption{Diferencia entre procesos y threads}
 	\label{fig:differences_between_processes_and_threads_1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.65\textwidth]{differences_between_processes_and_threads_2}
 	%\caption{Diferencia entre procesos y threads}
@@ -729,7 +1090,7 @@ Different threads in a process are not as independent as different processes. Al
 
 Hay información que pasa del PCB al (o los) TCB
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{differences_between_processes_and_threads_3}
 	%\caption{Diferencia entre procesos y threads}
@@ -781,7 +1142,7 @@ Time slice: tiempo que puede ejecutarse un proceso sin que el SO lo pare (impide
 	\item If a thread starts running, no other thread in that process will ever run unless the first thread voluntarily gives up the CPU
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{threads_user_space}
 	\caption{Threads en el espacio de usuario}
@@ -807,7 +1168,7 @@ Their main disadvantage is that the cost of a system call is substantial, so if 
 	\item Signals: when a signal comes in, which thread should handle it?
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{kernel_threads}
 	\caption{Kernel Threads}
@@ -819,7 +1180,7 @@ One way is use kernel-level threads and then multiplex user-level threads onto s
 
 The kernel is aware of only the kernel-level threads and schedules those. Some of those threads may have multiple user-level threads multiplexed on top of them. These user level threads are created, destroyed and scheduled just like user-level threads in a process.Each kernel-level thread has some set of user-level threads that take turns using it.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{hybrid_threads}
 	\caption{Threads híbridos}
@@ -894,7 +1255,7 @@ Las funciones recursivas hacen que crezca mucho el stack.
 
 Las variables dinámicas controladas se manejan por medio de una estructura llamada heap. Que se puede implementar de varias formas (Listas o Buddies)
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.2\textwidth]{memory_storage_management}
 	%\caption{Manejo de stack y heap}
@@ -954,7 +1315,7 @@ Una forma de hacerlo es por medio de un \emph{registro base} y uno \emph{límite
 
 El Sistema Operativo no tiene restricciones al operar en Modo Kernel
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.2\textwidth]{memory_protection}
 	%\caption{Protección por espacios de memoria}
@@ -1038,7 +1399,7 @@ El programador debe planificar el uso de \emph{overlays} según el uso de las ru
 
 Aún se usa en PDAs, Celulares y Embedded.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.2\textwidth]{virtual_memory_overlays}
 	%\caption{Overlays}
@@ -1099,7 +1460,7 @@ Mapea las paginas con los frames.
 \subsubsection{Estructura}
 La estructura de una entrada en la tabla de paginación puede variar de maquina a maquina.
 Ejemplo:
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{virtual_memory_page_entry}
 	%\caption{Entrada a la tabla de paginación}
@@ -1305,14 +1666,14 @@ Si se trata de un lenguaje de alto o mediano nivel, la traducción es una compil
 Biblioteca y programa objeto no ejecutable son diferentes conceptualmente (de objetivos de creación):
 La biblioteca es pensada para usarse en diferentes programas, mientras que el programa objeto se crea para un programa en particular.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{linkers_loaders_linking_1}
 	%\caption{---}
 	\label{fig:linkers_loaders_linking_1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{linkers_loaders_linking_2}
 	%\caption{---}
@@ -1330,21 +1691,21 @@ Permite cambiar el funcionamiento actualizando las librerías del SO. Pero depen
 
 Linker y loader son en momento de post-compilación.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{linkers_loaders_loading_1}
 	%\caption{---}
 	\label{fig:linkers_loaders_loading_1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{linkers_loaders_loading_2}
 	%\caption{---}
 	\label{fig:linkers_loaders_loading_2}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{linkers_loaders_loading_3}
 	%\caption{---}
@@ -1644,11 +2005,11 @@ Cuando el sistema operativo guest ejecuta una instrucción sensible ocurre una `
 
 Tiene que ser virtualizable según Popek y Goldberg.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{\imgdir/virtualization_hipervisor_type_i}
-	%\caption{-}
-	\label{fig:virtualizacion_hipervisor_tipo_i}
+	%\caption{}
+	%\label{fig:virtualizacion_hipervisor_tipo_i}
 \end{figure}
 
 \subsubsection{Hipervisor tipo II}
@@ -1656,7 +2017,7 @@ Corre bajo el control de un sistema operativo anfitrión o host.
 
 Puede virtualizar cualquier ambiente, aún cuando éste no sea virtualizable según las condiciones de Popek y Goldberg.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{\imgdir/virtualization_hipervisor_type_ii}
 	%\caption{-}
@@ -1668,7 +2029,7 @@ Paravirtualizar consiste en reemplazar, en el sistema operativo guest, las instr
 
 \textbf{La paravirtualización es distinta del hipervisor tipo II}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{\imgdir/virtualization_paravirtualization}
 	%\caption{-}
@@ -1742,7 +2103,7 @@ Provee persistencia a través de reinicios, activaciones de programas o fallas d
 
 	Other files are binary, which just means that they are not ASCII files. Listing them on the printer fives an incomprehensible full of random junk. Usually, they have some internal structure known to programs that use them.
 	
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.2\textwidth]{\imgdir/filesystem_file}
 		%\caption{-}
@@ -1833,7 +2194,7 @@ Presenta dos aspectos:
 \subsubsection{Partición de discos con MBR}
 File systems are stored on disks. Most disks can be divided up into one or more partitions, with independent file systems on each partition. Sector 0 of the disk is called the MBR (Master Boot Record) and is used to boot the computer. The end of the MBR contains the partition table. This table gives the starting and the ending addresses of each partition. One of the partitions in the table is marked as active. When the computer is booted, the BIOS reads in and executes the MBR. The first thing the MBR program does is locate the active partition, read in its first block, called the boot block, and execute it. The program in the boot block loads the operating system contained in that partition. For uniformity, every partition starts with a boot block, even if it does not contain a bootable operating system. Besides, it might contain one in the future.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_mrb}
 	%\caption{-}
@@ -1855,7 +2216,7 @@ The partition table header defines the usable blocks on the disk. It also define
 \subsubsection{Paritition entries}
 The GPT uses simple and straightforward entries to describe partitions. The first 16 bytes designate the partition type globally unique identifier (GUID). For example, the GUID for an EFI System partition is C12A7328-F81F-11D2-BA4B-00A0C93EC93B. The second 16 bytes contain a GUID unique to the partition. Then follow the starting and ending 64-bit LBAs, partition attributes and partition names. As is the nature and purpose of GUIDs, no central registry is needed to ensure the uniqueness of the GUID partition type designators. The location of the partition entries array on disk is defined in the GPT header.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_entries}
 	%\caption{-}
@@ -1870,7 +2231,7 @@ The FAT file system is a legacy file system which is simple and robust. It offer
 \subsubsection{UNIX File System}
 A UNIX directory entry contains one entry for each file in that directory. Each entry is extremely simple because UNIX uses the i-node scheme. A directory entry contains only two fields: the file name and the number of the i-node for that file. 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.4\textwidth]{\imgdir/filesystem_partition_unix_directory_entry}
 	%\caption{-}
@@ -1879,7 +2240,7 @@ A UNIX directory entry contains one entry for each file in that directory. Each 
 
 The UNIX i-nodes contain some attributes. The attributes containt the file size, timestamps, owner, group, protection information, and a count of the number of directory entries that pont to the i-node. The latter field is needed due to links. Whenever a new link is made to an i-node, the count in the i-node is increased. When a link is removed, the count is decremented. When it gets to 0, the i-node is reclaimed and the disk blocks are put back in the free list.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_unix_inode}
 	%\caption{-}
@@ -1923,7 +2284,7 @@ A virtual file system (VFS) or virtual filesystem switch is an abstraction layer
 
 A VFS specifies an interface (or a ``contract'') between the kernel and a concrete file system. Therefore, it is easy to add support for new file system types to the kernel simply by fulfilling the contract.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{\imgdir/filesystem_partition_vfs}
 	%\caption{-}
@@ -1966,7 +2327,7 @@ Para lograr estos objetivos utiliza los conceptos de Mirror o redundancia de dat
 \subsubsection{Niveles de RAID}
 \begin{description}
 	\item[RAID 0] \emph{A RAID 0 (also known as a stripe set or striped volume) splits data evenly across two or more disks (striped)}, without parity information and with speed as the intended goal. RAID 0 was not one of the original RAID levels and provides no data redundancy. RAID 0 is normally used to increase performance, although it can also be used as a way to create a large logical disk out of two or more physical ones.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.15\textwidth]{\imgdir/clustered_filesystem_raid_0}
 		%\caption{-}
@@ -1975,7 +2336,7 @@ Para lograr estos objetivos utiliza los conceptos de Mirror o redundancia de dat
 	Accessing the stripes in the order A1, A2, A3, ... provides the illusion of a larger and faster drive.
 
 	\item[RAID 1] \emph{An exact copy (or mirror) of a set of data on two disks}. This is useful when read performance or reliability is more important than data storage capacity. Such an array can only be as big as the smallest member disk. A classic RAID 1 mirrored pair contains two disks.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.15\textwidth]{\imgdir/clustered_filesystem_raid_1}
 		%\caption{-}
@@ -1987,7 +2348,7 @@ Para lograr estos objetivos utiliza los conceptos de Mirror o redundancia de dat
 	\item[RAID 3] Byte stripping con disco de paridad (para detectar si hubo errores).
 
 	\item[RAID 4] Block-level striping with a dedicated parity disk. A block, sometimes called a physical record, is a sequence of bytes or bits, usually containing some whole number of records.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.3\textwidth]{\imgdir/clustered_filesystem_raid_4}
 		%\caption{-}
@@ -1995,7 +2356,7 @@ Para lograr estos objetivos utiliza los conceptos de Mirror o redundancia de dat
 	\end{figure}
 
 	\item[RAID 5] A RAID 5 comprises block-level striping with distributed parity. Unlike in RAID 4, parity information is distributed among the drives. RAID 5 requires at least three disks.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.3\textwidth]{\imgdir/clustered_filesystem_raid_5}
 		%\caption{-}
@@ -2005,7 +2366,7 @@ Para lograr estos objetivos utiliza los conceptos de Mirror o redundancia de dat
 	\item[RAID 6] Block Stripping con doble paridad distribuida.
 
 	\item[RAID anidados] Levels of nested RAID, also known as hybrid RAID, combine two or more of the standard levels of RAID (redundant array of independent disks) to gain performance, additional redundancy, or both. Muchos de estos niveles están en software.
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.45\textwidth]{\imgdir/clustered_filesystem_raid_hybrid}
 		%\caption{-}
@@ -2055,7 +2416,7 @@ Requieren de un software de administración.
 
 Algunas proveen capacidades RAID.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.45\textwidth]{\imgdir/clustered_filesystem_san_nas}
 	%\caption{-}
@@ -2081,7 +2442,7 @@ Programs are commonly written in Java and compiled to bytecode for the Java virt
 Desde Lolipop usa Android Runtime.
 
 \subsubsection{Arquitectura}
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{\imgdir/android_arquitectura}
 	%\caption{-}
@@ -2121,7 +2482,7 @@ Una activity es una aplicación que se comunica por medio de una pantalla con el
 	\end{description}		
 \end{description}
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{\imgdir/android_activity_lifecycle}
 	%\caption{-}
@@ -2150,7 +2511,7 @@ Objective-C como lenguaje preferido.
 
 The idea behind a hybrid kernel is to have a kernel structure similar to that of a microkernel, but to implement that structure in the manner of a monolithic kernel. In contrast to a microkernel, all (or nearly all) operating system services in a hybrid kernel are still in kernel space. So there are none of the reliability benefits of having services in user space, as with a microkernel. However, just as with an ordinary monolithic kernel, there is none of the performance overhead for message passing and context switching between kernel and user mode that normally comes with a microkernel. Pasaje de mensajes y protección de memoria.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.35\textwidth]{\imgdir/ios_capas_abstraccion}
 	\caption{Las 4 capas de abstracción de IOS}
@@ -2210,7 +2571,7 @@ Usa Ubiquity Containers, se guardan:
 
 To save data to iCloud, your app places data in special file system locations known as iCloud containers. An iCloud container (also referred to as a ubiquity container) serves as the local representation of the corresponding iCloud storage. It is separate from the rest of your app's data. 
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.35\textwidth]{\imgdir/ios_icloud}
 	%\caption{-}
